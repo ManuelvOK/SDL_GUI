@@ -1,4 +1,4 @@
-#include <model/input_model.h>
+#include <models/input_model.h>
 
 void InputModel::update() {
     for (bool &state: this->_current_states) {

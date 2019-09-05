@@ -2,8 +2,8 @@
 
 #include <SDL2/SDL.h>
 
-#include <controller/controller_base.h>
-#include <model/input_model.h>
+#include <controllers/controller_base.h>
+#include <models/input_model.h>
 
 class InputController : public ControllerBase {
     InputModel *_input_model = nullptr;

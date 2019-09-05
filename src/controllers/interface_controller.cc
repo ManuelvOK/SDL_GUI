@@ -1,4 +1,4 @@
-#include <controller/interface_controller.h>
+#include <controllers/interface_controller.h>
 
 void InterfaceController::update() {
     /* do stuff */

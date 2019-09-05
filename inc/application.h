@@ -5,14 +5,14 @@
 
 #include <SDL2/SDL.h>
 
-#include <controller/controller_base.h>
-#include <controller/input_controller.h>
-#include <controller/interface_controller.h>
-#include <model/input_model.h>
-#include <model/interface_model.h>
-#include <model/model_base.h>
-#include <view/interface_view.h>
-#include <view/view_base.h>
+#include <controllers/controller_base.h>
+#include <controllers/input_controller.h>
+#include <controllers/interface_controller.h>
+#include <models/input_model.h>
+#include <models/interface_model.h>
+#include <models/model_base.h>
+#include <views/interface_view.h>
+#include <views/view_base.h>
 
 class Application {
     std::string _application_title = "";

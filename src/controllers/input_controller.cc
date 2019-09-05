@@ -1,4 +1,4 @@
-#include <controller/input_controller.h>
+#include <controllers/input_controller.h>
 
 void InputController::update() {
     SDL_Event event;

@@ -133,7 +133,6 @@ void Application::run() {
         /* render */
         render_count ++;
         this->render_views();
-        //std::cerr << "logic_count: " << logic_count << std::endl << "render_count: " << render_count << std::endl;
 
         if (this->_input_model->is_pressed(InputModel::InputKey::QUIT)) {
             this->_is_running = false;

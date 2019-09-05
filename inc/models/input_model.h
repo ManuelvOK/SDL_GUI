@@ -2,7 +2,7 @@
 
 #include <array>
 
-#include <model/model_base.h>
+#include <models/model_base.h>
 
 class InputModel : public ModelBase {
     std::array<bool, 8> _current_states;

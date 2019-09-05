@@ -1,0 +1,44 @@
+#include <gui/drawable.h>
+
+void Drawable::render(SDL_Renderer *renderer, Position parent_position) const {
+    Position position = parent_position + this->_position;
+    this->draw(renderer, position);
+    for (Drawable *child: this->_children) {
+        if (child == nullptr) {
+            continue;
+        }
+        child->render(renderer, position);
+    }
+}
+
+Drawable *Drawable::find_first_with_attribute(std::string attribute) {
+    if (this->has_attribute(attribute)) {
+        return this;
+    }
+    for(Drawable *child: this->_children) {
+        Drawable *found = child->find_first_with_attribute(attribute);
+        if (found != nullptr) {
+            return found;
+        }
+    }
+    return nullptr;
+}
+
+std::vector<Drawable *> Drawable::find_all_with_attribute(std::string attribute) {
+    std::vector<Drawable *> vec;
+    if (this->has_attribute(attribute)) {
+        vec.push_back(this);
+    }
+    for(Drawable *child: this->_children) {
+        std::vector<Drawable *> found = child->find_all_with_attribute(attribute);
+        vec.insert(vec.end(), found.begin(), found.end());
+    }
+    return vec;
+}
+
+bool Drawable::is_inside(Position position) const {
+    return position._x > this->_position._x &&
+           position._y > this->_position._y &&
+           position._x < this->_position._x + static_cast<int>(this->_width) &&
+           position._y < this->_position._y + static_cast<int>(this->_height);
+}

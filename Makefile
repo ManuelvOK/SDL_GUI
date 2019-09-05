@@ -33,6 +33,10 @@ clean:
 	$(RM) $(OBJDIR)
 	$(RM) $(DEPDIR)
 
+.PHONY: sure
+sure: clean
+	+@$(MAKE) --no-print-directory
+
 else
 
 TARGET       := SDL_GUI
@@ -84,7 +88,7 @@ $(DEPDIR)/%.d: %.cc
 $(ROOTDIR)/tags: $(SRCSCC)
 	$(CXX) $(CXXFLAGSTAGS) $(CXXFLAGS) -M $(SRCSCCABS) | sed -e 's/[\\ ]/\n/g' | \
 	sed -e '/^$$/d' -e '/\.o:[ \t]*$$/d' | \
-	ctags -L - --c++-kinds=+p --fields=+iaS --extra=+q -o "$(ROOTDIR)/tags" --language-force=C++
+	ctags -L - --c++-kinds=+p --fields=+iaS --extras=+q -o "$(ROOTDIR)/tags" --language-force=C++
 
 -include $(DEPS)
 
