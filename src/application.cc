@@ -7,6 +7,12 @@
 #include <chrono>
 #include <algorithm>
 
+#include <controllers/interface_controller.h>
+#include <controllers/keyboard_input_controller.h>
+#include <controllers/mouse_input_controller.h>
+#include <models/interface_model.h>
+#include <views/interface_view.h>
+
 /**
  * Initialise SDL for video output
  */
@@ -51,19 +57,6 @@ bool Application::init() {
     }
     on_exit(this->exit_SDL_DestroyRenderer, this->_renderer);
 
-    /* init interface model */
-    InterfaceModel *interface_model = new InterfaceModel();
-    this->_model_list.push_back(interface_model);
-
-    /* init interface controller */
-    InterfaceController *interface_controller = new InterfaceController();
-    this->_controller_list.push_back(interface_controller);
-
-    /* init interface view */
-    InterfaceView *interface_view = new InterfaceView(this->_renderer);
-    interface_view->set_model(interface_model);
-    this->_view_list.push_back(interface_view);
-
     /* init keyboard input controller */
     KeyboardInputModel *keyboard_input_model = new KeyboardInputModel();
     this->_model_list.push_back(keyboard_input_model);
@@ -83,6 +76,20 @@ bool Application::init() {
     MouseInputController *mouse_input_controller = new MouseInputController();
     mouse_input_controller->set_model(mouse_input_model);
     this->_controller_list.push_back(mouse_input_controller);
+
+    /* init interface model */
+    InterfaceModel *interface_model = new InterfaceModel();
+    this->_model_list.push_back(interface_model);
+
+    /* init interface controller */
+    InterfaceController *interface_controller = new InterfaceController();
+    this->_controller_list.push_back(interface_controller);
+
+    /* init interface view */
+    InterfaceView *interface_view = new InterfaceView(this->_renderer);
+    interface_view->set_model(interface_model);
+    interface_view->set_mouse_input_model(mouse_input_model);
+    this->_view_list.push_back(interface_view);
 
     return true;
 }

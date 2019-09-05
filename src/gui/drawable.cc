@@ -1,5 +1,12 @@
 #include <gui/drawable.h>
 
+void Drawable::map(std::function<void (Drawable *)> f) {
+    f(this);
+    for (Drawable *child: this->_children) {
+        f(child);
+    }
+}
+
 void Drawable::render(SDL_Renderer *renderer, Position parent_position) const {
     Position position = parent_position + this->_position;
     this->draw(renderer, position);

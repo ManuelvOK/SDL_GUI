@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <vector>
 
 #include <SDL2/SDL.h>
@@ -7,6 +8,7 @@
 #include <gui/attributable.h>
 #include <gui/position.h>
 #include <gui/positionable.h>
+#include <gui/style.h>
 
 class Drawable : public Positionable, public Attributable {
 protected:
@@ -36,6 +38,18 @@ protected:
      */
     virtual void draw(SDL_Renderer *renderer, Position position) const = 0;
 public:
+    Style _default_style;
+    Style _hover_style;
+    Style *_current_style = &this->_default_style;
+
+    /**
+     * apply a function recursively to this and all children
+     *
+     * @param f
+     *   function to apply
+     */
+    void map(std::function<void(Drawable *)> f);
+
     /**
      * draw this and all of its childs
      *
