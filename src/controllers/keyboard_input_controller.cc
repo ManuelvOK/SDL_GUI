@@ -1,6 +1,6 @@
-#include <controllers/input_controller.h>
+#include <controllers/keyboard_input_controller.h>
 
-void InputController::update() {
+void KeyboardInputController::update() {
     SDL_Event event;
     while (0 != SDL_PollEvent(&event)) {
         switch(event.type) {
@@ -11,10 +11,10 @@ void InputController::update() {
     }
 }
 
-void InputController::handle_key_press(SDL_KeyboardEvent kb_event) {
+void KeyboardInputController::handle_key_press(SDL_KeyboardEvent kb_event) {
     switch (kb_event.keysym.scancode) {
         case SDL_SCANCODE_Q:
-        case SDL_SCANCODE_ESCAPE: this->_input_model->set_pressed(InputModel::InputKey::QUIT);
+        case SDL_SCANCODE_ESCAPE: this->_input_model->set_pressed(KeyboardInputModel::Key::QUIT);
                                   break;
         default: break;
     }

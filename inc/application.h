@@ -6,11 +6,12 @@
 #include <SDL2/SDL.h>
 
 #include <controllers/controller_base.h>
-#include <controllers/input_controller.h>
 #include <controllers/interface_controller.h>
-#include <models/input_model.h>
+#include <controllers/keyboard_input_controller.h>
 #include <models/interface_model.h>
+#include <models/keyboard_input_model.h>
 #include <models/model_base.h>
+#include <models/mouse_input_model.h>
 #include <views/interface_view.h>
 #include <views/view_base.h>
 
@@ -20,11 +21,8 @@ class Application {
     std::vector<ModelBase *> _model_list;
     std::vector<ViewBase *> _view_list;
     std::vector<ControllerBase *> _controller_list;
-    InterfaceModel *_interface_model = nullptr;
-    InterfaceController *_interface_controller = nullptr;
-    InterfaceView *_interface_view = nullptr;
-    InputModel *_input_model = nullptr;
-    InputController *_input_controller = nullptr;
+    const KeyboardInputModel *_keyboard_input_model = nullptr;
+    const MouseInputModel *_mouse_input_model = nullptr;
 
     SDL_Window *_window = nullptr;
     SDL_Renderer *_renderer = nullptr;

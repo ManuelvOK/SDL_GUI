@@ -1,14 +1,14 @@
-#include <models/input_model.h>
+#include <models/keyboard_input_model.h>
 
-void InputModel::update() {
+void KeyboardInputModel::update() {
     for (bool &state: this->_current_states) {
         state = false;
     }
 }
-void InputModel::set_pressed(InputKey key) {
+void KeyboardInputModel::set_pressed(Key key) {
     this->_current_states[static_cast<unsigned>(key)] = true;
 }
 
-bool InputModel::is_pressed(InputKey key) const {
+bool KeyboardInputModel::is_pressed(Key key) const {
     return this->_current_states[static_cast<unsigned>(key)];
 }
