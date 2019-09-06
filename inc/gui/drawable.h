@@ -1,7 +1,7 @@
 #pragma once
 
 #include <functional>
-#include <vector>
+#include <list>
 
 #include <SDL2/SDL.h>
 
@@ -13,7 +13,8 @@
 class Drawable : public Positionable, public Attributable {
 protected:
     Drawable *_parent = nullptr;
-    std::vector<Drawable *> _children;
+    std::list<Drawable *> _children;
+    std::list<Drawable *> _children_reversed;
 
     /**
      * default Contructor
@@ -43,12 +44,68 @@ public:
     Style *_current_style = &this->_default_style;
 
     /**
+     * getter for the list of children
+     *
+     * @param reversed
+     *   flag to determine if the list should be returned reversed
+     * @returns
+     *   list of children
+     */
+    std::list<Drawable *> children(bool reversed = false);
+
+    /**
      * apply a function recursively to this and all children
      *
      * @param f
      *   function to apply
+     * @param reversed
+     *   flag to determine the order of child processing. If true, the list of childs get
+     *   reversed before applying f
      */
-    void map(std::function<void(Drawable *)> f);
+    void map(std::function<void (Drawable *)> f, bool reversed = false);
+
+    /**
+     * apply a function recursively to this and all children from bottom to top of the tree
+     *
+     * @param f
+     *   function to apply
+     * @param reversed
+     *   flag to determine the order of child processing. If true, the list of childs get
+     *   reversed before applying f
+     */
+    void bottom_up_map(std::function<void (Drawable *)> f, bool reversed = false);
+
+    /**
+     * apply a function recursively to this and all children propagating a value
+     *
+     * @param f
+     *   function to apply
+     * @param value
+     *   initial value
+     * @param reversed
+     *   flag to determine the order of child processing. If true, the list of childs get
+     *   reversed before applying f
+     */
+    template<typename T>
+    void reduce(std::function<T (Drawable *, T)> f, T value, bool reversed = false);
+
+    /**
+     * apply a function recursively reversed, from bottom to top of the tree aggregating the return value
+     *
+     * @param f
+     *   function to apply
+     * @param value
+     *   initial value
+     * @param aggregate
+     *   function to aggregate return values from all children
+     * @param reversed
+     *   flag to determine the order of child processing. If true, the list of childs get
+     *   reversed before applying f
+     * @returns
+     *   last aggregated propagation value
+     */
+    template<typename T>
+    T bottom_up_reduce(std::function<T (Drawable *, T)> f, T value, std::function<T (std::vector<T>)> aggregate, bool reversed = false);
 
     /**
      * draw this and all of its childs
@@ -80,5 +137,21 @@ public:
      */
     std::vector<Drawable *> find_all_with_attribute(std::string attribute);
 
-    virtual bool is_inside(Position) const;
+    /**
+     * check if Position is inside this
+     *
+     * @param position
+     *   Position to check for
+     * @returns
+     *   True if position is inside. False otherwise.
+     */
+    virtual bool is_inside(Position position) const;
+
+    /**
+     * add a child
+     *
+     * @param child
+     *   child to add
+     */
+    void add_child(Drawable *child);
 };
