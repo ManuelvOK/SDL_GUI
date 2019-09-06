@@ -1,5 +1,12 @@
 #include <gui/drawable.h>
 
+void Drawable::set_current_style(Style *style) {
+    this->_current_style = style;
+    this->hook_set_current_style(style);
+}
+
+void Drawable::hook_set_current_style(Style *style) {}
+
 std::list<Drawable *> Drawable::children(bool reversed) {
     return reversed ? this->_children_reversed : this->_children;
 }

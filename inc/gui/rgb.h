@@ -6,9 +6,10 @@
  */
 class RGB {
 public:
-    int _r = 0; /**< red value between 0 and 255 */
-    int _g = 0; /**< green value between 0 and 255 */
-    int _b = 0; /**< blue value between 0 and 255 */
+    unsigned char _r = 0; /**< red value between 0 and 255 */
+    unsigned char _g = 0; /**< green value between 0 and 255 */
+    unsigned char _b = 0; /**< blue value between 0 and 255 */
+    unsigned char _a = 255; /**< apha value between 0 and 255 */
 
     /**
      * Default constructor
@@ -21,7 +22,7 @@ public:
      * @param grey
      *   value for r, g and b
      */
-    RGB(int grey) : _r(grey), _g(grey), _b(grey) {}
+    RGB(unsigned char grey) : _r(grey), _g(grey), _b(grey) {}
 
     /**
      * Constructor
@@ -33,7 +34,12 @@ public:
      * @param b
      *   blue value between 0 and 255
      */
-    RGB(int r, int g, int b) : _r(r), _g(g), _b(b) {}
+    RGB(unsigned char r, unsigned char g, unsigned char b) : _r(r), _g(g), _b(b) {}
+
+    /**
+     * conversion operator for SDL_Color
+     */
+    operator SDL_Color() const;
 
     /**
      * activate color for a given alpha on a given renderer
@@ -43,5 +49,5 @@ public:
      * @param alpha
      *   alpha value for the color to activate
      */
-    void activate(SDL_Renderer *renderer, int alpha = 255) const;
+    void activate(SDL_Renderer *renderer) const;
 };

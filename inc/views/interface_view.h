@@ -1,12 +1,14 @@
 #include <views/view_base.h>
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include <gui/drawable.h>
 #include <models/mouse_input_model.h>
 
 class InterfaceView : public ViewBase {
     SDL_Renderer *_renderer;
+    TTF_Font *_font;
 
     const MouseInputModel *_mouse_input_model = nullptr;
 

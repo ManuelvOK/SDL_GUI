@@ -16,6 +16,8 @@ protected:
     std::list<Drawable *> _children;
     std::list<Drawable *> _children_reversed;
 
+    Style *_current_style = &this->_default_style;
+
     /**
      * default Contructor
      */
@@ -38,10 +40,20 @@ protected:
      *   global offset in window
      */
     virtual void draw(SDL_Renderer *renderer, Position position) const = 0;
+
+
+    virtual void hook_set_current_style(Style *style);
 public:
     Style _default_style;
     Style _hover_style;
-    Style *_current_style = &this->_default_style;
+
+    /**
+     * change the style to use for rendering
+     *
+     * @param style
+     *   style to use
+     */
+    void set_current_style(Style *style);
 
     /**
      * getter for the list of children
@@ -154,4 +166,5 @@ public:
      *   child to add
      */
     void add_child(Drawable *child);
+
 };

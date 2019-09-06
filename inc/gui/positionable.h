@@ -24,4 +24,12 @@ protected:
      *   position
      */
     Positionable(Position position) : _position(position) {}
+public:
+    /**
+     * Setter for _position
+     *
+     * @param position
+     *   position to set
+     */
+    void set_position(Position position);
 };

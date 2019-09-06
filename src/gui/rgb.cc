@@ -1,5 +1,9 @@
 #include <gui/rgb.h>
 
-void RGB::activate(SDL_Renderer *renderer, int alpha) const {
-    SDL_SetRenderDrawColor(renderer, this->_r, this->_g, this->_b, alpha);
+RGB::operator SDL_Color() const {
+    return SDL_Color{this->_r, this->_g, this->_b, this->_a};
+}
+
+void RGB::activate(SDL_Renderer *renderer) const {
+    SDL_SetRenderDrawColor(renderer, this->_r, this->_g, this->_b, this->_a);
 }
