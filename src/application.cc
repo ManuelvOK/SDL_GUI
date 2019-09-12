@@ -86,7 +86,7 @@ bool Application::init() {
     this->_controller_list.push_back(interface_controller);
 
     /* init interface view */
-    InterfaceView *interface_view = new InterfaceView(this->_renderer);
+    InterfaceView *interface_view = new InterfaceView(this->_renderer, "./templates/main.tpl");
     interface_view->set_model(interface_model);
     interface_view->set_mouse_input_model(mouse_input_model);
     this->_view_list.push_back(interface_view);

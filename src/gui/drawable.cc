@@ -5,47 +5,9 @@ void Drawable::set_current_style(Style *style) {
     this->hook_set_current_style(style);
 }
 
-void Drawable::hook_set_current_style(Style *style) {}
-
-std::list<Drawable *> Drawable::children(bool reversed) {
-    return reversed ? this->_children_reversed : this->_children;
+void Drawable::hook_set_current_style(Style *style) {
+    (void) style;
 }
-
-void Drawable::map(std::function<void (Drawable *)> f, bool reversed) {
-    f(this);
-    for (Drawable *child: this->children(reversed)) {
-        child->map(f);
-    }
-}
-
-void Drawable::bottom_up_map(std::function<void (Drawable *)> f, bool reversed) {
-    for (Drawable *child: this->children(reversed)) {
-        child->map(f);
-    }
-    f(this);
-}
-
-template<typename T>
-void Drawable::reduce(std::function<T (Drawable *, T)> f, T value, bool reversed) {
-    T this_value = f(this, value);
-    for (Drawable *child: this->children(reversed)) {
-        child->reduce(f, this_value);
-    }
-}
-
-template<typename T>
-T Drawable::bottom_up_reduce(std::function<T (Drawable *, T)> f, T value,
-        std::function<T (std::vector<T>)> aggregate, bool reversed) {
-    if (this->_children.empty()) {
-        return f(this, value);
-    }
-    std::vector<T> vec;
-    for (Drawable *child: this->children(reversed)) {
-        vec.push_back(child->reduce(f, value, aggregate));
-    }
-    return f(this, aggregate(vec));
-}
-
 
 void Drawable::render(SDL_Renderer *renderer, Position parent_position) const {
     Position position = parent_position + this->_position;
