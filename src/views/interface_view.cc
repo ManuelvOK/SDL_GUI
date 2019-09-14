@@ -26,32 +26,32 @@ bool InterfaceView::init() {
     /* parse template file */
     DrawableTreeBuilder builder(this->_font);
     XmlParser<Drawable> parser(&builder);
-    this->_draw_root = parser.parse_file(this->_template_file_path);
+    this->_draw_tree = parser.parse_file(this->_template_file_path);
 
     return true;
 
     /* set up frames n stuff */
-    Rect *rect = new Rect({0, 0}, 1600, 900);
-    rect->_default_style._color = {177, 177, 177};
-    rect->_default_style._border_color = {100, 100, 100};
-    rect->_default_style._border = true;
-    rect->_hover_style = rect->_default_style;
-    this->_draw_root = rect;
+    //Rect *rect = new Rect({0, 0}, 1600, 900);
+    //rect->_default_style._color = {177, 177, 177};
+    //rect->_default_style._border_color = {100, 100, 100};
+    //rect->_default_style._border = true;
+    //rect->_hover_style = rect->_default_style;
+    //this->_draw_root = rect;
 
-    Text *text = new Text("Example Text 1", this->_font);
-    rect->add_child(text);
-    text = new Text("Example Text 2", this->_font);
-    text->set_position({200, 50});
-    rect->add_child(text);
+    //Text *text = new Text("Example Text 1", this->_font);
+    //rect->add_child(text);
+    //text = new Text("Example Text 2", this->_font);
+    //text->set_position({200, 50});
+    //rect->add_child(text);
 
-    return true;
+    //return true;
 }
 
 void InterfaceView::deinit() {}
 
 void InterfaceView::update() {
     Position current_position = this->_mouse_input_model->current_position();
-    this->_draw_root->map(this->_draw_root, [current_position](Drawable *d){
+    this->_draw_tree->map([current_position](Drawable *d){
             if (d->is_inside(current_position)) {
                 d->set_current_style(&d->_hover_style);
             } else {
@@ -64,8 +64,20 @@ void InterfaceView::render() {
     SDL_SetRenderDrawColor(this->_renderer, 170, 170, 170, 0);
     SDL_RenderClear(this->_renderer);
 
+    SDL_Renderer *renderer = this->_renderer;
     /* draw all drawables recursively */
-    this->_draw_root->render(this->_renderer);
+    this->_draw_tree->reduce<Position>([renderer](Drawable *d, Position parent_position) {
+            Position position = parent_position + d->position();
+            d->draw(renderer, position);
+            return position;
+            }, {0,0});
+//    this->draw(renderer, position);
+//    for (Drawable *child: this->_children) {
+//        if (child == nullptr) {
+//            continue;
+//        }
+//        child->render(renderer, position);
+//    }
 
     SDL_RenderPresent(this->_renderer);
 }

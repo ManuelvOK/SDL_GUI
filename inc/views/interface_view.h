@@ -5,6 +5,7 @@
 
 #include <gui/drawable.h>
 #include <models/mouse_input_model.h>
+#include <util/tree.h>
 
 class InterfaceView : public ViewBase {
     SDL_Renderer *_renderer;
@@ -14,7 +15,7 @@ class InterfaceView : public ViewBase {
 
     const MouseInputModel *_mouse_input_model = nullptr;
 
-    Drawable *_draw_root = nullptr;
+    Tree<Drawable> *_draw_tree;
 public:
     InterfaceView(SDL_Renderer *renderer, std::string template_file_path);
     void set_mouse_input_model(const MouseInputModel *mouse_input_model);

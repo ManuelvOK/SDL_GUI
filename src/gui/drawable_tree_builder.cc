@@ -6,9 +6,9 @@
 #include <gui/primitives/rect.h>
 #include <gui/primitives/text.h>
 
-void DrawableTreeBuilder::add_child(Drawable *parent, Drawable *child) {
-    parent->add_child(child);
-}
+//void DrawableTreeBuilder::add_child(Drawable *parent, Drawable *child) {
+//    parent->add_child(child);
+//}
 
 Drawable *DrawableTreeBuilder::construct_node(std::string type, std::map<std::string, std::string> attributes) {
     (void) attributes;

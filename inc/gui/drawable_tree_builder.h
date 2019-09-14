@@ -18,5 +18,5 @@ class DrawableTreeBuilder : public TreeBuilder<Drawable> {
 public:
     DrawableTreeBuilder(TTF_Font *font) : _font(font) {}
     Drawable *construct_node(std::string type, std::map<std::string, std::string> attributes) override;
-    void add_child(Drawable *parent, Drawable *child) override;
+    //void add_child(Drawable *parent, Drawable *child) override;
 };

@@ -6,9 +6,8 @@
 #include <gui/position.h>
 #include <gui/positionable.h>
 #include <gui/style.h>
-#include <util/tree.h>
 
-class Drawable : public Positionable, public Attributable, public Tree<Drawable> {
+class Drawable : public Positionable, public Attributable {
 protected:
     Style *_current_style = &this->_default_style;
 
@@ -25,6 +24,19 @@ protected:
      */
     Drawable(Position position) : Positionable(position) {}
 
+    virtual void hook_set_current_style(Style *style);
+public:
+    Style _default_style;
+    Style _hover_style;
+
+    /**
+     * getter for _position
+     *
+     * @returns
+     *   position
+     */
+    Position position() const;
+
     /**
      * draw this Object. gets called by render()
      *
@@ -34,11 +46,6 @@ protected:
      *   global offset in window
      */
     virtual void draw(SDL_Renderer *renderer, Position position) const = 0;
-
-    virtual void hook_set_current_style(Style *style);
-public:
-    Style _default_style;
-    Style _hover_style;
 
     /**
      * change the style to use for rendering
@@ -56,7 +63,7 @@ public:
      * @param parent_position
      *   global offset of parent
      */
-    void render(SDL_Renderer *renderer, Position parent_position = {0,0}) const;
+    //void render(SDL_Renderer *renderer, Position parent_position = {0,0}) const;
 
     /**
      * Find first Child that holds a given attribute
@@ -66,7 +73,7 @@ public:
      * @returns
      *   first found Drawable that holds the given attribute. nullptr if no such object exists.
      */
-    Drawable *find_first_with_attribute(std::string attribute);
+    //Drawable *find_first_with_attribute(std::string attribute);
 
     /**
      * Find all Childs that hold a given attribute
@@ -76,7 +83,7 @@ public:
      * @returns
      *   List of Objects that hold the given attribute.
      */
-    std::vector<Drawable *> find_all_with_attribute(std::string attribute);
+    //std::vector<Drawable *> find_all_with_attribute(std::string attribute);
 
     /**
      * check if Position is inside this
@@ -94,6 +101,6 @@ public:
      * @param child
      *   child to add
      */
-    void add_child(Drawable *child);
+    //void add_child(Drawable *child);
 
 };
