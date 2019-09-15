@@ -1,4 +1,8 @@
 #pragma once
+
+#include <map>
+#include <string>
+
 #include <SDL2/SDL.h>
 
 /**
@@ -10,6 +14,10 @@ public:
     unsigned char _g = 0; /**< green value between 0 and 255 */
     unsigned char _b = 0; /**< blue value between 0 and 255 */
     unsigned char _a = 255; /**< apha value between 0 and 255 */
+
+    std::map<std::string, std::array<unsigned char, 4>> _predefinitions = {
+        {"red", {255, 0, 0, 255}},
+    };
 
     /**
      * Default constructor
@@ -35,6 +43,8 @@ public:
      *   blue value between 0 and 255
      */
     RGB(unsigned char r, unsigned char g, unsigned char b) : _r(r), _g(g), _b(b) {}
+
+    RGB(std::string color);
 
     /**
      * conversion operator for SDL_Color

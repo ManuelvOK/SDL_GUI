@@ -32,4 +32,8 @@ public:
      *   position to set
      */
     void set_position(Position position);
+
+    void set_width(unsigned width);
+
+    void set_height(unsigned height);
 };

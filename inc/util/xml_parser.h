@@ -16,8 +16,16 @@ template <typename T>
 class XmlParser {
     TreeBuilder<T> *_builder = nullptr;
 
+    std::map<std::string, std::string> parse_attributes(rapidxml::xml_node<> *node) const {
+        std::map<std::string, std::string> attributes;
+        for (rapidxml::xml_attribute<> *attribute = node->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute()) {
+            attributes.insert({attribute->name(), attribute->value()});
+        }
+        return attributes;
+    }
+
     TreeNode<T> *parse_node(rapidxml::xml_node<> *node) const {
-        T *parsed_object = this->_builder->construct_node(node->name(), {});
+        T *parsed_object = this->_builder->construct_node(node->name(), this->parse_attributes(node));
         TreeNode<T> *parsed_node = new TreeNode(parsed_object);
         for (rapidxml::xml_node<> *child = node->first_node(); child != nullptr; child = child->next_sibling()) {
             parsed_node->add_child(this->parse_node(child));
