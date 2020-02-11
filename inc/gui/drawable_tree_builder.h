@@ -21,12 +21,16 @@ class DrawableTreeBuilder : public TreeBuilder<Drawable> {
         BACKGROUND,
         WIDTH,
         HEIGHT,
+        POSITION_X,
+        POSITION_Y,
     };
     const std::map<std::string, StyleType> _style_type_map = {
         {"border", StyleType::BORDER},
         {"bg", StyleType::BACKGROUND},
         {"width", StyleType::WIDTH},
         {"height", StyleType::HEIGHT},
+        {"x", StyleType::POSITION_X},
+        {"y", StyleType::POSITION_Y},
     };
     TTF_Font *_font;
     void set_style(Drawable *drawable, std::map<std::string, std::string> attributes) const;
