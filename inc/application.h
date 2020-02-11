@@ -5,11 +5,11 @@
 
 #include <SDL2/SDL.h>
 
-#include <controllers/controller_base.h>
-#include <models/keyboard_input_model.h>
-#include <models/model_base.h>
-#include <models/mouse_input_model.h>
-#include <views/view_base.h>
+#include "controllers/controller_base.h"
+#include "models/keyboard_input_model.h"
+#include "models/model_base.h"
+#include "models/mouse_input_model.h"
+#include "views/view_base.h"
 
 class Application {
     /**

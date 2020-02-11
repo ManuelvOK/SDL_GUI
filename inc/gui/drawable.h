@@ -2,10 +2,10 @@
 
 #include <SDL2/SDL.h>
 
-#include <gui/attributable.h>
-#include <gui/position.h>
-#include <gui/positionable.h>
-#include <gui/style.h>
+#include "gui/attributable.h"
+#include "gui/position.h"
+#include "gui/positionable.h"
+#include "gui/style.h"
 
 class Drawable : public Positionable, public Attributable {
 protected:

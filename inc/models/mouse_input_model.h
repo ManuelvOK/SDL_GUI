@@ -2,8 +2,8 @@
 
 #include <array>
 
-#include <models/model_base.h>
-#include <gui/position.h>
+#include "models/model_base.h"
+#include "gui/position.h"
 
 class MouseInputModel : public ModelBase {
     /**

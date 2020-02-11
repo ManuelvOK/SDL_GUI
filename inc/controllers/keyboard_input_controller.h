@@ -2,8 +2,8 @@
 
 #include <SDL2/SDL.h>
 
-#include <controllers/controller_base.h>
-#include <models/keyboard_input_model.h>
+#include "controllers/controller_base.h"
+#include "models/keyboard_input_model.h"
 
 class KeyboardInputController : public ControllerBase {
     KeyboardInputModel *_input_model = nullptr;

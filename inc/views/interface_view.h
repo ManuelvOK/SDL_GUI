@@ -3,9 +3,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
-#include <gui/drawable.h>
-#include <models/mouse_input_model.h>
-#include <util/tree.h>
+#include "gui/drawable.h"
+#include "models/mouse_input_model.h"
+#include "util/tree.h"
 
 class InterfaceView : public ViewBase {
     /**
