@@ -79,8 +79,12 @@ effective: all
 makefile-debug:
 	@echo $(dir $(SRCSCC))
 
-$(TARGET): $(OBJS)
-	$(CXX) -o $@ $^ $(LIBS)
+.PHONY: lib
+lib: $(filter-out main.o, $(OBJS))
+	$(AR) rvs $(TARGET).a $(filter-out main.o, $^)
+
+$(TARGET): lib main.o
+	$(CXX) -o $@ main.o $@.a $(LIBS)
 
 $(DEPDIR)/%.d: %.cc
 	$(CXX) $(CXXFLAGS) -MM -o $@ $<
