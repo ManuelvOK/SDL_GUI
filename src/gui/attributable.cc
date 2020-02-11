@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+using namespace SDL_GUI;
+
 void Attributable::add_attribute(std::string attribute) {
     this->_attributes.push_back(attribute);
 }

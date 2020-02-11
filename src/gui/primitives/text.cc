@@ -1,5 +1,7 @@
 #include <gui/primitives/text.h>
 
+using namespace SDL_GUI;
+
 Text::~Text() {
     if (this->_surface != nullptr) {
         SDL_FreeSurface(this->_surface);

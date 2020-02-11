@@ -6,6 +6,7 @@
 /**
  * An Object that holds one or more attributes to be identified
  */
+namespace SDL_GUI {
 class Attributable {
     std::vector<std::string> _attributes; /**< List of attributes */
 
@@ -35,3 +36,4 @@ public:
      */
     bool has_attribute(std::string attribute);
 };
+}

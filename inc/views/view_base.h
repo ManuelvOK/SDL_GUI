@@ -2,6 +2,7 @@
 
 #include "../models/model_base.h"
 
+namespace SDL_GUI {
 class ViewBase {
 public:
     /**
@@ -58,3 +59,4 @@ protected:
      */
     ModelBase *_model = nullptr;
 };
+}

@@ -1,5 +1,7 @@
 #include <application.h>
 
+using namespace SDL_GUI;
+
 int main(int argc, char *argv[]) {
     (void) argc;
     (void) argv;

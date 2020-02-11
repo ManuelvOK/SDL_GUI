@@ -3,6 +3,7 @@
 #include <functional>
 #include <list>
 
+namespace SDL_GUI {
 template <typename T>
 class TreeNode {
     T *_node = nullptr;
@@ -333,4 +334,4 @@ public:
     }
 
 };
-
+}

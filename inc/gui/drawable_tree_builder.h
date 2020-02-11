@@ -5,6 +5,7 @@
 #include "drawable.h"
 #include "../util/tree_builder.h"
 
+namespace SDL_GUI {
 class DrawableTreeBuilder : public TreeBuilder<Drawable> {
     enum class Type {
         RECT,
@@ -34,3 +35,4 @@ public:
     Drawable *construct_node(std::string type, std::map<std::string, std::string> attributes) const override;
     //void add_child(Drawable *parent, Drawable *child) override;
 };
+}

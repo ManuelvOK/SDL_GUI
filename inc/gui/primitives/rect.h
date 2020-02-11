@@ -3,6 +3,7 @@
 #include "../drawable.h"
 #include "../rgb.h"
 
+namespace SDL_GUI {
 class Rect : public Drawable {
 public:
     /**
@@ -24,3 +25,4 @@ public:
 
     void draw(SDL_Renderer *renderer, Position position) const override;
 };
+}

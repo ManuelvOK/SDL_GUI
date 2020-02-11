@@ -7,6 +7,8 @@
 #include <gui/primitives/text.h>
 #include <util/xml_parser.h>
 
+using namespace SDL_GUI;
+
 InterfaceView::InterfaceView(SDL_Renderer *renderer, std::string template_file_path) : _renderer(renderer), _template_file_path(template_file_path) {
     this->init();
 }

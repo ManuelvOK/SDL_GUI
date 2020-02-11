@@ -9,6 +9,7 @@
 /**
  * A Text view
  */
+namespace SDL_GUI {
 class Text : public Drawable {
 private:
     SDL_Surface *_surface = nullptr; /**< SDL surface to put text on */
@@ -41,3 +42,4 @@ public:
 
     unsigned height() const;
 };
+}

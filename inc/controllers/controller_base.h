@@ -2,6 +2,7 @@
 
 #include "../models/model_base.h"
 
+namespace SDL_GUI {
 class ControllerBase {
 public:
     /**
@@ -20,3 +21,4 @@ protected:
      */
     ControllerBase() = default;
 };
+}

@@ -1,5 +1,7 @@
 #include <gui/positionable.h>
 
+using namespace SDL_GUI;
+
 void Positionable::set_position(Position position) {
     this->_position = position;
 }

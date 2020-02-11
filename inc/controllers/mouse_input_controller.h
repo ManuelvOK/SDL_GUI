@@ -5,6 +5,7 @@
 #include "controller_base.h"
 #include "../models/mouse_input_model.h"
 
+namespace SDL_GUI {
 class MouseInputController : public ControllerBase {
     /**
      * Model for mouse input
@@ -27,3 +28,4 @@ public:
 
     virtual void update() override;
 };
+}

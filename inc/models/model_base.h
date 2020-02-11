@@ -1,5 +1,6 @@
 #pragma once
 
+namespace SDL_GUI {
 class ModelBase {
 public:
     /**
@@ -12,3 +13,4 @@ protected:
      */
     ModelBase() = default;
 };
+}

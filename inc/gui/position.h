@@ -3,6 +3,7 @@
 /**
  * 2 dimensional point
  */
+namespace SDL_GUI {
 class Position {
 public:
     int _x = 0; /**< horizontal position */
@@ -28,3 +29,4 @@ public:
         return Position(this->_x + p._x, this->_y + p._y);
     }
 };
+}

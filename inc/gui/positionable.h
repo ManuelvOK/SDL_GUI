@@ -5,6 +5,7 @@
 /**
  * Objects consisting out of a position, width and height
  */
+namespace SDL_GUI {
 class Positionable {
 protected:
     Position _position; /**< objects position */
@@ -37,3 +38,4 @@ public:
 
     void set_height(unsigned height);
 };
+}

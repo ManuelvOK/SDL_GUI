@@ -7,6 +7,7 @@
 #include "../models/mouse_input_model.h"
 #include "../util/tree.h"
 
+namespace SDL_GUI {
 class InterfaceView : public ViewBase {
     /**
      * SDL Renderer to render on
@@ -49,3 +50,4 @@ public:
     void update() override;
     void render() override;
 };
+}

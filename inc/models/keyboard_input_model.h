@@ -4,6 +4,7 @@
 
 #include "model_base.h"
 
+namespace SDL_GUI {
 class KeyboardInputModel : public ModelBase {
     /**
      * Array stating the state of the different keys. For now it is pressed or not pressed
@@ -28,3 +29,4 @@ public:
      */
     bool is_pressed(Key key) const;
 };
+}

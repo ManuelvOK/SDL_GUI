@@ -13,6 +13,8 @@
 #include <models/interface_model.h>
 #include <views/interface_view.h>
 
+using namespace SDL_GUI;
+
 /**
  * Initialise SDL for video output
  */

@@ -10,7 +10,7 @@
 #include "models/model_base.h"
 #include "models/mouse_input_model.h"
 #include "views/view_base.h"
-
+namespace SDL_GUI {
 class Application {
     /**
      * title string of the Application
@@ -125,3 +125,4 @@ public:
     void manage_views_and_controllers();
 
 };
+}

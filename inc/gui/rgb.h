@@ -8,6 +8,7 @@
 /**
  * Color Code for RGB color
  */
+namespace SDL_GUI {
 class RGB {
 public:
     unsigned char _r = 0; /**< red value between 0 and 255 */
@@ -61,3 +62,4 @@ public:
      */
     void activate(SDL_Renderer *renderer) const;
 };
+}

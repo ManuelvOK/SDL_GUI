@@ -1,5 +1,7 @@
 #include <models/keyboard_input_model.h>
 
+using namespace SDL_GUI;
+
 void KeyboardInputModel::update() {
     for (bool &state: this->_current_states) {
         state = false;

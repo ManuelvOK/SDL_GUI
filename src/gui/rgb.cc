@@ -1,5 +1,7 @@
 #include <gui/rgb.h>
 
+using namespace SDL_GUI;
+
 RGB::RGB(std::string color) {
     if (this->_predefinitions.find(color) == this->_predefinitions.end()) {
         return;

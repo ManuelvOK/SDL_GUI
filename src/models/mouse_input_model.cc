@@ -1,5 +1,6 @@
 #include <models/mouse_input_model.h>
 
+using namespace SDL_GUI;
 
 void MouseInputModel::update() {
     for (bool &state: this->_current_states) {

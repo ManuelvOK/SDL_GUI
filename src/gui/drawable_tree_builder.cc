@@ -7,6 +7,8 @@
 #include <gui/primitives/rect.h>
 #include <gui/primitives/text.h>
 
+using namespace SDL_GUI;
+
 //void DrawableTreeBuilder::add_child(Drawable *parent, Drawable *child) {
 //    parent->add_child(child);
 //}

@@ -5,6 +5,7 @@
 #include "model_base.h"
 #include "../gui/position.h"
 
+namespace SDL_GUI {
 class MouseInputModel : public ModelBase {
     /**
      * current state of the two Mouse buttons
@@ -46,3 +47,4 @@ public:
 
 };
 
+}

@@ -1,5 +1,7 @@
 #include <controllers/keyboard_input_controller.h>
 
+using namespace SDL_GUI;
+
 void KeyboardInputController::update() {
     SDL_Event event;
     while (0 != SDL_PollEvent(&event)) {

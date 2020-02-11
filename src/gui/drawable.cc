@@ -1,5 +1,7 @@
 #include <gui/drawable.h>
 
+using namespace SDL_GUI;
+
 Position Drawable::position() const {
     return this->_position;
 }

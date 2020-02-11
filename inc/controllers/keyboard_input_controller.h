@@ -5,6 +5,7 @@
 #include "controller_base.h"
 #include "../models/keyboard_input_model.h"
 
+namespace SDL_GUI {
 class KeyboardInputController : public ControllerBase {
     KeyboardInputModel *_input_model = nullptr;
 
@@ -15,3 +16,4 @@ public:
     }
     virtual void update() override;
 };
+}

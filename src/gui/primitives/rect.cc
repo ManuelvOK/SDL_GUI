@@ -1,5 +1,7 @@
 #include <gui/primitives/rect.h>
 
+using namespace SDL_GUI;
+
 Rect::Rect(Position position, unsigned width, unsigned height) : Drawable(position) {
     this->_width = width;
     this->_height = height;

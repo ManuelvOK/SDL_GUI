@@ -7,6 +7,7 @@
 #include "positionable.h"
 #include "style.h"
 
+namespace SDL_GUI {
 class Drawable : public Positionable, public Attributable {
 protected:
     Style *_current_style = &this->_default_style;
@@ -104,3 +105,4 @@ public:
     //void add_child(Drawable *child);
 
 };
+}

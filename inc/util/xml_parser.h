@@ -12,6 +12,7 @@
 #include "tree_builder.h"
 
 
+namespace SDL_GUI {
 template <typename T>
 class XmlParser {
     TreeBuilder<T> *_builder = nullptr;
@@ -47,4 +48,4 @@ public:
     }
 
 };
-
+}

@@ -1,5 +1,7 @@
 #include <controllers/mouse_input_controller.h>
 
+using namespace SDL_GUI;
+
 void MouseInputController::update() {
     int x, y;
     SDL_GetMouseState(&x, &y);
