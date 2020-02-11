@@ -2,8 +2,8 @@
 
 #include <SDL2/SDL_ttf.h>
 
-#include "gui/drawable.h"
-#include "util/tree_builder.h"
+#include "drawable.h"
+#include "../util/tree_builder.h"
 
 class DrawableTreeBuilder : public TreeBuilder<Drawable> {
     enum class Type {

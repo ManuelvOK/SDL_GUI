@@ -4,7 +4,7 @@
 
 #include <SDL2/SDL_ttf.h>
 
-#include "gui/drawable.h"
+#include "../drawable.h"
 
 /**
  * A Text view

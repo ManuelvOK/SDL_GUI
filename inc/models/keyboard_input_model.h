@@ -2,7 +2,7 @@
 
 #include <array>
 
-#include "models/model_base.h"
+#include "model_base.h"
 
 class KeyboardInputModel : public ModelBase {
     /**

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "models/model_base.h"
+#include "../models/model_base.h"
 
 class ViewBase {
 public:

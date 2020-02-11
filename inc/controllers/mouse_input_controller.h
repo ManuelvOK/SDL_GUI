@@ -2,8 +2,8 @@
 
 #include <SDL2/SDL.h>
 
-#include "controllers/controller_base.h"
-#include "models/mouse_input_model.h"
+#include "controller_base.h"
+#include "../models/mouse_input_model.h"
 
 class MouseInputController : public ControllerBase {
     /**

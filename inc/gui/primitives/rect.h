@@ -1,7 +1,7 @@
 #pragma once
 
-#include "gui/drawable.h"
-#include "gui/rgb.h"
+#include "../drawable.h"
+#include "../rgb.h"
 
 class Rect : public Drawable {
 public:

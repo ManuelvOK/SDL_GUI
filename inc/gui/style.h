@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gui/rgb.h"
+#include "rgb.h"
 
 class Style {
 public:

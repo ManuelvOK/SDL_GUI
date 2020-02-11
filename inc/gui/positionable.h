@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gui/position.h"
+#include "position.h"
 
 /**
  * Objects consisting out of a position, width and height
