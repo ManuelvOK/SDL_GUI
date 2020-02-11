@@ -80,7 +80,9 @@ makefile-debug:
 	@echo $(dir $(SRCSCC))
 
 .PHONY: lib
-lib: $(filter-out main.o, $(OBJS))
+lib: SDL_GUI.a
+
+SDL_GUI.a: $(filter-out main.o, $(OBJS))
 	$(AR) rvs $(TARGET).a $(filter-out main.o, $^)
 
 $(TARGET): lib main.o
