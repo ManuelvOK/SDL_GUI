@@ -17,6 +17,7 @@ void KeyboardInputController::handle_key_press(SDL_KeyboardEvent kb_event) {
     switch (kb_event.keysym.scancode) {
         case SDL_SCANCODE_Q:
         case SDL_SCANCODE_ESCAPE: this->_input_model->set_pressed(KeyboardInputModel::Key::QUIT);
+                                  *this->_is_running = false;
                                   break;
         default: break;
     }

@@ -21,27 +21,22 @@ class Application {
      * list of Models
      */
     std::vector<ModelBase *> _model_list;
+
     /**
      * list of views
      */
     std::vector<ViewBase *> _view_list;
+
     /**
      * list of controllers
      */
     std::vector<ControllerBase *> _controller_list;
-    /**
-     * shortcut to the specific keyboard intput model
-     */
-    const KeyboardInputModel *_keyboard_input_model = nullptr;
-    /**
-     * shortcut for the specific mouse input model
-     */
-    const MouseInputModel *_mouse_input_model = nullptr;
 
     /**
      * window to render in
      */
     SDL_Window *_window = nullptr;
+
     /**
      * renderer to render on
      */
@@ -53,9 +48,25 @@ class Application {
     bool _is_running = true;
 
     /**
+     * number of frames per second
+     */
+    int _fps = 60;
+
+    /**
      * initialise everything concerning SDL
      */
     void init_SDL();
+
+    /**
+     * initialise the window
+     */
+    void init_window();
+
+    /**
+     * initialise the renderer
+     */
+    void init_renderer();
+
     /**
      * trigger proper destruction of everything concerning SDL
      */
@@ -63,7 +74,7 @@ class Application {
 
     /**
      * proper destruction of the SDL Window
-     * @param status ToDO: what is this?
+     * @param status TODO: what is this?
      * @param window Pointer to the SDL Window to destroy
      */
     static void exit_SDL_DestroyWindow(int status, void *window);
@@ -90,7 +101,7 @@ public:
      * This initialises SDL, creates all the needed Models, Controllers and Views
      * @return true if initialisation succeeds. Otherwise false
      */
-    bool init();
+    virtual void init();
 
     /**
      * run applicatoin
