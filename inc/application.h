@@ -12,6 +12,7 @@
 #include "views/view_base.h"
 namespace SDL_GUI {
 class Application {
+protected:
     /**
      * title string of the Application
      */
