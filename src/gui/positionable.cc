@@ -6,6 +6,14 @@ void Positionable::set_position(Position position) {
     this->_position = position;
 }
 
+void Positionable::set_x(int x) {
+    this->_position._x = x;
+}
+
+void Positionable::set_y(int y) {
+    this->_position._y = y;
+}
+
 void Positionable::set_width(unsigned width) {
     this->_width = width;
 }

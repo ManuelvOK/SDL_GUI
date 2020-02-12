@@ -33,9 +33,11 @@ void DrawableTreeBuilder::set_style(Drawable *drawable, std::map<std::string, st
             case StyleType::HEIGHT:
                 drawable->set_height(std::stoi(value));
                 break;
-            case StyleType::POSITOIN_X:
+            case StyleType::POSITION_X:
+                drawable->set_x(std::stoi(value));
                 break;
-            case StyleType::POSITOIN_Y:
+            case StyleType::POSITION_Y:
+                drawable->set_y(std::stoi(value));
                 break;
             default:
                 break;

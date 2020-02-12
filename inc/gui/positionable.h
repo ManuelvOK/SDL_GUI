@@ -34,6 +34,10 @@ public:
      */
     void set_position(Position position);
 
+    void set_x(int x);
+
+    void set_y(int y);
+
     void set_width(unsigned width);
 
     void set_height(unsigned height);
