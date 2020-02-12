@@ -23,9 +23,11 @@ void DrawableTreeBuilder::set_style(Drawable *drawable, std::map<std::string, st
         switch (this->_style_type_map.at(key)) {
             case StyleType::BORDER:
                 drawable->_default_style._border = true;
+                drawable->_hover_style._border = true;
                 break;
             case StyleType::BACKGROUND:
                 drawable->_default_style._color = RGB(value);
+                drawable->_hover_style._color = RGB(value);
                 break;
             case StyleType::WIDTH:
                 drawable->set_width(std::stoi(value));
