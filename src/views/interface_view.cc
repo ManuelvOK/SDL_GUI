@@ -68,9 +68,10 @@ void InterfaceView::render() {
 
     SDL_Renderer *renderer = this->_renderer;
     /* draw all drawables recursively */
-    this->_draw_tree->reduce<Position>([renderer](Drawable *d, Position parent_position) {
-            Position position = parent_position + d->position();
-            d->draw(renderer, position);
+    this->_draw_tree->reduce<Position>([renderer](Drawable *drawable, Position parent_position) {
+            drawable->recalculate();
+            Position position = parent_position + drawable->position();
+            drawable->draw(renderer, position);
             return position;
             }, {0,0});
 //    this->draw(renderer, position);

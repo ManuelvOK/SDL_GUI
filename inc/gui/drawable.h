@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include <SDL2/SDL.h>
 
 #include "attributable.h"
@@ -25,6 +27,14 @@ protected:
      */
     Drawable(Position position) : Positionable(position) {}
 
+    /**
+     * vector of callbacks for recalculation
+     */
+    std::vector<std::function<void()>> _recalculation_callbacks;
+
+    /**
+     * function to call after current_style is set
+     */
     virtual void hook_set_current_style(Style *style);
 public:
     Style _default_style;
@@ -55,6 +65,17 @@ public:
      *   style to use
      */
     void set_current_style(Style *style);
+
+    /**
+     * add a callback function for data binding
+     * @param callback callback function that gets executed every tick
+     */
+    void add_recalculation_callback(std::function<void()> callback);
+
+    /**
+     * recalculate attributes of this drawable by calling all of the recalculation callbacks
+     */
+    void recalculate();
 
     /**
      * draw this and all of its childs

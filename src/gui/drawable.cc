@@ -15,6 +15,16 @@ void Drawable::hook_set_current_style(Style *style) {
     (void) style;
 }
 
+void Drawable::add_recalculation_callback(std::function<void()> callback) {
+    this->_recalculation_callbacks.push_back(callback);
+}
+
+void Drawable::recalculate() {
+    for (std::function<void()> callback: this->_recalculation_callbacks) {
+        callback();
+    }
+}
+
 //void Drawable::render(SDL_Renderer *renderer, Position parent_position) const {
 //    Position position = parent_position + this->_position;
 //    this->draw(renderer, position);
