@@ -130,11 +130,5 @@ public:
      * trigger rendering on all the existing views that have a related model
      */
     void render_views();
-
-    /**
-     * filter view list, deleting the ones not having a related model
-     */
-    void manage_views_and_controllers();
-
 };
 }

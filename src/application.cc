@@ -35,36 +35,44 @@ void Application::init() {
     this->init_window();
     this->init_renderer();
 
-    /* init keyboard input controller */
+    /**********
+     * Models *
+     **********/
+    /* init keyboard input model */
     KeyboardInputModel *keyboard_input_model = new KeyboardInputModel();
     this->_model_list.push_back(keyboard_input_model);
 
+    /* init keyboard input model */
+    MouseInputModel *mouse_input_model = new MouseInputModel();
+    this->_model_list.push_back(mouse_input_model);
+
+    /* init interface model */
+    InterfaceModel *interface_model = new InterfaceModel();
+    this->_model_list.push_back(interface_model);
+
+    /***************
+     * Controllers *
+     ***************/
     /* init keyboard input controller */
     KeyboardInputController *keyboard_input_controller = new KeyboardInputController(&this->_is_running);
     keyboard_input_controller->set_model(keyboard_input_model);
     this->_controller_list.push_back(keyboard_input_controller);
-
-    /* init keyboard input controller */
-    MouseInputModel *mouse_input_model = new MouseInputModel();
-    this->_model_list.push_back(mouse_input_model);
 
     /* init mouse input controller */
     MouseInputController *mouse_input_controller = new MouseInputController();
     mouse_input_controller->set_model(mouse_input_model);
     this->_controller_list.push_back(mouse_input_controller);
 
-    /* init interface model */
-    InterfaceModel *interface_model = new InterfaceModel();
-    this->_model_list.push_back(interface_model);
 
     /* init interface controller */
-    InterfaceController *interface_controller = new InterfaceController();
+    InterfaceController *interface_controller = new InterfaceController("./templates/main.tpl", interface_model, mouse_input_model);
     this->_controller_list.push_back(interface_controller);
 
+    /********
+     * View *
+     ********/
     /* init interface view */
-    InterfaceView *interface_view = new InterfaceView(this->_renderer, "./templates/main.tpl");
-    interface_view->set_model(interface_model);
-    interface_view->set_mouse_input_model(mouse_input_model);
+    InterfaceView *interface_view = new InterfaceView(this->_renderer, interface_model);
     this->_view_list.push_back(interface_view);
 }
 
@@ -139,7 +147,6 @@ void Application::run() {
 
             this->update_controllers();
             this->update_views();
-            this->manage_views_and_controllers();
         }
 
         time_app = t_sys();
@@ -160,22 +167,12 @@ void Application::update_controllers() {
 
 void Application::update_views() {
     for (ViewBase *view: this->_view_list) {
-        if (view->has_model()) {
-            view->update();
-        }
+        view->update();
     }
 }
 
 void Application::render_views() {
     for (ViewBase *view: this->_view_list) {
-        if (view->has_model()) {
-            view->render();
-        }
+        view->render();
     }
-}
-
-void Application::manage_views_and_controllers() {
-    std::remove_if(
-            this->_view_list.begin(), this->_view_list.end(),
-            [](ViewBase *view) { return !view->has_model(); });
 }

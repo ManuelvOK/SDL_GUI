@@ -49,7 +49,7 @@ SRCSH        := $(patsubst $(INCDIR)/%,%,$(SRCSHABS))
 OBJS         := $(SRCSCC:.cc=.o)
 DEPS         := $(addprefix $(patsubst $(ROOTDIR)/%,%,$(DEPDIR))/,$(SRCSCC:.cc=.d))
 
-CXXFLAGS     := -std=c++17 -Wall -Wextra -Wpedantic -g -O0 `sdl2-config --cflags`
+CXXFLAGS     := -std=c++17 -Wall -Wextra -Wpedantic -ggdb -O0 `sdl2-config --cflags`
 CXXFLAGS     += -I$(INCDIR)
 
 CXXFLAGSTAGS := -I/home/manuel/.vim/tags

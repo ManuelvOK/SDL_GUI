@@ -62,6 +62,10 @@ public:
         return reversed ? this->_children_reversed : this->_children;
     }
 
+    const std::list<TreeNode<T> *> children(bool reversed = false) const {
+        return reversed ? this->_children_reversed : this->_children;
+    }
+
     /**
      * construct a Node for the given objetc and set it as a child
      *
@@ -157,6 +161,14 @@ public:
     void reduce(std::function<R (T *, R)> f, R value, bool reversed = false) {
         R this_value = f(this->_node, value);
         for (TreeNode<T> *child: this->children(reversed)) {
+            child->reduce(f, this_value, reversed);
+        }
+    }
+
+    template<typename R>
+    void reduce(std::function<R (const T *, R)> f, R value, bool reversed = false) const {
+        R this_value = f(this->_node, value);
+        for (const TreeNode<T> *child: this->children(reversed)) {
             child->reduce(f, this_value, reversed);
         }
     }
@@ -304,6 +316,14 @@ public:
      */
     template<typename R>
     void reduce(std::function<R (T *, R)> f, R value, bool reversed = false) {
+        if (this->_root == nullptr) {
+            return;
+        }
+        this->_root->reduce(f, value, reversed);
+    }
+
+    template<typename R>
+    void reduce(std::function<R (const T *, R)> f, R value, bool reversed = false) const {
         if (this->_root == nullptr) {
             return;
         }

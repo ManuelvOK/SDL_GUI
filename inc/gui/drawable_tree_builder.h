@@ -32,7 +32,9 @@ class DrawableTreeBuilder : public TreeBuilder<Drawable> {
         {"x", StyleType::POSITION_X},
         {"y", StyleType::POSITION_Y},
     };
+
     TTF_Font *_font;
+
     void set_style(Drawable *drawable, std::map<std::string, std::string> attributes) const;
 public:
     DrawableTreeBuilder(TTF_Font *font) : _font(font) {}
