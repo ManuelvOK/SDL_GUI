@@ -102,7 +102,7 @@ public:
      *   Node representing the given object. nullptr if not found.
      */
     TreeNode<T> *find(T *node) const {
-        if (this->node == node) {
+        if (this->_node == node) {
             return this;
         }
         for (TreeNode<T> *n: this->children) {
@@ -112,6 +112,35 @@ public:
             }
         }
         return nullptr;
+    }
+
+    /**
+     * create list of objects by filtering this subtree
+     * @param f filter to apply
+     * @return list of filtered objects
+     */
+    std::vector<T *> filter(std::function<bool(T *)> f) {
+        std::vector<T *> filtered;
+        if (f(this->_node)) {
+            filtered.push_back(this->_node);
+        }
+        for (TreeNode<T> *n: this->children) {
+            std::vector<T *> filtered_child = n->filter(f);
+            filtered.insert(filtered.end(), filtered_child.begin(), filtered_child.end());
+        }
+        return filtered;
+    }
+
+    std::vector<const T *> filter(std::function<bool(T *)> f) const {
+        std::vector<const T *> filtered;
+        if (f(this->_node)) {
+            filtered.push_back(this->_node);
+        }
+        for (TreeNode<T> *n: this->children) {
+            std::vector<const T *> filtered_child = n->filter(f);
+            filtered.insert(filtered.end(), filtered_child.begin(), filtered_child.end());
+        }
+        return filtered;
     }
 
     /**
@@ -269,6 +298,27 @@ public:
             return nullptr;
         }
         return this->_root->find(node);
+    }
+
+    /**
+     * filter the tree for a list of Objects
+     * @param f filter to apply to each object
+     * @return filtered list of Objects
+     */
+    std::vector<T *> filter(std::function<bool(T *)> f) {
+        std::vector< T*> filtered;
+        if (this->_root == nullptr) {
+            return filtered;
+        }
+        return this->_root->filter(f);
+    }
+
+    std::vector<const T *> filter(std::function<bool(T *)> f) const {
+        std::vector<const T*> filtered;
+        if (this->_root == nullptr) {
+            return filtered;
+        }
+        return this->_root->filter(f);
     }
 
     /**
