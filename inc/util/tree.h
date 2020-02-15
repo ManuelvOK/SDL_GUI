@@ -122,7 +122,7 @@ public:
     std::vector<TreeNode<T> *> filter(std::function<bool(T *)> f) {
         std::vector<TreeNode<T> *> filtered;
         if (f(this->_node)) {
-            filtered.push_back(this->_node);
+            filtered.push_back(this);
         }
         for (TreeNode<T> *n: this->_children) {
             std::vector<TreeNode<T> *> filtered_child = n->filter(f);
@@ -134,7 +134,7 @@ public:
     std::vector<const TreeNode<T> *> filter(std::function<bool(T *)> f) const {
         std::vector<const TreeNode<T> *> filtered;
         if (f(this->_node)) {
-            filtered.push_back(this->_node);
+            filtered.push_back(this);
         }
         for (TreeNode<T> *n: this->_children) {
             std::vector<const TreeNode<T> *> filtered_child = n->filter(f);
