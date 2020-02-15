@@ -125,7 +125,7 @@ public:
             filtered.push_back(this->_node);
         }
         for (TreeNode<T> *n: this->_children) {
-            std::vector<T *> filtered_child = n->filter(f);
+            std::vector<TreeNode<T> *> filtered_child = n->filter(f);
             filtered.insert(filtered.end(), filtered_child.begin(), filtered_child.end());
         }
         return filtered;
