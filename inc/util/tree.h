@@ -120,7 +120,7 @@ public:
      * @return list of filtered Nodes
      */
     std::vector<TreeNode<T> *> filter(std::function<bool(T *)> f) {
-        std::vector<T *> filtered;
+        std::vector<TreeNode<T> *> filtered;
         if (f(this->_node)) {
             filtered.push_back(this->_node);
         }
