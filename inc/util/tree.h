@@ -115,11 +115,11 @@ public:
     }
 
     /**
-     * create list of objects by filtering this subtree
+     * create list of Nodes by filtering this subtree
      * @param f filter to apply
-     * @return list of filtered objects
+     * @return list of filtered Nodes
      */
-    std::vector<T *> filter(std::function<bool(T *)> f) {
+    std::vector<TreeNode<T> *> filter(std::function<bool(T *)> f) {
         std::vector<T *> filtered;
         if (f(this->_node)) {
             filtered.push_back(this->_node);
@@ -131,13 +131,13 @@ public:
         return filtered;
     }
 
-    std::vector<const T *> filter(std::function<bool(T *)> f) const {
-        std::vector<const T *> filtered;
+    std::vector<const TreeNode<T> *> filter(std::function<bool(T *)> f) const {
+        std::vector<const TreeNode<T> *> filtered;
         if (f(this->_node)) {
             filtered.push_back(this->_node);
         }
         for (TreeNode<T> *n: this->_children) {
-            std::vector<const T *> filtered_child = n->filter(f);
+            std::vector<const TreeNode<T> *> filtered_child = n->filter(f);
             filtered.insert(filtered.end(), filtered_child.begin(), filtered_child.end());
         }
         return filtered;
@@ -301,20 +301,20 @@ public:
     }
 
     /**
-     * filter the tree for a list of Objects
+     * filter the tree for a list of nodes
      * @param f filter to apply to each object
-     * @return filtered list of Objects
+     * @return filtered list of Nodes
      */
-    std::vector<T *> filter(std::function<bool(T *)> f) {
-        std::vector< T*> filtered;
+    std::vector<TreeNode<T> *> filter(std::function<bool(T *)> f) {
+        std::vector<TreeNode<T> *> filtered;
         if (this->_root == nullptr) {
             return filtered;
         }
         return this->_root->filter(f);
     }
 
-    std::vector<const T *> filter(std::function<bool(T *)> f) const {
-        std::vector<const T*> filtered;
+    std::vector<const TreeNode<T> *> filter(std::function<bool(T *)> f) const {
+        std::vector<const TreeNode<T> *> filtered;
         if (this->_root == nullptr) {
             return filtered;
         }
