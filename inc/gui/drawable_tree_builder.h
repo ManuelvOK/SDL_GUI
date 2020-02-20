@@ -10,15 +10,18 @@ class DrawableTreeBuilder : public TreeBuilder<Drawable> {
     enum class Type {
         RECT,
         TEXT,
+        VERTICAL_LINE,
     };
     const std::map<std::string, Type> _type_map = {
         {"rect", Type::RECT},
         {"text", Type::TEXT},
+        {"vertical-line", Type::VERTICAL_LINE},
     };
 
     enum class StyleType {
         BORDER,
         BACKGROUND,
+        COLOR,
         WIDTH,
         HEIGHT,
         POSITION_X,
@@ -27,6 +30,7 @@ class DrawableTreeBuilder : public TreeBuilder<Drawable> {
     const std::map<std::string, StyleType> _style_type_map = {
         {"border", StyleType::BORDER},
         {"bg", StyleType::BACKGROUND},
+        {"color", StyleType::COLOR},
         {"width", StyleType::WIDTH},
         {"height", StyleType::HEIGHT},
         {"x", StyleType::POSITION_X},

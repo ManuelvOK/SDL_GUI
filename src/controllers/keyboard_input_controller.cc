@@ -8,6 +8,7 @@ void KeyboardInputController::update() {
         switch(event.type) {
             case SDL_KEYDOWN: this->handle_key_press(event.key);
                               break;
+            case SDL_KEYUP: this->handle_key_release(event.key);
             default: break;
         }
     }
@@ -16,9 +17,13 @@ void KeyboardInputController::update() {
 void KeyboardInputController::handle_key_press(SDL_KeyboardEvent kb_event) {
     switch (kb_event.keysym.scancode) {
         case SDL_SCANCODE_Q:
-        case SDL_SCANCODE_ESCAPE: this->_input_model->set_pressed(KeyboardInputModel::Key::QUIT);
+        case SDL_SCANCODE_ESCAPE: this->_keyboard_input_model->set_pressed(KeyboardInputModel::Key::QUIT);
                                   *this->_is_running = false;
                                   break;
         default: break;
     }
+}
+
+void KeyboardInputController::handle_key_release(SDL_KeyboardEvent kb_event) {
+    (void) kb_event;
 }

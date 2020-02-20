@@ -30,7 +30,7 @@ protected:
     /**
      * vector of callbacks for recalculation
      */
-    std::vector<std::function<void()>> _recalculation_callbacks;
+    std::vector<std::function<void(Drawable *)>> _recalculation_callbacks;
 
     /**
      * function to call after current_style is set
@@ -70,7 +70,7 @@ public:
      * add a callback function for data binding
      * @param callback callback function that gets executed every tick
      */
-    void add_recalculation_callback(std::function<void()> callback);
+    void add_recalculation_callback(std::function<void(Drawable *)> callback);
 
     /**
      * recalculate attributes of this drawable by calling all of the recalculation callbacks

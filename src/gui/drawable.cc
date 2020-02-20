@@ -15,13 +15,13 @@ void Drawable::hook_set_current_style(Style *style) {
     (void) style;
 }
 
-void Drawable::add_recalculation_callback(std::function<void()> callback) {
+void Drawable::add_recalculation_callback(std::function<void(Drawable *)> callback) {
     this->_recalculation_callbacks.push_back(callback);
 }
 
 void Drawable::recalculate() {
-    for (std::function<void()> callback: this->_recalculation_callbacks) {
-        callback();
+    for (std::function<void(Drawable *)> callback: this->_recalculation_callbacks) {
+        callback(this);
     }
 }
 

@@ -6,6 +6,7 @@
 
 #include <gui/primitives/rect.h>
 #include <gui/primitives/text.h>
+#include <gui/primitives/vertical_line.h>
 
 using namespace SDL_GUI;
 
@@ -26,6 +27,7 @@ void DrawableTreeBuilder::set_style(Drawable *drawable, std::map<std::string, st
                 drawable->_hover_style._border = true;
                 break;
             case StyleType::BACKGROUND:
+            case StyleType::COLOR:
                 drawable->_default_style._color = RGB(value);
                 drawable->_hover_style._color = RGB(value);
                 break;
@@ -58,6 +60,8 @@ Drawable *DrawableTreeBuilder::construct_node(std::string type, std::map<std::st
         case Type::TEXT:
             drawable = new Text("test text", this->_font);
             break;
+        case Type::VERTICAL_LINE:
+            drawable = new VerticalLine();
     }
     if (attributes.find("attributes") != attributes.end()) {
         std::stringstream ss(attributes["attributes"]);
