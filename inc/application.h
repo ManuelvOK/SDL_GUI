@@ -6,6 +6,7 @@
 #include <SDL2/SDL.h>
 
 #include "controllers/controller_base.h"
+#include "controllers/keyboard_input_controller.h"
 #include "models/keyboard_input_model.h"
 #include "models/model_base.h"
 #include "models/mouse_input_model.h"
@@ -52,6 +53,8 @@ protected:
      * number of frames per second
      */
     int _fps = 60;
+
+    KeyboardInputModel<Key> *_keyboard_input_model = nullptr;
 
     /**
      * initialise everything concerning SDL

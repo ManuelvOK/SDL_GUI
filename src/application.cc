@@ -30,6 +30,7 @@ Application::~Application() {
     }
 }
 
+
 void Application::init() {
     this->init_SDL();
     this->init_window();
@@ -39,8 +40,9 @@ void Application::init() {
      * Models *
      **********/
     /* init keyboard input model */
-    KeyboardInputModel *keyboard_input_model = new KeyboardInputModel();
+    KeyboardInputModel<Key> *keyboard_input_model = new KeyboardInputModel<Key>();
     this->_model_list.push_back(keyboard_input_model);
+    this->_keyboard_input_model = keyboard_input_model;
 
     /* init keyboard input model */
     MouseInputModel *mouse_input_model = new MouseInputModel();
@@ -53,16 +55,19 @@ void Application::init() {
     /***************
      * Controllers *
      ***************/
+
+    std::map<SDL_Scancode, Key> input_config = {
+        {SDL_SCANCODE_Q, Key::QUIT},
+        {SDL_SCANCODE_ESCAPE, Key::QUIT},
+    };
     /* init keyboard input controller */
-    KeyboardInputController *keyboard_input_controller = new KeyboardInputController(&this->_is_running);
-    keyboard_input_controller->set_model(keyboard_input_model);
+    KeyboardInputController<Key> *keyboard_input_controller = new KeyboardInputController<Key>(keyboard_input_model, input_config);
     this->_controller_list.push_back(keyboard_input_controller);
 
     /* init mouse input controller */
     MouseInputController *mouse_input_controller = new MouseInputController();
     mouse_input_controller->set_model(mouse_input_model);
     this->_controller_list.push_back(mouse_input_controller);
-
 
     /* init interface controller */
     InterfaceController *interface_controller = new InterfaceController("./templates/main.tpl", interface_model, mouse_input_model);
@@ -153,6 +158,9 @@ void Application::run() {
         /* render */
         render_count ++;
         this->render_views();
+        if (this->_keyboard_input_model->is_down(Key::QUIT)) {
+            this->_is_running = false;
+        }
     }
     this->deinit();
 }
