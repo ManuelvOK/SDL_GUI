@@ -9,10 +9,6 @@
 
 namespace SDL_GUI {
 
-enum class Key {
-    QUIT,
-};
-
 template<typename T>
 class KeyboardInputController : public ControllerBase {
     static_assert(std::is_enum<T>::value);
@@ -23,6 +19,9 @@ protected:
     std::map<SDL_Scancode, T> _input_config;
 
     virtual void handle_key_press(SDL_KeyboardEvent kb_event) {
+        if (kb_event.repeat) {
+            return;
+        }
         if (this->_input_config.contains(kb_event.keysym.scancode)) {
             this->_keyboard_input_model->press(this->_input_config[kb_event.keysym.scancode]);
         }
@@ -39,6 +38,7 @@ public:
     KeyboardInputController(KeyboardInputModel<T> *keyboard_input_model, std::map<SDL_Scancode, T> input_config) : _keyboard_input_model(keyboard_input_model), _input_config(input_config) {}
 
     virtual void update() override {
+        this->_keyboard_input_model->update();
         SDL_Event event;
         while (0 != SDL_PollEvent(&event)) {
             switch(event.type) {
