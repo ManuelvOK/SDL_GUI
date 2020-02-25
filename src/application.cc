@@ -1,17 +1,11 @@
 #include <application.h>
+
 #include <iostream>
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-
 #include <chrono>
 #include <algorithm>
 
-#include <controllers/interface_controller.h>
-#include <controllers/keyboard_input_controller.h>
-#include <controllers/mouse_input_controller.h>
-#include <models/interface_model.h>
-#include <views/interface_view.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 using namespace SDL_GUI;
 
@@ -36,49 +30,7 @@ void Application::init() {
     this->init_window();
     this->init_renderer();
 
-    /**********
-     * Models *
-     **********/
-    /* init keyboard input model */
-    KeyboardInputModel<Key> *keyboard_input_model = new KeyboardInputModel<Key>();
-    this->_model_list.push_back(keyboard_input_model);
-    this->_keyboard_input_model = keyboard_input_model;
-
-    /* init keyboard input model */
-    MouseInputModel *mouse_input_model = new MouseInputModel();
-    this->_model_list.push_back(mouse_input_model);
-
-    /* init interface model */
-    InterfaceModel *interface_model = new InterfaceModel();
-    this->_model_list.push_back(interface_model);
-
-    /***************
-     * Controllers *
-     ***************/
-
-    std::map<SDL_Scancode, Key> input_config = {
-        {SDL_SCANCODE_Q, Key::QUIT},
-        {SDL_SCANCODE_ESCAPE, Key::QUIT},
-    };
-    /* init keyboard input controller */
-    KeyboardInputController<Key> *keyboard_input_controller = new KeyboardInputController<Key>(keyboard_input_model, input_config);
-    this->_controller_list.push_back(keyboard_input_controller);
-
-    /* init mouse input controller */
-    MouseInputController *mouse_input_controller = new MouseInputController();
-    mouse_input_controller->set_model(mouse_input_model);
-    this->_controller_list.push_back(mouse_input_controller);
-
-    /* init interface controller */
-    InterfaceController *interface_controller = new InterfaceController("./templates/main.tpl", interface_model, mouse_input_model);
-    this->_controller_list.push_back(interface_controller);
-
-    /********
-     * View *
-     ********/
-    /* init interface view */
-    InterfaceView *interface_view = new InterfaceView(this->_renderer, interface_model);
-    this->_view_list.push_back(interface_view);
+    this->init_MVCs();
 }
 
 void Application::init_SDL() {
@@ -158,9 +110,7 @@ void Application::run() {
         /* render */
         render_count ++;
         this->render_views();
-        if (this->_keyboard_input_model->is_down(Key::QUIT)) {
-            this->_is_running = false;
-        }
+        this->update_running();
     }
     this->deinit();
 }

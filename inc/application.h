@@ -6,11 +6,9 @@
 #include <SDL2/SDL.h>
 
 #include "controllers/controller_base.h"
-#include "controllers/keyboard_input_controller.h"
-#include "models/keyboard_input_model.h"
 #include "models/model_base.h"
-#include "models/mouse_input_model.h"
 #include "views/view_base.h"
+
 namespace SDL_GUI {
 class Application {
 protected:
@@ -54,8 +52,6 @@ protected:
      */
     int _fps = 60;
 
-    KeyboardInputModel<Key> *_keyboard_input_model = nullptr;
-
     /**
      * initialise everything concerning SDL
      */
@@ -88,6 +84,11 @@ protected:
      * @param renderer Pointer to the SDL Renderer to destroy
      */
     static void exit_SDL_DestroyRenderer(int status, void *renderer);
+
+    /**
+     * update this->is_running variable
+     */
+    virtual void update_running() = 0;
 public:
     /**
      * Constructor
@@ -102,10 +103,14 @@ public:
 
     /**
      * initialise the application.
-     * This initialises SDL, creates all the needed Models, Controllers and Views
-     * @return true if initialisation succeeds. Otherwise false
+     * This initialises SDL and calls the overridden init_MVCs function
      */
-    virtual void init();
+    void init();
+
+    /*
+     * creates all the needed Models, Controllers and Views
+     */
+    virtual void init_MVCs() = 0;
 
     /**
      * run applicatoin
