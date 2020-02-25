@@ -7,10 +7,11 @@
 #include "attributable.h"
 #include "position.h"
 #include "positionable.h"
+#include "scrollable.h"
 #include "style.h"
 
 namespace SDL_GUI {
-class Drawable : public Positionable, public Attributable {
+class Drawable : public Positionable, public Scrollable, public Attributable {
 protected:
     Style *_current_style = &this->_default_style;
 

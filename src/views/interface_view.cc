@@ -49,8 +49,8 @@ void InterfaceView::render() {
     this->_interface_model->drawable_tree()->reduce<Position>([renderer](const Drawable *drawable, Position parent_position) {
             Position position = parent_position + drawable->position();
             drawable->draw(renderer, position);
-            return position;
-            }, {0,0});
+            return position + drawable->scroll_position();
+        }, {0,0});
 //    this->draw(renderer, position);
 //    for (Drawable *child: this->_children) {
 //        if (child == nullptr) {
