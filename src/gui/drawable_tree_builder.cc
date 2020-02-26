@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cstdlib>
 #include <sstream>
 
 #include <gui/primitives/rect.h>
@@ -23,13 +24,12 @@ void DrawableTreeBuilder::set_style(Drawable *drawable, std::map<std::string, st
         }
         switch (this->_style_type_map.at(key)) {
             case StyleType::BORDER:
-                drawable->_default_style._border = true;
-                drawable->_hover_style._border = true;
+                drawable->_default_style._has_border = true;
+                drawable->_hover_style._has_border = true;
                 break;
             case StyleType::BACKGROUND:
             case StyleType::COLOR:
-                drawable->_default_style._color = RGB(value);
-                drawable->_hover_style._color = RGB(value);
+                this->set_color_of_drawable(drawable, value);
                 break;
             case StyleType::WIDTH:
                 drawable->set_width(std::stoi(value));
@@ -47,6 +47,22 @@ void DrawableTreeBuilder::set_style(Drawable *drawable, std::map<std::string, st
                 break;
         }
     }
+}
+
+void DrawableTreeBuilder::set_color_of_drawable(Drawable *drawable, std::string color_value) const {
+    RGB color;
+    /* check for number */
+    char *end;
+    unsigned char value_num = static_cast<unsigned char>(std::strtol(color_value.c_str(), &end, 10));
+    if (end != color_value.c_str()) {
+        color = RGB(value_num);
+    } else {
+        color = RGB(color_value);
+    }
+    drawable->_default_style._color = color;
+    drawable->_default_style._has_background = true;
+    drawable->_hover_style._color = color;
+    drawable->_hover_style._has_background = true;
 }
 
 Drawable *DrawableTreeBuilder::construct_node(std::string type, std::map<std::string, std::string> attributes) const {

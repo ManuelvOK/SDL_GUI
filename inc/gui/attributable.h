@@ -35,5 +35,7 @@ public:
      *   True if attribute is in the list of given attributes for this object. False otherwise.
      */
     bool has_attribute(std::string attribute);
+
+    std::vector<std::string> attributes() const;
 };
 }

@@ -21,3 +21,15 @@ void Positionable::set_width(unsigned width) {
 void Positionable::set_height(unsigned height) {
     this->_height = height;
 }
+
+unsigned Positionable::height() const {
+    return this->_height;
+}
+
+unsigned Positionable::width() const {
+    return this->_width;
+}
+
+Position Positionable::position() const {
+    return this->_position;
+}

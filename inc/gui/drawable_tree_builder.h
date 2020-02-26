@@ -40,6 +40,8 @@ class DrawableTreeBuilder : public TreeBuilder<Drawable> {
     TTF_Font *_font;
 
     void set_style(Drawable *drawable, std::map<std::string, std::string> attributes) const;
+
+    void set_color_of_drawable(Drawable *drawable, std::string color_value) const;
 public:
     DrawableTreeBuilder(TTF_Font *font) : _font(font) {}
     Drawable *construct_node(std::string type, std::map<std::string, std::string> attributes) const override;

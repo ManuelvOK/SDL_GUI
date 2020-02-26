@@ -15,3 +15,7 @@ void Attributable::add_attributes(std::vector<std::string> attributes) {
 bool Attributable::has_attribute(std::string attribute) {
     return (std::find(this->_attributes.begin(), this->_attributes.end(), attribute) != this->_attributes.end());
 }
+
+std::vector<std::string> Attributable::attributes() const {
+    return this->_attributes;
+}

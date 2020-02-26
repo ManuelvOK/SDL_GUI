@@ -41,5 +41,11 @@ public:
     void set_width(unsigned width);
 
     void set_height(unsigned height);
+
+    unsigned height() const;
+
+    unsigned width() const;
+
+    Position position() const;
 };
 }
