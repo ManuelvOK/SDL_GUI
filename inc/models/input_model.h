@@ -55,6 +55,10 @@ public:
         this->_pressed.insert(key);
     }
 
+    void press_once(T key) {
+        this->_down.insert(key);
+    }
+
     /**
      * set the state of a given key to be released
      * @param key The key to set as released
