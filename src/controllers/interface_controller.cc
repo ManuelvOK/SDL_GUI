@@ -16,7 +16,7 @@ void InterfaceController::update() {
     Position current_position = this->_input_model->current_position();
     this->_interface_model->drawable_tree()->map([current_position](Drawable *drawable){
             drawable->recalculate();
-            if (drawable->is_inside(current_position)) {
+            if (drawable->has_hover_style() && drawable->is_inside(current_position)) {
                 drawable->set_current_style(&drawable->_hover_style);
             } else {
                 drawable->set_current_style(&drawable->_default_style);

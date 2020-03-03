@@ -14,6 +14,7 @@ namespace SDL_GUI {
 class Drawable : public Positionable, public Scrollable, public Attributable {
 protected:
     Style *_current_style = &this->_default_style;
+    bool _has_hover_style = false;
 
     /**
      * default Contructor
@@ -66,6 +67,8 @@ public:
      *   style to use
      */
     void set_current_style(Style *style);
+
+    bool has_hover_style();
 
     /**
      * add a callback function for data binding

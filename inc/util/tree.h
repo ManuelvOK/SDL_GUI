@@ -241,6 +241,10 @@ public:
         delete this->_root;
     }
 
+    const TreeNode<T> *root() const {
+        return this->_root;
+    }
+
     /**
      * construct a node for the given object and set it as root of the tree
      *

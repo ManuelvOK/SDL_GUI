@@ -26,6 +26,7 @@ class DrawableTreeBuilder : public TreeBuilder<Drawable> {
         HEIGHT,
         POSITION_X,
         POSITION_Y,
+        OVERFLOW,
     };
     const std::map<std::string, StyleType> _style_type_map = {
         {"border", StyleType::BORDER},
@@ -35,6 +36,7 @@ class DrawableTreeBuilder : public TreeBuilder<Drawable> {
         {"height", StyleType::HEIGHT},
         {"x", StyleType::POSITION_X},
         {"y", StyleType::POSITION_Y},
+        {"overflow", StyleType::OVERFLOW},
     };
 
     TTF_Font *_font;

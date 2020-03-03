@@ -25,7 +25,6 @@ void DrawableTreeBuilder::set_style(Drawable *drawable, std::map<std::string, st
         switch (this->_style_type_map.at(key)) {
             case StyleType::BORDER:
                 drawable->_default_style._has_border = true;
-                drawable->_hover_style._has_border = true;
                 break;
             case StyleType::BACKGROUND:
             case StyleType::COLOR:
@@ -43,6 +42,8 @@ void DrawableTreeBuilder::set_style(Drawable *drawable, std::map<std::string, st
             case StyleType::POSITION_Y:
                 drawable->set_y(std::stoi(value));
                 break;
+            case StyleType::OVERFLOW:
+                drawable->_default_style._overflow = (value == "true");
             default:
                 break;
         }

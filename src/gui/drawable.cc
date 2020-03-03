@@ -11,6 +11,10 @@ void Drawable::set_current_style(Style *style) {
     this->hook_set_current_style(style);
 }
 
+bool Drawable::has_hover_style() {
+    return this->_has_hover_style;
+}
+
 void Drawable::hook_set_current_style(Style *style) {
     (void) style;
 }

@@ -1,6 +1,7 @@
 #include <views/interface_view.h>
 
 #include <iostream>
+#include <tuple>
 
 #include <gui/primitives/rect.h>
 #include <gui/primitives/text.h>
@@ -46,11 +47,23 @@ void InterfaceView::render() {
 
     SDL_Renderer *renderer = this->_renderer;
     /* draw all drawables recursively */
-    this->_interface_model->drawable_tree()->reduce<Position>([renderer](const Drawable *drawable, Position parent_position) {
-            Position position = parent_position + drawable->position();
+    SDL_RenderSetClipRect(renderer, NULL);
+    this->_interface_model->drawable_tree()->reduce<std::tuple<Position, Position, const Drawable *>>([renderer](const Drawable *drawable, auto v) {
+            Position scroll_position = std::get<1>(v);
+            Position position = std::get<0>(v) + scroll_position + drawable->position();
+            const Drawable *parent = std::get<2>(v);
+            if (parent) {
+                SDL_Rect clip_rect = {
+                    std::get<0>(v)._x,
+                    std::get<0>(v)._y,
+                    parent->width(),
+                    parent->height(),
+                };
+                SDL_RenderSetClipRect(renderer, &clip_rect);
+            }
             drawable->draw(renderer, position);
-            return position + drawable->scroll_position();
-        }, {0,0});
+            return std::make_tuple(position, scroll_position + drawable->scroll_position(), drawable);
+        }, std::make_tuple(Position{0,0}, Position{0,0}, nullptr));
 //    this->draw(renderer, position);
 //    for (Drawable *child: this->_children) {
 //        if (child == nullptr) {
