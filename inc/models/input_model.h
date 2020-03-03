@@ -6,10 +6,32 @@
 #include <SDL2/SDL.h>
 
 #include "model_base.h"
+#include "../gui/position.h"
 
 namespace SDL_GUI {
+
+class InputModelBase : public ModelBase {
+protected:
+    /**
+     * current position of the mouse
+     */
+    Position _current_position;
+public:
+    /**
+     * set the position of the mouse pointer
+     * @param position the Position to set the mouse pointer to
+     */
+    void set_position(Position position);
+
+    /**
+     * get the mouse pointers current position
+     * @returns the mouse pointers current position:
+     */
+    Position current_position() const;
+};
+
 template<typename T>
-class KeyboardInputModel : public ModelBase {
+class InputModel : public InputModelBase {
     static_assert(std::is_enum<T>::value);
 
     std::set<T> _pressed;
@@ -17,7 +39,7 @@ class KeyboardInputModel : public ModelBase {
     std::set<T> _up;
 
 public:
-    KeyboardInputModel() = default;
+    InputModel() = default;
 
     void update() {
         this->_down.clear();

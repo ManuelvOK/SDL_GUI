@@ -4,12 +4,12 @@
 
 #include "application.h"
 #include "input_keys.h"
-#include "models/keyboard_input_model.h"
+#include "models/input_model.h"
 #include "models/mouse_input_model.h"
 
 namespace SDL_GUI {
 class ExampleApplication : public Application {
-    KeyboardInputModel<InputKey> *_keyboard_input_model = nullptr;
+    InputModel<InputKey> *_input_model = nullptr;
 
     /**
      * update this->is_running variable

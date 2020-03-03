@@ -7,6 +7,7 @@ void MouseInputModel::update() {
         state = false;
     }
 }
+
 void MouseInputModel::set_pressed(Button button) {
     this->_current_states[static_cast<unsigned>(button)] = true;
 }

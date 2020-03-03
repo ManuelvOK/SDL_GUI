@@ -6,14 +6,14 @@
 using namespace SDL_GUI;
 
 InterfaceController::InterfaceController(const std::string template_file_path,
-        InterfaceModel *interface_model, const MouseInputModel *mouse_input_model)
+        InterfaceModel *interface_model, const InputModelBase *input_model)
     : _template_file_path(template_file_path), _interface_model(interface_model),
-    _mouse_input_model(mouse_input_model) {
+    _input_model(input_model) {
     this->init();
 }
 
 void InterfaceController::update() {
-    Position current_position = this->_mouse_input_model->current_position();
+    Position current_position = this->_input_model->current_position();
     this->_interface_model->drawable_tree()->map([current_position](Drawable *drawable){
             drawable->recalculate();
             if (drawable->is_inside(current_position)) {
