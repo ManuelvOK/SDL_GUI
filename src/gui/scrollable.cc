@@ -1,46 +1,101 @@
 #include <gui/scrollable.h>
 
+#include <algorithm>
+
 using namespace SDL_GUI;
+
+int Scrollable::scroll_position_x_max() {
+    return this->_underscroll._x;
+}
+
+int Scrollable::scroll_position_x_min() {
+    return this->_child_overflow._x - this->_overscroll._x;
+}
+
+int Scrollable::scroll_position_y_max() {
+    return this->_underscroll._y;
+}
+
+int Scrollable::scroll_position_y_min() {
+    return this->_child_overflow._y - this->_overscroll._y;
+}
 
 Position Scrollable::scroll_position() const {
     return this->_scroll_position;
 }
 
 void Scrollable::set_scroll_position(Position offset) {
-    this->_scroll_position = offset;
+    this->set_scroll_position_x(offset._x);
+    this->set_scroll_position_y(offset._y);
 }
 
 void Scrollable::set_scroll_position_x(int x) {
-    this->_scroll_position._x = x;
+    if (this->_scrolling_x_enabled) {
+        this->_scroll_position._x = std::max(this->scroll_position_x_min(), std::min(this->scroll_position_y_max(), x));
+    }
 }
 
 void Scrollable::set_scroll_position_y(int y) {
-    this->_scroll_position._y = y;
+    if (this->_scrolling_y_enabled) {
+        this->_scroll_position._y = y;
+    }
 }
 
-void Scrollable::lock_scrolling_x() {
-    this->_scroll_min._x = 0;
-    this->_scroll_max._x = 0;
+void Scrollable::enable_scrolling() {
+    this->_scrolling_x_enabled = true;
+    this->_scrolling_y_enabled = true;
 }
 
-void Scrollable::lock_scrolling_y() {
-    this->_scroll_min._y = 0;
-    this->_scroll_max._y = 0;
+void Scrollable::disable_scrolling() {
+    this->_scrolling_x_enabled = false;
+    this->_scrolling_y_enabled = false;
 }
 
-void Scrollable::set_scroll_range_min_x(int x) {
-    this->_scroll_min._x = x;
+void Scrollable::enable_scrolling_x() {
+    this->_scrolling_x_enabled = true;
 }
 
-void Scrollable::set_scroll_range_max_x(int x) {
-    this->_scroll_max._x = x;
+void Scrollable::disable_scrolling_x() {
+    this->_scrolling_x_enabled = false;
 }
 
-void Scrollable::set_scroll_range_min_y(int y) {
-    this->_scroll_min._y = y;
+void Scrollable::enable_scrolling_y() {
+    this->_scrolling_y_enabled = true;
 }
 
-void Scrollable::set_scroll_range_max_y(int y) {
-    this->_scroll_max._y = y;
+void Scrollable::disable_scrolling_y() {
+    this->_scrolling_y_enabled = false;
+}
+
+void Scrollable::scroll_left(int value) {
+    this->set_scroll_position_x(this->_scroll_position._x - value);
+}
+
+void Scrollable::scroll_right(int value) {
+    this->set_scroll_position_x(this->_scroll_position._x + value);
+}
+
+void Scrollable::scroll_up(int value) {
+    this->set_scroll_position_y(this->_scroll_position._y - value);
+}
+
+void Scrollable::scroll_down(int value) {
+    this->set_scroll_position_y(this->_scroll_position._y + value);
+}
+
+void Scrollable::set_underscroll_x(int x) {
+    this->_underscroll._x = x;
+}
+
+void Scrollable::set_overscroll_x(int x) {
+    this->_overscroll._x = x;
+}
+
+void Scrollable::set_underscroll_y(int y) {
+    this->_underscroll._y = y;
+}
+
+void Scrollable::set_overscroll_y(int y) {
+    this->_overscroll._y = y;
 }
 
