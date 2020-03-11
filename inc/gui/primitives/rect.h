@@ -9,7 +9,7 @@ public:
     /**
      * default Constructor
      */
-    Rect() = default;
+    Rect() : Drawable("Rect") {}
 
     /**
      * Constructor

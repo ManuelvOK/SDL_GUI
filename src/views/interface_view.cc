@@ -54,6 +54,7 @@ void InterfaceView::render() {
             Position position_with_scrolling = position + scroll_position;
             SDL_Rect parent_clip_rect = std::get<2>(v);
             SDL_RenderSetClipRect(renderer, &parent_clip_rect);
+            //std::cout << "rendering " << drawable->_type << " at position " << position_with_scrolling << "\n";
             drawable->draw(renderer, position_with_scrolling);
             /* calculate new clip rect */
             int new_x = std::max(parent_clip_rect.x, position_with_scrolling._x);

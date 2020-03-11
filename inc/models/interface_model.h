@@ -18,8 +18,12 @@ protected:
      * Tree of Drawables that get rendered
      */
     Tree<Drawable> *_drawable_tree;
+
+    NullDrawable *_null_drawable;
+    TreeNode<Drawable> *_null_drawable_node;
 public:
     InterfaceModel();
+    ~InterfaceModel();
 
     virtual void init();
 

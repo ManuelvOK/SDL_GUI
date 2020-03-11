@@ -9,7 +9,14 @@ InterfaceModel::InterfaceModel() {
     this->init();
 }
 
+InterfaceModel::~InterfaceModel() {
+    delete this->_null_drawable;
+    delete this->_null_drawable_node;
+}
+
 void InterfaceModel::init() {
+    this->_null_drawable = new NullDrawable();
+    this->_null_drawable_node = new TreeNode<Drawable>(this->_null_drawable);
     /* init font */
     this->_font = TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf", 12);
     if (!this->_font) {
@@ -17,6 +24,7 @@ void InterfaceModel::init() {
         exit(EXIT_FAILURE);
     }
 }
+
 
 TTF_Font *InterfaceModel::font() const {
     return this->_font;
@@ -80,7 +88,7 @@ std::vector<const TreeNode<Drawable> *> InterfaceModel::find_tree_nodes(std::str
 TreeNode<Drawable> * InterfaceModel::find_first_tree_node(std::string attribute) {
     std::vector<TreeNode<Drawable> *> tree_nodes = this->_drawable_tree->filter([attribute](Drawable *d){return d->has_attribute(attribute);});
     if (tree_nodes.size() < 1) {
-        return nullptr;
+        return this->_null_drawable_node;
     }
     return tree_nodes[0];
 }
@@ -88,7 +96,7 @@ TreeNode<Drawable> * InterfaceModel::find_first_tree_node(std::string attribute)
 const TreeNode<Drawable> * InterfaceModel::find_first_tree_node(std::string attribute) const {
     std::vector<TreeNode<Drawable> *> tree_nodes = this->_drawable_tree->filter([attribute](Drawable *d){return d->has_attribute(attribute);});
     if (tree_nodes.size() < 1) {
-        return nullptr;
+        return this->_null_drawable_node;
     }
     return tree_nodes[0];
 

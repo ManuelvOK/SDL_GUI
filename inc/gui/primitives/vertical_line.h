@@ -5,7 +5,7 @@
 namespace SDL_GUI {
 class VerticalLine : public Drawable {
 public:
-    VerticalLine() = default;
+    VerticalLine() : Drawable("VerticalLine") {}
 
     void draw(SDL_Renderer *renderer, Position position) const override;
 };

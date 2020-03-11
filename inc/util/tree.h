@@ -24,7 +24,7 @@ public:
      * Destructor
      * Recursively freeing memory for TreeNode structures. This does not destruct the node objetcs itself.
      */
-    ~TreeNode<T>() {
+    virtual ~TreeNode<T>() {
         for (TreeNode<T> *child: this->_children) {
             delete child;
         }

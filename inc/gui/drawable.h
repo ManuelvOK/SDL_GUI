@@ -19,7 +19,7 @@ protected:
     /**
      * default Contructor
      */
-    Drawable() = default;
+    Drawable(std::string type) : _type(type) {}
 
     /**
      * Constructor
@@ -27,7 +27,9 @@ protected:
      * @param position
      *   local position inside parent drawable
      */
-    Drawable(Position position) : Positionable(position) {}
+    Drawable(std::string type, Position position) : Positionable(position), _type(type) {}
+
+    virtual ~Drawable() = default;
 
     /**
      * vector of callbacks for recalculation
@@ -39,6 +41,7 @@ protected:
      */
     virtual void hook_set_current_style(Style *style);
 public:
+    const std::string _type;
     Style _default_style;
     Style _hover_style;
 
@@ -82,36 +85,6 @@ public:
     void recalculate();
 
     /**
-     * draw this and all of its childs
-     *
-     * @param renderer
-     *   renderer to draw on
-     * @param parent_position
-     *   global offset of parent
-     */
-    //void render(SDL_Renderer *renderer, Position parent_position = {0,0}) const;
-
-    /**
-     * Find first Child that holds a given attribute
-     *
-     * @param attribute
-     *   attribute to search for
-     * @returns
-     *   first found Drawable that holds the given attribute. nullptr if no such object exists.
-     */
-    //Drawable *find_first_with_attribute(std::string attribute);
-
-    /**
-     * Find all Childs that hold a given attribute
-     *
-     * @param attribute
-     *   attribute to search for
-     * @returns
-     *   List of Objects that hold the given attribute.
-     */
-    //std::vector<Drawable *> find_all_with_attribute(std::string attribute);
-
-    /**
      * check if Position is inside this
      *
      * @param position
@@ -129,5 +102,15 @@ public:
      */
     //void add_child(Drawable *child);
 
+};
+
+class NullDrawable : public Drawable {
+public:
+    NullDrawable() : Drawable("Null") {}
+    virtual void draw(SDL_Renderer *renderer, Position position) const {
+        (void) renderer;
+        (void) position;
+    }
+    void recalculate() {}
 };
 }

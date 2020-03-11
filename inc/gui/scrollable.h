@@ -26,6 +26,8 @@ public:
     void set_scroll_position_x(int x);
     void set_scroll_position_y(int y);
 
+    void reposition();
+
     void scroll_left(int value = 10);
     void scroll_right(int value = 10);
     void scroll_up(int value = 10);

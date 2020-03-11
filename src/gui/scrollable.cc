@@ -4,6 +4,10 @@
 
 using namespace SDL_GUI;
 
+void Scrollable::reposition() {
+    this->set_scroll_position(this->_scroll_position);
+}
+
 int Scrollable::scroll_position_x_max() {
     return this->_underscroll._x;
 }
