@@ -79,7 +79,7 @@ std::vector<const TreeNode<Drawable> *> InterfaceModel::find_tree_nodes(std::str
 
 TreeNode<Drawable> * InterfaceModel::find_first_tree_node(std::string attribute) {
     std::vector<TreeNode<Drawable> *> tree_nodes = this->_drawable_tree->filter([attribute](Drawable *d){return d->has_attribute(attribute);});
-    if (tree_nodes.size() > 1) {
+    if (tree_nodes.size() < 1) {
         return nullptr;
     }
     return tree_nodes[0];
@@ -87,7 +87,7 @@ TreeNode<Drawable> * InterfaceModel::find_first_tree_node(std::string attribute)
 
 const TreeNode<Drawable> * InterfaceModel::find_first_tree_node(std::string attribute) const {
     std::vector<TreeNode<Drawable> *> tree_nodes = this->_drawable_tree->filter([attribute](Drawable *d){return d->has_attribute(attribute);});
-    if (tree_nodes.size() > 1) {
+    if (tree_nodes.size() < 1) {
         return nullptr;
     }
     return tree_nodes[0];
