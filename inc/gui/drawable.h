@@ -94,13 +94,11 @@ public:
      */
     virtual bool is_inside(Position position) const;
 
-    /**
-     * add a child
-     *
-     * @param child
-     *   child to add
-     */
-    //void add_child(Drawable *child);
+    void show();
+
+    void hide();
+
+    bool is_hidden() const;
 
 };
 

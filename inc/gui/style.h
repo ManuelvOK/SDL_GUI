@@ -10,6 +10,7 @@ public:
     bool _has_background = false; /**< background flag */
     bool _has_border = false; /**< border flag */
     bool _overflow = false; /**< overflow flag */
+    bool _hidden = false; /**< hidden flag */
 
     Style() = default;
 };
