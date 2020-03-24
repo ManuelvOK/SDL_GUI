@@ -31,6 +31,10 @@ public:
         return Position(this->_x + p._x, this->_y + p._y);
     }
 
+    Position operator-(const Position &p) {
+        return Position(this->_x - p._x, this->_y - p._y);
+    }
+
     friend std::ostream& operator<<(std::ostream& os, const Position& pos);
 };
 

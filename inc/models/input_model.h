@@ -15,19 +15,29 @@ protected:
     /**
      * current position of the mouse
      */
-    Position _current_position;
+    Position _mouse_position;
+    Position _mouse_offset;
+
+    Position _mouse_wheel;
 public:
     /**
      * set the position of the mouse pointer
      * @param position the Position to set the mouse pointer to
      */
-    void set_position(Position position);
+    void set_mouse_position(Position position);
 
     /**
      * get the mouse pointers current position
      * @returns the mouse pointers current position:
      */
-    Position current_position() const;
+    Position mouse_position() const;
+
+    Position mouse_offset() const;
+
+    void set_mouse_wheel(Position offset);
+
+    Position mouse_wheel() const;
+
 };
 
 template<typename T>
@@ -37,6 +47,7 @@ class InputModel : public InputModelBase {
     std::set<T> _pressed;
     std::set<T> _down;
     std::set<T> _up;
+
 
 public:
     InputModel() = default;

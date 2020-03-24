@@ -26,7 +26,7 @@ void ExampleApplication::init_MVCs() {
      ***************/
 
     /* init input controller */
-    InputController<InputKey> *input_controller = new InputController<InputKey>(input_model, keyboard_input_config, window_event_config);
+    InputController<InputKey> *input_controller = new InputController<InputKey>(input_model, keyboard_input_config, window_event_config, mouse_input_config);
     this->_controller_list.push_back(input_controller);
 
     /* init interface controller */

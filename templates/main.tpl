@@ -1,4 +1,4 @@
-<rect width="400" height="800" bg="red" border="true" attributes="main">
+<rect width="400" height="800" border="true" attributes="main" onfocus="highlight">
     <text>
     </text>
 </rect>

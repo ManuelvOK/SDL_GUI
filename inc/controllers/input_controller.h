@@ -20,6 +20,8 @@ protected:
 
     std::map<SDL_WindowEventID, T> _window_event_config;
 
+    std::map<Uint8, T> _mouse_input_config;
+
     virtual void handle_key_press(SDL_KeyboardEvent kb_event) {
         if (kb_event.repeat) {
             return;
@@ -36,15 +38,19 @@ protected:
     }
 
     virtual void handle_button_press(SDL_MouseButtonEvent mouse_event) {
-        //TODO: implement
+        if (this->_mouse_input_config.contains(mouse_event.button)) {
+            this->_input_model->press(this->_mouse_input_config[mouse_event.button]);
+        }
     }
 
     virtual void handle_button_release(SDL_MouseButtonEvent mouse_event) {
-        //TODO: implement
+        if (this->_mouse_input_config.contains(mouse_event.button)) {
+            this->_input_model->release(this->_mouse_input_config[mouse_event.button]);
+        }
     }
 
     virtual void handle_scrolling(SDL_MouseWheelEvent mouse_wheel_event) {
-        //TODO: implement
+        this->_input_model->set_mouse_wheel({mouse_wheel_event.x, mouse_wheel_event.y});
     }
 
     virtual void handle_window_event(SDL_WindowEvent window_event) {
@@ -56,13 +62,13 @@ protected:
 
 public:
 
-    InputController(InputModel<T> *input_model, std::map<SDL_Scancode, T> keyboard_input_config, std::map<SDL_WindowEventID, T> window_event_config) : _input_model(input_model), _keyboard_input_config(keyboard_input_config), _window_event_config(window_event_config) {}
+    InputController(InputModel<T> *input_model, std::map<SDL_Scancode, T> keyboard_input_config, std::map<SDL_WindowEventID, T> window_event_config, std::map<Uint8, T> mouse_input_config) : _input_model(input_model), _keyboard_input_config(keyboard_input_config), _window_event_config(window_event_config), _mouse_input_config(mouse_input_config) {}
 
     virtual void update() override {
         this->_input_model->update();
         int x, y;
         SDL_GetMouseState(&x, &y);
-        this->_input_model->set_position({x, y});
+        this->_input_model->set_mouse_position({x, y});
         SDL_Event event;
         while (0 != SDL_PollEvent(&event)) {
             switch(event.type) {

@@ -15,4 +15,7 @@ const std::map<SDL_Scancode, InputKey> keyboard_input_config = {
 const std::map<SDL_WindowEventID, InputKey> window_event_config = {
     {SDL_WINDOWEVENT_RESIZED, InputKey::RESIZED},
 };
+
+const std::map<Uint8, InputKey> mouse_input_config;
 }
+
