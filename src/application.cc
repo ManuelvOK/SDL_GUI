@@ -70,6 +70,7 @@ void Application::init_renderer() {
         std::cerr << "unable to create renderer: " << SDL_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
+    SDL_SetRenderDrawBlendMode(this->_renderer, SDL_BLENDMODE_BLEND);
     on_exit(this->exit_SDL_DestroyRenderer, this->_renderer);
 }
 

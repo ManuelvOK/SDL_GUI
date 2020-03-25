@@ -44,8 +44,10 @@ public:
      *   green value between 0 and 255
      * @param b
      *   blue value between 0 and 255
+     * @param a
+     *   alpha value between 0 and 255
      */
-    RGB(unsigned char r, unsigned char g, unsigned char b) : _r(r), _g(g), _b(b), _a(255) {}
+    RGB(unsigned char r, unsigned char g, unsigned char b, unsigned char a = 255) : _r(r), _g(g), _b(b), _a(a) {}
 
     RGB(std::string color);
 
