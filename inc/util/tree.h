@@ -115,6 +115,44 @@ public:
     }
 
     /**
+     * find the first object in the Tree DFS that holds a given condition
+     * @param f condition
+     * @return first object that holds for the given condition
+     */
+    TreeNode<T> *find_first(std::function<bool(T*)> f) {
+        if (f(this->_node)) {
+            return this;
+        }
+        TreeNode<T> *node = nullptr;
+        for (TreeNode<T> *n: this->_children) {
+            node = n->find_first(f);
+            if (node != nullptr) {
+                return node;
+            }
+        }
+        return nullptr;
+    }
+
+    /**
+     * find the first object in the Tree DFS reversed that holds a given condition
+     * @param f condition
+     * @return first object that holds for the given condition
+     */
+    TreeNode<T> *find_first_bottom_up(std::function<bool(T*)> f) {
+        TreeNode<T> *node = nullptr;
+        for (TreeNode<T> *n: this->_children_reversed) {
+            node = n->find_first(f);
+            if (node != nullptr) {
+                return node;
+            }
+        }
+        if (f(this->_node)) {
+            return this;
+        }
+        return nullptr;
+    }
+
+    /**
      * create list of Nodes by filtering this subtree
      * @param f filter to apply
      * @return list of filtered Nodes
@@ -302,6 +340,30 @@ public:
             return nullptr;
         }
         return this->_root->find(node);
+    }
+
+    /**
+     * find the first object in the Tree DFS that holds a given condition
+     * @param f condition
+     * @return first object that holds for the given condition
+     */
+    TreeNode<T> *find_first(std::function<bool(T*)> f) {
+        if (this->_root == nullptr) {
+            return nullptr;
+        }
+        return this->_root->find_first(f);
+    }
+
+    /**
+     * find the first object in the Tree DFS that holds a given condition
+     * @param f condition
+     * @return first object that holds for the given condition
+     */
+    TreeNode<T> *find_first_bottom_up(std::function<bool(T*)> f) {
+        if (this->_root == nullptr) {
+            return nullptr;
+        }
+        return this->_root->find_first_bottom_up(f);
     }
 
     /**

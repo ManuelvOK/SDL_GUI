@@ -65,8 +65,8 @@ public:
      * find first Drawable in _drawable_tree with a certain attribute
      * @param attribute attribute to find
      */
-    Drawable * find_first_drawable(std::string attribute);
-    const Drawable * find_first_drawable(std::string attribute) const;
+    Drawable *find_first_drawable(std::string attribute);
+    const Drawable *find_first_drawable(std::string attribute) const;
 
     /**
      * find all TreeNodes in _drawable_tree with a certain attribute
@@ -79,7 +79,14 @@ public:
      * find first TreeNode in _drawable_tree with a certain attribute
      * @param attribute attribute to find
      */
-    TreeNode<Drawable> * find_first_tree_node(std::string attribute);
-    const TreeNode<Drawable> * find_first_tree_node(std::string attribute) const;
+    TreeNode<Drawable> *find_first_tree_node(std::string attribute);
+    const TreeNode<Drawable> *find_first_tree_node(std::string attribute) const;
+
+    /**
+     * get bottommost drawable in tree whose bounding box surrounds a given position
+     * This gets the first drawable the mouse hovers over
+     */
+    Drawable *find_first_drawable_at_position(Position position);
+    const Drawable *find_first_drawable_at_position(Position position) const;
 };
 }
