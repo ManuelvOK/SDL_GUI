@@ -42,6 +42,10 @@ protected:
      */
     SDL_Renderer *_renderer = nullptr;
 
+    unsigned _window_width;
+
+    unsigned _window_height;
+
     /**
      * flag that determines whether this application should continue running
      */
@@ -94,7 +98,7 @@ public:
      * Constructor
      * @param application_title title string for the application
      */
-    Application(std::string application_title);
+    Application(std::string application_title, unsigned window_width = 1920, unsigned window_height = 1080);
 
     /**
      * Destructor

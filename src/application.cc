@@ -11,8 +11,8 @@
 
 using namespace SDL_GUI;
 
-Application::Application(std::string application_title) :
-    _application_title(application_title) {}
+Application::Application(std::string application_title, unsigned window_width, unsigned window_height) :
+    _application_title(application_title), _window_width(window_width), _window_height(window_height) {}
 
 Application::~Application() {
     for (ModelBase *model: this->_model_list) {
@@ -53,7 +53,7 @@ void Application::init_SDL() {
 void Application::init_window() {
     /* init window */
     /* TODO: get rid of magic number */
-    this->_window = SDL_CreateWindow(this->_application_title.c_str(), 0, 0, 640, 480,
+    this->_window = SDL_CreateWindow(this->_application_title.c_str(), 0, 0, this->_window_width, this->_window_height,
             SDL_WINDOW_RESIZABLE);
     if (this->_window == nullptr) {
         std::cerr << "unable to create window: " << SDL_GetError() << std::endl;
