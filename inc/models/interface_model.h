@@ -21,8 +21,9 @@ protected:
 
     NullDrawable *_null_drawable;
     TreeNode<Drawable> *_null_drawable_node;
+    SDL_Renderer *_renderer;
 public:
-    InterfaceModel();
+    InterfaceModel(SDL_Renderer *renderer);
     ~InterfaceModel();
 
     virtual void init();

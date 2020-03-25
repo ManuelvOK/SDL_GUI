@@ -6,6 +6,8 @@
 #include <models/interface_model.h>
 #include <views/interface_view.h>
 
+#include <gui/primitives/texture.h>
+
 using namespace SDL_GUI;
 
 void ExampleApplication::init_MVCs() {
@@ -18,7 +20,7 @@ void ExampleApplication::init_MVCs() {
     this->_input_model = input_model;
 
     /* init interface model */
-    InterfaceModel *interface_model = new InterfaceModel();
+    InterfaceModel *interface_model = new InterfaceModel(this->_renderer);
     this->_model_list.push_back(interface_model);
 
     /***************
@@ -39,6 +41,16 @@ void ExampleApplication::init_MVCs() {
     /* init interface view */
     InterfaceView *interface_view = new InterfaceView(this->_renderer, interface_model);
     this->_view_list.push_back(interface_view);
+
+
+    /*****************
+     * example stuff *
+     *****************/
+    TreeNode<Drawable> *main = interface_model->find_first_tree_node("main");
+    Texture *t = new Texture("textures/strichmann.png", this->_renderer);
+    t->set_width(500);
+    t->set_height(200);
+    main->add_child(t);
 }
 
 void ExampleApplication::update_running() {

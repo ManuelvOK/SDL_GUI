@@ -54,7 +54,7 @@ CXXFLAGS     += -I$(INCDIR)
 
 CXXFLAGSTAGS := -I/home/manuel/.vim/tags
 
-LIBS         := -lSDL2 -lSDL2_gfx -lSDL2_ttf
+LIBS         := -lSDL2 -lSDL2_gfx -lSDL2_ttf -lSDL2_image
 
 vpath %.h $(dir $(SRCSHABS))
 vpath %.cc $(dir $(SRCSCCABS))

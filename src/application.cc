@@ -7,6 +7,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
+#include <gui/primitives/texture.h>
+
 using namespace SDL_GUI;
 
 Application::Application(std::string application_title) :
@@ -21,6 +23,9 @@ Application::~Application() {
     }
     for (ControllerBase *controller: this->_controller_list) {
         delete controller;
+    }
+    for (std::pair<std::string, SDL_Texture *> t: Texture::_textures) {
+        SDL_DestroyTexture(t.second);
     }
 }
 

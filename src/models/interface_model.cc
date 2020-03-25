@@ -5,7 +5,7 @@
 
 using namespace SDL_GUI;
 
-InterfaceModel::InterfaceModel() {
+InterfaceModel::InterfaceModel(SDL_Renderer *renderer) : _renderer(renderer) {
     this->init();
 }
 
