@@ -49,6 +49,7 @@ void InterfaceView::render() {
             SDL_RenderSetClipRect(renderer, &parent_clip_rect);
             //std::cout << "rendering " << drawable->_type << " at position " << position_with_scrolling << "\n";
             drawable->draw(renderer, position_with_scrolling);
+            drawable->draw_border(renderer, position_with_scrolling);
             /* calculate new clip rect */
             int new_x = std::max(parent_clip_rect.x, position_with_scrolling._x);
             int new_y = std::max(parent_clip_rect.y, position_with_scrolling._y);

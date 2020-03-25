@@ -17,14 +17,4 @@ void Rect::draw(SDL_Renderer *renderer, Position position) const {
         this->_current_style->_color.activate(renderer);
         SDL_RenderFillRect(renderer, &r);
     }
-
-    /* draw border */
-    if (not this->_current_style->_has_border) {
-        return;
-    }
-    this->_current_style->_border_color.activate(renderer);
-    SDL_RenderDrawRect(renderer, &r);
-    /* since the drawn rect does not include the lower right point,
-     * we have to draw it manually */
-    SDL_RenderDrawPoint(renderer, r.x + r.w - 1, r.y + r.h - 1);
 }

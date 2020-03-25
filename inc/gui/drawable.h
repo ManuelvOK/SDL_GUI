@@ -40,6 +40,7 @@ protected:
      * function to call after current_style is set
      */
     virtual void hook_set_current_style(Style *style);
+
 public:
     const std::string _type;
     Style _default_style;
@@ -62,6 +63,16 @@ public:
      *   global offset in window
      */
     virtual void draw(SDL_Renderer *renderer, Position position) const = 0;
+
+    /**
+     * draw this Objects border. If it should have one. gets called by render()
+     *
+     * @param renderer
+     *   renderer to draw on
+     * @param position
+     *   global offset in window
+     */
+    void draw_border(SDL_Renderer *renderer, Position position) const;
 
     /**
      * change the style to use for rendering

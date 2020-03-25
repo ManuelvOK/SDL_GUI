@@ -20,5 +20,4 @@ void Texture::draw(SDL_Renderer *renderer, Position position) const {
         static_cast<int>(this->_height),
     };
     SDL_RenderCopy(renderer, this->_texture, NULL, &rect);
-
 }

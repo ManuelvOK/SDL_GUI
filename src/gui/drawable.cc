@@ -29,6 +29,25 @@ void Drawable::recalculate() {
     }
 }
 
+void Drawable::draw_border(SDL_Renderer *renderer, Position position) const {
+    if (not this->_current_style->_has_border) {
+        return;
+    }
+    for (int i = 0; i < static_cast<int>(this->_current_style->_border_width); ++i) {
+        SDL_Rect r = {
+            position._x + i,
+            position._y + i,
+            static_cast<int>(this->_width - 2*i),
+            static_cast<int>(this->_height - 2*i),
+        };
+        this->_current_style->_border_color.activate(renderer);
+        SDL_RenderDrawRect(renderer, &r);
+        /* since the drawn rect does not include the lower right point,
+         * we have to draw it manually */
+        SDL_RenderDrawPoint(renderer, r.x + r.w - 1, r.y + r.h - 1);
+    }
+}
+
 void Drawable::show() {
     this->_current_style->_hidden = false;
 }
