@@ -42,6 +42,10 @@ void InterfaceModel::set_drawable_tree(Tree<Drawable> *tree) {
     this->_drawable_tree = tree;
 }
 
+SDL_Renderer *InterfaceModel::renderer() {
+    return this->_renderer;
+}
+
 std::vector<Drawable *> InterfaceModel::find_drawables(std::string attribute) {
     std::vector<TreeNode<Drawable> *> treenodes = this->_drawable_tree->filter([attribute](Drawable *d){return d->has_attribute(attribute);});
     std::vector<Drawable *> drawables;

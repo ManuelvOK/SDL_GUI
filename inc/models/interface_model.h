@@ -46,6 +46,8 @@ public:
      */
     void set_drawable_tree(Tree<Drawable> *tree);
 
+    SDL_Renderer *renderer();
+
     /**
      * find all Drawables in _drawable_tree with a certain attribute
      * @param attribute attribute to find
