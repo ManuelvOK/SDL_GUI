@@ -124,7 +124,11 @@ Drawable *InterfaceModel::find_first_drawable_at_position(Position position) {
 }
 
 const Drawable *InterfaceModel::find_first_drawable_at_position(Position position) const {
-    return this->_drawable_tree->find_first_bottom_up([position](Drawable *drawable){
+    TreeNode<Drawable> *node = this->_drawable_tree->find_first_bottom_up([position](Drawable *drawable){
             return drawable->is_inside(position);
-        })->node();
+        });
+    if (node == nullptr) {
+        return nullptr;
+    }
+    return node->node();
 }

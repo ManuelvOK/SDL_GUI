@@ -141,7 +141,7 @@ public:
     TreeNode<T> *find_first_bottom_up(std::function<bool(T*)> f) {
         TreeNode<T> *node = nullptr;
         for (TreeNode<T> *n: this->_children_reversed) {
-            node = n->find_first(f);
+            node = n->find_first_bottom_up(f);
             if (node != nullptr) {
                 return node;
             }
