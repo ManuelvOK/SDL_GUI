@@ -5,7 +5,7 @@
 
 using namespace SDL_GUI;
 
-InterfaceModel::InterfaceModel(SDL_Renderer *renderer) : _renderer(renderer) {
+InterfaceModel::InterfaceModel(SDL_Renderer *renderer, unsigned window_width, unsigned window_height) : _renderer(renderer), _window_width(window_width), _window_height(window_height) {
     this->init();
 }
 
@@ -44,6 +44,14 @@ void InterfaceModel::set_drawable_tree(Tree<Drawable> *tree) {
 
 SDL_Renderer *InterfaceModel::renderer() {
     return this->_renderer;
+}
+
+unsigned InterfaceModel::window_width() const {
+    return this->_window_width;
+}
+
+unsigned InterfaceModel::window_height() const {
+    return this->_window_height;
 }
 
 std::vector<Drawable *> InterfaceModel::find_drawables(std::string attribute) {

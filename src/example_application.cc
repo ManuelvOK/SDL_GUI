@@ -20,7 +20,7 @@ void ExampleApplication::init_MVCs() {
     this->_input_model = input_model;
 
     /* init interface model */
-    InterfaceModel *interface_model = new InterfaceModel(this->_renderer);
+    InterfaceModel *interface_model = new InterfaceModel(this->_renderer, this->_window_width, this->_window_height);
     this->_model_list.push_back(interface_model);
 
     /***************

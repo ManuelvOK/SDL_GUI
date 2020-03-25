@@ -30,6 +30,12 @@ void InterfaceView::render() {
     SDL_Renderer *renderer = this->_renderer;
     /* draw all drawables recursively */
     SDL_RenderSetClipRect(renderer, NULL);
+    SDL_Rect initial_clip_rect = {
+        0,
+        0,
+        static_cast<int>(this->_interface_model->window_width()),
+        static_cast<int>(this->_interface_model->window_height())
+    };
     this->_interface_model->drawable_tree()->reduce<std::tuple<Position, Position, SDL_Rect, bool>>([renderer](const Drawable *drawable, auto v) {
             Position scroll_position = std::get<1>(v);
             Position position = std::get<0>(v) + drawable->position();
@@ -50,7 +56,7 @@ void InterfaceView::render() {
             int new_height = std::min(parent_clip_rect.y + parent_clip_rect.h, static_cast<int>(new_y + drawable->height())) - new_y;
             parent_clip_rect = {new_x, new_y, new_width, new_height};
             return std::make_tuple(position, scroll_position + drawable->scroll_position(), parent_clip_rect, false);
-        }, std::make_tuple(Position{0,0}, Position{0,0}, SDL_Rect{0,0,1000,1000}, false));
+        }, std::make_tuple(Position{0,0}, Position{0,0}, initial_clip_rect, false));
 
     SDL_RenderPresent(this->_renderer);
 }

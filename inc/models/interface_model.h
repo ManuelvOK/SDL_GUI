@@ -22,8 +22,11 @@ protected:
     NullDrawable *_null_drawable;
     TreeNode<Drawable> *_null_drawable_node;
     SDL_Renderer *_renderer;
+
+    unsigned _window_width;
+    unsigned _window_height;
 public:
-    InterfaceModel(SDL_Renderer *renderer);
+    InterfaceModel(SDL_Renderer *renderer, unsigned window_width, unsigned window_height);
     ~InterfaceModel();
 
     virtual void init();
@@ -47,6 +50,9 @@ public:
     void set_drawable_tree(Tree<Drawable> *tree);
 
     SDL_Renderer *renderer();
+
+    unsigned window_width() const;
+    unsigned window_height() const;
 
     /**
      * find all Drawables in _drawable_tree with a certain attribute
