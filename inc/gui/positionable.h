@@ -34,6 +34,8 @@ public:
      */
     void set_position(Position position);
 
+    void move(Position position);
+
     void set_x(int x);
 
     void set_y(int y);

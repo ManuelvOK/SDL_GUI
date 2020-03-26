@@ -54,6 +54,8 @@ public:
     unsigned window_width() const;
     unsigned window_height() const;
 
+    Drawable *null_drawable();
+
     /**
      * find all Drawables in _drawable_tree with a certain attribute
      * @param attribute attribute to find

@@ -6,6 +6,10 @@ void Positionable::set_position(Position position) {
     this->_position = position;
 }
 
+void Positionable::move(Position position) {
+    this->_position += position;
+}
+
 void Positionable::set_x(int x) {
     this->_position._x = x;
 }

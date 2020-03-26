@@ -54,6 +54,10 @@ unsigned InterfaceModel::window_height() const {
     return this->_window_height;
 }
 
+Drawable *InterfaceModel::null_drawable() {
+    return this->_null_drawable;
+}
+
 std::vector<Drawable *> InterfaceModel::find_drawables(std::string attribute) {
     std::vector<TreeNode<Drawable> *> treenodes = this->_drawable_tree->filter([attribute](Drawable *d){return d->has_attribute(attribute);});
     std::vector<Drawable *> drawables;
