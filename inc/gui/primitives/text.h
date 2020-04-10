@@ -13,8 +13,8 @@ namespace SDL_GUI {
 class Text : public Drawable {
 private:
     SDL_Surface *_surface = nullptr; /**< SDL surface to put text on */
-    std::string _text; /**< text to display */
     TTF_Font *_font; /**< Font to use */
+    std::string _text; /**< text to display */
 
     /**
      * apply the current style and render the text to the surface
@@ -26,10 +26,12 @@ public:
     /**
      * Constructor
      *
+     * @param font
+     *   font to display the text in
      * @param text
      *   the text to display
      */
-    Text(const std::string text, TTF_Font *font) : Drawable("Text"), _text(text), _font(font) {}
+    Text(TTF_Font *font, const std::string text = "") : Drawable("Text"), _font(font), _text(text) {}
 
     /**
      * Destructor
@@ -41,5 +43,7 @@ public:
     unsigned width() const;
 
     unsigned height() const;
+
+    void set_text(const std::string text = "");
 };
 }

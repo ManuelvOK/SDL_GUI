@@ -75,7 +75,7 @@ Drawable *DrawableTreeBuilder::construct_node(std::string type, std::map<std::st
             drawable = new Rect();
             break;
         case Type::TEXT:
-            drawable = new Text("test text", this->_font);
+            drawable = new Text(this->_font, "test text");
             break;
         case Type::VERTICAL_LINE:
             drawable = new VerticalLine();

@@ -9,6 +9,9 @@ Text::~Text() {
 }
 
 void Text::create_surface() {
+    if (this->_surface != nullptr) {
+        SDL_FreeSurface(this->_surface);
+    }
     this->_surface = TTF_RenderText_Blended(this->_font, this->_text.c_str(),
             this->_current_style->_color);
 }
@@ -25,4 +28,9 @@ void Text::draw(SDL_Renderer *renderer, Position position) const {
     SDL_Rect dstrect{position._x, position._y, this->_surface->w, this->_surface->h};
     SDL_RenderCopy(renderer, texture, NULL, &dstrect);
     SDL_DestroyTexture(texture);
+}
+
+void Text::set_text(const std::string text) {
+    this->_text = text;
+    this->create_surface();
 }
