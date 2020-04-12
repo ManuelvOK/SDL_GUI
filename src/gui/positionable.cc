@@ -26,14 +26,23 @@ void Positionable::set_height(unsigned height) {
     this->_height = height;
 }
 
-unsigned Positionable::height() const {
-    return this->_height;
+Position Positionable::position() const {
+    return this->_position;
+}
+
+int Positionable::x() const {
+    return this->_position._x;
+}
+
+int Positionable::y() const {
+    return this->_position._y;
 }
 
 unsigned Positionable::width() const {
     return this->_width;
 }
 
-Position Positionable::position() const {
-    return this->_position;
+unsigned Positionable::height() const {
+    return this->_height;
 }
+

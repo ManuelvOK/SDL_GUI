@@ -5,16 +5,19 @@
 #include <SDL2/SDL.h>
 
 #include "attributable.h"
+#include "hoverable.h"
 #include "position.h"
 #include "positionable.h"
 #include "scrollable.h"
 #include "style.h"
 
 namespace SDL_GUI {
-class Drawable : public Positionable, public Scrollable, public Attributable {
+class Drawable : public Positionable, public Hoverable, public Scrollable, public Attributable {
 protected:
     Style *_current_style = &this->_default_style;
     bool _has_hover_style = false;
+
+    bool _is_debug = false; /**< flag that determines whether this object is used for debugging. */
 
     /**
      * default Contructor
