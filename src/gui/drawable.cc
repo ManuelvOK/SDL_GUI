@@ -1,6 +1,45 @@
 #include <gui/drawable.h>
 
+#include <sstream>
+
+#include <gui/primitives/text.h>
+#include <models/interface_model.h>
+
 using namespace SDL_GUI;
+
+Drawable::Drawable(std::string type, Position position, std::function<void ()> init_debug_information_callback) : Positionable(position), _type(type) {
+    if (init_debug_information_callback) {
+        this->_init_debug_information_callback = init_debug_information_callback;
+    } else {
+        this->_init_debug_information_callback = std::bind(&Drawable::default_init_debug_information, this);
+    }
+}
+
+void Drawable::default_init_debug_information() {
+    /* Position Text */
+    std::stringstream position_string;
+    position_string << this->position();
+
+    Text *position_text = new Text(InterfaceModel::font(), position_string.str());
+    position_text->set_position({3,3});
+    position_text->add_attribute("debug");
+    Drawable *drawable = this;
+    position_text->add_recalculation_callback([drawable, position_text](Drawable *){
+            std::stringstream position_string;
+            position_string << drawable->position();
+            position_text->set_text(position_string.str());
+        });
+
+    this->_debug_information.push_back(position_text);
+}
+
+void Drawable::init_debug_information() {
+    if (this->_debug_information_initialised) {
+        return;
+    }
+    this->_init_debug_information_callback();
+    this->_debug_information_initialised = true;
+}
 
 Position Drawable::position() const {
     return this->_position;

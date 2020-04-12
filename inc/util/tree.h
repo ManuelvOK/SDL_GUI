@@ -10,7 +10,7 @@ class TreeNode {
     TreeNode<T> *_parent = nullptr;
     std::list<TreeNode<T> *> _children;
     std::list<TreeNode<T> *> _children_reversed;
-
+    std::function<void(T *)> _init_node_callback;
 public:
     /**
      * Constructor
@@ -18,7 +18,15 @@ public:
      * @param node
      *   The Object this node represents
      */
-    TreeNode<T>(T *node) : _node(node) {}
+    TreeNode<T>(T *node, std::function<void(T *)> init_node_callback = nullptr) : _node(node) {
+        if (init_node_callback) {
+            this->_init_node_callback = init_node_callback;
+        } else {
+            /* callback does nothing */
+            this->_init_node_callback = [](T*){};
+        }
+        this->_init_node_callback(node);
+    }
 
     /**
      * Destructor
@@ -27,6 +35,9 @@ public:
     virtual ~TreeNode<T>() {
         for (TreeNode<T> *child: this->_children) {
             delete child;
+        }
+        if (this->_node) {
+            delete this->_node;
         }
     }
 
@@ -75,7 +86,7 @@ public:
      *   The added child node
      */
     TreeNode<T> *add_child(T *child) {
-        TreeNode<T> * t = new TreeNode{child};
+        TreeNode<T> * t = new TreeNode{child, this->_init_node_callback};
         this->_children.push_back(t);
         this->_children_reversed.push_front(t);
         return t;
@@ -285,7 +296,19 @@ public:
 template <typename T>
 class Tree {
     TreeNode<T> *_root = nullptr;
+    std::function<void(T *)> _init_node_callback;
 public:
+    /**
+     * Constructor
+     */
+    Tree<T>(std::function<void(T *)> init_node_callback = nullptr) {
+        if (init_node_callback) {
+            this->_init_node_callback = init_node_callback;
+        } else {
+            /* callback does nothing */
+            this->_init_node_callback = [](T*){};
+        }
+    }
     /**
      * Destructor
      */
@@ -306,7 +329,7 @@ public:
      *   The added root node
      */
     TreeNode<T> *set_root(T *node) {
-        this->_root =  new TreeNode<T>(node);
+        this->_root =  new TreeNode<T>(node, this->_init_node_callback);
         return this->_root;
     }
 

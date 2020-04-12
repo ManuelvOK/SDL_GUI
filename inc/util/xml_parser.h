@@ -25,9 +25,9 @@ class XmlParser {
         return attributes;
     }
 
-    TreeNode<T> *parse_node(rapidxml::xml_node<> *node) const {
+    TreeNode<T> *parse_node(rapidxml::xml_node<> *node, std::function<void(T *)> init_node_callback = nullptr) const {
         T *parsed_object = this->_builder->construct_node(node->name(), this->parse_attributes(node));
-        TreeNode<T> *parsed_node = new TreeNode(parsed_object);
+        TreeNode<T> *parsed_node = new TreeNode(parsed_object, init_node_callback);
         for (rapidxml::xml_node<> *child = node->first_node(); child != nullptr; child = child->next_sibling()) {
             parsed_node->add_child(this->parse_node(child));
         }
@@ -42,8 +42,8 @@ public:
         buffer.push_back('\0');
         rapidxml::xml_document<> doc;
         doc.parse<0>(&buffer[0]);
-        Tree<T> *tree = new Tree<T>();
-        tree->set_root(this->parse_node(doc.first_node()));
+        Tree<T> *tree = this->_builder->construct_empty_tree();
+        tree->set_root(this->parse_node(doc.first_node(), this->_builder->get_init_node_callback()));
         return tree;
     }
 

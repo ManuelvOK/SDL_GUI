@@ -12,22 +12,20 @@ protected:
     /**
      * Font to us for text
      */
-    TTF_Font *_font;
+    static TTF_Font *_font;
 
     /**
      * Tree of Drawables that get rendered
      */
     Tree<Drawable> *_drawable_tree;
 
-    NullDrawable *_null_drawable;
-    TreeNode<Drawable> *_null_drawable_node;
     SDL_Renderer *_renderer;
 
     unsigned _window_width;
     unsigned _window_height;
 public:
     InterfaceModel(SDL_Renderer *renderer, unsigned window_width, unsigned window_height);
-    ~InterfaceModel();
+    ~InterfaceModel() = default;
 
     virtual void init();
 
@@ -35,7 +33,7 @@ public:
      * getter for _font
      * @returns this->_font
      */
-    TTF_Font *font() const;
+    static TTF_Font *font();
 
     /**
      * getter for _drawable_tree
@@ -54,7 +52,8 @@ public:
     unsigned window_width() const;
     unsigned window_height() const;
 
-    Drawable *null_drawable();
+    Drawable *null_drawable() const;
+    TreeNode<Drawable> *null_drawable_node() const;
 
     /**
      * find all Drawables in _drawable_tree with a certain attribute

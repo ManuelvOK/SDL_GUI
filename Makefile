@@ -57,6 +57,7 @@ vpath %.cc $(dir $(SRCSCCABS))
 vpath %.d $(dir $(DEPS))
 
 .PHONY: all
+all: LIBS += -fsanitize=address
 all: $(TARGET)
 
 .PHONY: tags
@@ -76,6 +77,7 @@ makefile-debug:
 	@echo $(filter-out main.o, $(OBJS))
 
 .PHONY: lib
+lib: CXXFLAGS += -fsanitize=address
 lib: SDL_GUI.a
 
 SDL_GUI.a: $(filter-out main.o, $(OBJS))

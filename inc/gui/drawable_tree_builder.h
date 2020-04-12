@@ -44,9 +44,11 @@ class DrawableTreeBuilder : public TreeBuilder<Drawable> {
     void set_style(Drawable *drawable, std::map<std::string, std::string> attributes) const;
 
     void set_color_of_drawable(Drawable *drawable, std::string color_value) const;
+
+    static void init_drawable_callback(Drawable *drawable);
 public:
-    DrawableTreeBuilder(TTF_Font *font) : _font(font) {}
+    DrawableTreeBuilder(TTF_Font *font);
     Drawable *construct_node(std::string type, std::map<std::string, std::string> attributes) const override;
-    //void add_child(Drawable *parent, Drawable *child) override;
+    Tree<Drawable> *construct_empty_tree() const override;
 };
 }

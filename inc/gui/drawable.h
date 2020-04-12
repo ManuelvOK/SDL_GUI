@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 
 #include "attributable.h"
+#include "debuggable.h"
 #include "hoverable.h"
 #include "position.h"
 #include "positionable.h"
@@ -12,27 +13,26 @@
 #include "style.h"
 
 namespace SDL_GUI {
-class Drawable : public Positionable, public Hoverable, public Scrollable, public Attributable {
+class Drawable : public Positionable, public Hoverable, public Scrollable, public Attributable, public Debuggable {
 protected:
     Style *_current_style = &this->_default_style;
     bool _has_hover_style = false;
 
-    bool _is_debug = false; /**< flag that determines whether this object is used for debugging. */
+    std::function<void ()> _init_debug_information_callback; /**< function to call for debug information initialisation */
 
     /**
-     * default Contructor
+     * default debug information initialisation
      */
-    Drawable(std::string type) : _type(type) {}
+    void default_init_debug_information();
 
     /**
      * Constructor
      *
-     * @param position
-     *   local position inside parent drawable
+     * @param type name of drawable subclass
+     * @param position local position inside parent drawable
+     * @param init_debug_information_callback function to call for debug information initialisation
      */
-    Drawable(std::string type, Position position) : Positionable(position), _type(type) {}
-
-    virtual ~Drawable() = default;
+    Drawable(std::string type, Position position = {0,0}, std::function<void ()> init_debug_information_callback = nullptr);
 
     /**
      * vector of callbacks for recalculation
@@ -45,9 +45,17 @@ protected:
     virtual void hook_set_current_style(Style *style);
 
 public:
+    virtual ~Drawable() = default;
+
     const std::string _type;
     Style _default_style;
     Style _hover_style;
+
+    /**
+     * initialise debug information
+     */
+    void init_debug_information();
+
 
     /**
      * getter for _position
@@ -117,6 +125,7 @@ public:
 
 class NullDrawable : public Drawable {
 public:
+    ~NullDrawable() = default;
     NullDrawable() : Drawable("Null") {}
     virtual void draw(SDL_Renderer *renderer, Position position) const {
         (void) renderer;

@@ -31,7 +31,7 @@ public:
      * @param text
      *   the text to display
      */
-    Text(TTF_Font *font, const std::string text = "") : Drawable("Text"), _font(font), _text(text) {}
+    Text(TTF_Font *font, const std::string text = "");
 
     /**
      * Destructor
