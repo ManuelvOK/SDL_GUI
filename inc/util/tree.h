@@ -82,6 +82,20 @@ public:
     }
 
     /**
+     * construct a Node for any given object and set them as children
+     *
+     * @param children objects to construct child nodes for
+     * @returns the added children nodes
+     */
+    std::vector<TreeNode<T> *> add_children(std::vector<T *> children) {
+        std::vector<TreeNode<T> *> added_children;
+        for (T *child: children) {
+            added_children.push_back(this->add_child(child));
+        }
+        return added_children;
+    }
+
+    /**
      * add a given treenode as childo
      *
      * @returns

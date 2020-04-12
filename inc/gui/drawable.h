@@ -110,7 +110,6 @@ public:
     void hide();
 
     bool is_hidden() const;
-
 };
 
 class NullDrawable : public Drawable {
