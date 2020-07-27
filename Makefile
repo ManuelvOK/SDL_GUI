@@ -1,101 +1,76 @@
-BUILD = build
-ifneq ($(notdir $(CURDIR)),$(BUILD))
-
-.SUFFIXES:
-OBJDIR := $(CURDIR)/build
-export INCDIR := $(CURDIR)/inc
-export SRCDIR := $(CURDIR)/src
-export ROOTDIR := $(CURDIR)
+BUILD  := build
+SRCDIR := src
+INCDIR := inc
+LIBDIR := lib
+DEPDIR := .d
 
 RM     := rm -rf
 MKDIR  := mkdir -p
+TARGET := $(BUILD)/SDL_GUI
+SRCSALL      := $(patsubst ./%, %, $(shell find -name "*.cc" -o -name "*.h"))
+SRCSCC       := $(filter %.cc, $(SRCSALL))
+SRCH         := $(filter %.h, $(SRCSALL))
+OBJS         := $(patsubst $(SRCDIR)/%.cc, $(BUILD)/%.o, $(SRCSCC))
+DEPS         := $(patsubst $(SRCDIR)/%.cc, $(DEPDIR)/%.d, $(SRCSCC))
 
-SRCSALL      := $(shell find $(CURDIR) -name "*.cc" -o -name "*.h")
-SRCSCCABS    := $(filter %.cc, $(SRCSALL))
-SRCSCC       := $(patsubst $(SRCDIR)/%,%,$(SRCSCCABS))
-
-# create directories
-$(foreach dirname,$(dir $(SRCSCC)),$(shell $(MKDIR) $(OBJDIR)/$(dirname)))
-
-.PHONY: $(all)
-all:
-	+@$(MAKE) --no-print-directory -C $(OBJDIR) -f $(CURDIR)/Makefile $(MAKECMDGOALS)
-
-Makefile : ;
-
-% :: all ;
-
-.PHONY: clean
-clean:
-	$(RM) $(OBJDIR)
-
-.PHONY: sure
-sure: clean
-	+@$(MAKE) --no-print-directory
-
-else
-
-TARGET       := SDL_GUI
-
-SRCSALL      := $(shell find $(ROOTDIR) -name "*.cc" -o -name "*.h")
-SRCSCCABS    := $(filter %.cc, $(SRCSALL))
-SRCSCC       := $(patsubst $(SRCDIR)/%,%,$(SRCSCCABS))
-SRCHABS      := $(filter %.h, $(SRCSALL))
-SRCSH        := $(patsubst $(INCDIR)/%,%,$(SRCSHABS))
-OBJS         := $(SRCSCC:.cc=.o)
-DEPS         := $(SRCSCC:.cc=.d)
 
 CXXFLAGS     := -std=c++2a -Wall -Wextra -Wpedantic -ggdb -O0 `sdl2-config --cflags`
 CXXFLAGS     += -I$(INCDIR)
 
-CXXFLAGSTAGS := -I/home/manuel/.vim/tags
+CXXFLAGSTAGS := -I/home/morion/.vim/tags
 
 LIBS         := -lSDL2 -lSDL2_gfx -lSDL2_ttf -lSDL2_image
 
-vpath %.h $(dir $(SRCSHABS))
-vpath %.cc $(dir $(SRCSCCABS))
-vpath %.d $(dir $(DEPS))
+# create directories
+$(foreach dirname,$(dir $(OBJS)) $(dir $(DEPS)),$(shell $(MKDIR) $(dirname)))
 
 .PHONY: all
-all: LIBS += -fsanitize=address
+#all: CXXFLAGS += -fsanitize=address
+#all: LIBS += -fsanitize=address
 all: $(TARGET)
 
-.PHONY: tags
-tags: $(ROOTDIR)/tags
+.PHONY: run
+run: all
+	$(TARGET)
 
-.PHONY: sanitized
-sanitized: CXXFLAGS += -fsanitize=address
-sanitized: LIBS += -fsanitize=address
-sanitized: all
+.PHONY: clean
+clean:
+	$(RM) $(BUILD)
+	$(RM) $(DEPDIR)
 
-.PHONY: effective
-effective: CXXFLAGS += -Weffc++
-effective: all
+.PHONY: sure
+sure: clean
+	@$(MAKE) --no-print-directory
 
-.PHONY: makefile-debug
-makefile-debug:
-	@echo $(filter-out main.o, $(OBJS))
+.PHONY: debug
+debug:
+	@echo $(OBJS)
 
 .PHONY: lib
-lib: CXXFLAGS += -fsanitize=address
-lib: SDL_GUI.a
+#lib: CXXFLAGS += -fsanitize=address
+#lib: LIBS += -fsanitize=address
+lib: $(TARGET).a
 
-SDL_GUI.a: $(filter-out main.o, $(OBJS))
-	$(AR) rvs $(TARGET).a $(filter-out main.o, $^)
+tags: $(SRCSCC)
+	$(CXX) $(CXXFLAGSTAGS) $(CXXFLAGS) -M $(SRCSCC) | sed -e 's/[\\ ]/\n/g' | \
+	sed -e '/^$$/d' -e '/\.o:[ \t]*$$/d' | \
+	ctags -L - --c++-kinds=+p --fields=+iaS --extra=+q -o "tags" --language-force=C++
 
-%.o: %.d
+$(OBJS): $(BUILD)/%.o: $(DEPDIR)/%.d
+$(OBJS): $(BUILD)/%.o: $(SRCDIR)/%.cc
+	$(CXX) -c $(CXXFLAGS) -o $@ $<
 
-$(TARGET): lib main.o
-	$(CXX) -o $@ main.o $@.a $(LIBS)
-
-%.d: %.cc
+$(DEPS): $(DEPDIR)/%.d: $(SRCDIR)/%.cc
 	$(CXX) $(CXXFLAGS) -MM -o $@ $<
 
-$(ROOTDIR)/tags: $(SRCSCC)
-	$(CXX) $(CXXFLAGSTAGS) $(CXXFLAGS) -M $(SRCSCCABS) | sed -e 's/[\\ ]/\n/g' | \
-	sed -e '/^$$/d' -e '/\.o:[ \t]*$$/d' | \
-	ctags -L - --c++-kinds=+p --fields=+iaS --extras=+q -o "$(ROOTDIR)/tags" --language-force=C++
+$(TARGET): $(BUILD)/main.o $(TARGET).a
+	$(CXX) -o $@ $< $(TARGET).a $(LIBS)
+
+$(TARGET).a: $(filter-out $(BUILD)/main.o, $(OBJS))
+	$(AR) rvs $@ $^
+
+$(LIBRARIES): $(LIBDIR)/%.a: $(LIBDIR)/%/
+	$(MAKE) -C $(LIBDIR)/$* lib
+	ln -fs $(CURDIR)/$(LIBDIR)/$*/build/$*.a $(LIBDIR)/$*.a
 
 -include $(DEPS)
-
-endif
