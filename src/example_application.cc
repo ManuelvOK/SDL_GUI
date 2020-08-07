@@ -46,7 +46,7 @@ void ExampleApplication::init_MVCs() {
     /*****************
      * example stuff *
      *****************/
-    TreeNode<Drawable> *main = interface_model->find_first_tree_node("main");
+    Drawable *main = interface_model->find_first_drawable("main");
     Texture *t = new Texture("textures/strichmann.png", this->_renderer);
     t->set_width(500);
     t->set_height(200);

@@ -25,16 +25,16 @@ TTF_Font *InterfaceModel::font() {
     return InterfaceModel::_font;
 }
 
-Tree<Drawable> *InterfaceModel::drawable_tree() {
-    return this->_drawable_tree;
+Drawable *InterfaceModel::drawable_root() {
+    return this->_drawable_root;
 }
 
-const Tree<Drawable> *InterfaceModel::drawable_tree() const {
-    return this->_drawable_tree;
+const Drawable *InterfaceModel::drawable_root() const {
+    return this->_drawable_root;
 }
 
-void InterfaceModel::set_drawable_tree(Tree<Drawable> *tree) {
-    this->_drawable_tree = tree;
+void InterfaceModel::set_drawable_root(Drawable *root) {
+    this->_drawable_root = root;
 }
 
 SDL_Renderer *InterfaceModel::renderer() {
@@ -53,85 +53,43 @@ Drawable *InterfaceModel::null_drawable() const {
     return new NullDrawable();
 }
 
-TreeNode<Drawable> *InterfaceModel::null_drawable_node() const {
-    return new TreeNode<Drawable>(this->null_drawable());
-}
-
 std::vector<Drawable *> InterfaceModel::find_drawables(std::string attribute) {
-    std::vector<TreeNode<Drawable> *> treenodes = this->_drawable_tree->filter([attribute](Drawable *d){return d->has_attribute(attribute);});
-    std::vector<Drawable *> drawables;
-    for (TreeNode<Drawable> *node: treenodes) {
-        drawables.push_back(node->node());
-    }
-    return drawables;
+    return this->_drawable_root->filter([attribute](Drawable *d){
+        return d->has_attribute(attribute);
+    });
 }
 
 std::vector<const Drawable *> InterfaceModel::find_drawables(std::string attribute) const {
-    std::vector<TreeNode<Drawable> *> treenodes = this->_drawable_tree->filter([attribute](Drawable *d){return d->has_attribute(attribute);});
-    std::vector<const Drawable *> drawables;
-    for (TreeNode<Drawable> *node: treenodes) {
-        drawables.push_back(node->node());
-    }
-    return drawables;
+    const Drawable *drawable_root = this->_drawable_root;
+    return drawable_root->filter([attribute](const Drawable *d){
+        return d->has_attribute(attribute);
+    });
 }
 
 Drawable * InterfaceModel::find_first_drawable(std::string attribute) {
-    std::vector<TreeNode<Drawable> *> treenodes = this->_drawable_tree->filter([attribute](Drawable *d){return d->has_attribute(attribute);});
-    if (treenodes.size() < 1) {
+    std::vector<Drawable *> drawables = this->find_drawables(attribute);
+    if (drawables.size() < 1) {
         return nullptr;
     }
-    return treenodes[0]->node();
+    return drawables[0];
 }
 
 const Drawable * InterfaceModel::find_first_drawable(std::string attribute) const {
-    std::vector<TreeNode<Drawable> *> treenodes = this->_drawable_tree->filter([attribute](Drawable *d){return d->has_attribute(attribute);});
-    if (treenodes.size() < 1) {
+    std::vector<const Drawable *> drawables = this->find_drawables(attribute);
+    if (drawables.size() < 1) {
         return nullptr;
     }
-    return treenodes[0]->node();
-}
-
-std::vector<TreeNode<Drawable> *> InterfaceModel::find_tree_nodes(std::string attribute) {
-    return this->_drawable_tree->filter([attribute](Drawable *d){return d->has_attribute(attribute);});
-}
-
-std::vector<const TreeNode<Drawable> *> InterfaceModel::find_tree_nodes(std::string attribute) const {
-    std::vector<TreeNode<Drawable> *> tree_nodes = this->_drawable_tree->filter([attribute](Drawable *d){return d->has_attribute(attribute);});
-    return std::vector<const TreeNode<Drawable> *>(tree_nodes.begin(), tree_nodes.end());
-}
-
-TreeNode<Drawable> * InterfaceModel::find_first_tree_node(std::string attribute) {
-    std::vector<TreeNode<Drawable> *> tree_nodes = this->_drawable_tree->filter([attribute](Drawable *d){return d->has_attribute(attribute);});
-    if (tree_nodes.size() < 1) {
-        return this->null_drawable_node();
-    }
-    return tree_nodes[0];
-}
-
-const TreeNode<Drawable> * InterfaceModel::find_first_tree_node(std::string attribute) const {
-    std::vector<TreeNode<Drawable> *> tree_nodes = this->_drawable_tree->filter([attribute](Drawable *d){return d->has_attribute(attribute);});
-    if (tree_nodes.size() < 1) {
-        return this->null_drawable_node();
-    }
-    return tree_nodes[0];
+    return drawables[0];
 }
 
 Drawable *InterfaceModel::find_first_drawable_at_position(Position position) {
-    TreeNode<Drawable> *node = this->_drawable_tree->find_first_bottom_up([position](Drawable *drawable){
-            return drawable->is_inside(position);
-        });
-    if (node == nullptr) {
-        return nullptr;
-    }
-    return node->node();
+    return this->_drawable_root->find_first_bottom_up([position](Drawable *d){
+        return d->is_inside(position);
+    });
 }
 
 const Drawable *InterfaceModel::find_first_drawable_at_position(Position position) const {
-    TreeNode<Drawable> *node = this->_drawable_tree->find_first_bottom_up([position](Drawable *drawable){
-            return drawable->is_inside(position);
-        });
-    if (node == nullptr) {
-        return nullptr;
-    }
-    return node->node();
+    return this->_drawable_root->find_first_bottom_up([position](Drawable *d){
+        return d->is_inside(position);
+    });
 }

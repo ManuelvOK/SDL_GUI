@@ -8,6 +8,7 @@
  */
 namespace SDL_GUI {
 class Attributable {
+protected:
     std::vector<std::string> _attributes; /**< List of attributes */
 
 public:
@@ -34,7 +35,7 @@ public:
      * @returns
      *   True if attribute is in the list of given attributes for this object. False otherwise.
      */
-    bool has_attribute(std::string attribute);
+    bool has_attribute(std::string attribute) const;
 
     std::vector<std::string> attributes() const;
 };

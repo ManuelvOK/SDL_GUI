@@ -12,7 +12,7 @@ void Attributable::add_attributes(std::vector<std::string> attributes) {
     this->_attributes.insert(this->_attributes.end(), attributes.begin(), attributes.end());
 }
 
-bool Attributable::has_attribute(std::string attribute) {
+bool Attributable::has_attribute(std::string attribute) const {
     return (std::find(this->_attributes.begin(), this->_attributes.end(), attribute) != this->_attributes.end());
 }
 

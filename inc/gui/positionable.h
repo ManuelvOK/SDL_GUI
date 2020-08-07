@@ -24,31 +24,60 @@ protected:
      * Constructor
      * @param position position
      */
-    Positionable(Position position) : _position(position), _absolute_position() {}
+    Positionable(Position position, Position absolute_position)
+        : _position(position), _absolute_position(absolute_position) {}
 public:
     /**
      * Setter for _position
+     * This also changes _absolute_position.
      * @param position position to set
      */
     void set_position(Position position);
 
     /**
+     * Setter for _absolute_position
+     * @param position position to set
+     */
+    void set_absolute_position(Position position);
+
+    /**
+     * Offset position.
+     * This also moves the absolute position
+     * @param position Position to add to current position
+     */
+    virtual void move(Position position);
+
+    /**
      * Offset position.
      * @param position Position to add to current position
      */
-    void move(Position position);
+    void move_absolute(Position position);
 
     /**
-     * setter for _x
+     * setter for _position._x
+     * This also changes _absolute_position._x
      * @param x x coordinate of position
      */
     void set_x(int x);
 
     /**
-     * setter for _y
+     * setter for _absolute_position._x
+     * @param x x coordinate of position
+     */
+    void set_absolute_x(int x);
+
+    /**
+     * setter for _position._y
+     * This also changes _absolute_position._y
      * @param y y coordinate of position
      */
     void set_y(int y);
+
+    /**
+     * setter for _absolute_position._y
+     * @param y y coordinate of position
+     */
+    void set_absolute_y(int y);
 
     /**
      * setter for _width
@@ -67,6 +96,12 @@ public:
      * @returns position of object
      */
     Position position() const;
+
+    /**
+     * getter for _absolute_position
+     * @returns absolute position of object
+     */
+    Position absolute_position() const;
 
     /**
      * getter for _position._x
@@ -91,6 +126,17 @@ public:
      * @returns height of object
      */
     unsigned height() const;
+
+
+    /**
+     * check if Position is inside this
+     *
+     * @param position
+     *   Position to check for
+     * @returns
+     *   True if position is inside. False otherwise.
+     */
+    virtual bool is_inside(Position position) const;
 
 };
 }

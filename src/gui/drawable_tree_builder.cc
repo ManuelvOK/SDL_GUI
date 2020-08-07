@@ -11,14 +11,6 @@
 
 using namespace SDL_GUI;
 
-DrawableTreeBuilder::DrawableTreeBuilder(TTF_Font *font) : _font(font) {
-    this->_init_node_callback = DrawableTreeBuilder::init_drawable_callback;
-}
-
-void DrawableTreeBuilder::init_drawable_callback(Drawable *drawable) {
-    drawable->init_debug_information();
-}
-
 void DrawableTreeBuilder::set_style(Drawable *drawable, std::map<std::string, std::string> attributes) const {
     for (std::pair<std::string, std::string> attribute: attributes) {
         std::string key = attribute.first;
@@ -94,8 +86,4 @@ Drawable *DrawableTreeBuilder::construct_node(std::string type, std::map<std::st
     }
     this->set_style(drawable, attributes);
     return drawable;
-}
-
-Tree<Drawable> *DrawableTreeBuilder::construct_empty_tree() const {
-    return new Tree<Drawable>(this->_init_node_callback);
 }

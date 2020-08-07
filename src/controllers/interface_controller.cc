@@ -14,7 +14,7 @@ InterfaceController::InterfaceController(const std::string template_file_path,
 
 void InterfaceController::update() {
     Position mouse_position = this->_input_model->mouse_position();
-    this->_interface_model->drawable_tree()->map([mouse_position](Drawable *drawable){
+    this->_interface_model->drawable_root()->map([mouse_position](Drawable *drawable){
             drawable->recalculate();
             if (drawable->has_hover_style() && drawable->is_inside(mouse_position)) {
                 drawable->set_current_style(&drawable->_hover_style);
@@ -27,6 +27,6 @@ void InterfaceController::update() {
 void InterfaceController::init() {
     /* parse template file */
     DrawableTreeBuilder builder(this->_interface_model->font());
-    XmlParser<Drawable> parser(&builder);
-    this->_interface_model->set_drawable_tree(parser.parse_file(this->_template_file_path));
+    XmlParser<DrawableTreeBuilder, Drawable> parser(&builder);
+    this->_interface_model->set_drawable_root(parser.parse_file(this->_template_file_path));
 }

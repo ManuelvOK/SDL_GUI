@@ -4,7 +4,6 @@
 
 #include "model_base.h"
 #include "../gui/drawable.h"
-#include "../util/tree.h"
 
 namespace SDL_GUI {
 class InterfaceModel : public ModelBase {
@@ -17,7 +16,7 @@ protected:
     /**
      * Tree of Drawables that get rendered
      */
-    Tree<Drawable> *_drawable_tree;
+    Drawable *_drawable_root;
 
     SDL_Renderer *_renderer;
 
@@ -36,16 +35,16 @@ public:
     static TTF_Font *font();
 
     /**
-     * getter for _drawable_tree
-     * @returns this->_drawable_tree
+     * getter for _drawable_root
+     * @returns this->_drawable_root
      */
-    Tree<Drawable> *drawable_tree();
-    const Tree<Drawable> *drawable_tree() const;
+    Drawable *drawable_root();
+    const Drawable *drawable_root() const;
 
     /**
-     * setter for _drawable_tree
+     * setter for _drawableroote
      */
-    void set_drawable_tree(Tree<Drawable> *tree);
+    void set_drawable_root(Drawable *root);
 
     SDL_Renderer *renderer();
 
@@ -53,35 +52,20 @@ public:
     unsigned window_height() const;
 
     Drawable *null_drawable() const;
-    TreeNode<Drawable> *null_drawable_node() const;
 
     /**
-     * find all Drawables in _drawable_tree with a certain attribute
+     * find all Drawables in _drawable_root with a certain attribute
      * @param attribute attribute to find
      */
     std::vector<Drawable *> find_drawables(std::string attribute);
     std::vector<const Drawable *> find_drawables(std::string attribute) const;
 
     /**
-     * find first Drawable in _drawable_tree with a certain attribute
+     * find first Drawable in _drawable_root with a certain attribute
      * @param attribute attribute to find
      */
     Drawable *find_first_drawable(std::string attribute);
     const Drawable *find_first_drawable(std::string attribute) const;
-
-    /**
-     * find all TreeNodes in _drawable_tree with a certain attribute
-     * @param attribute attribute to find
-     */
-    std::vector<TreeNode<Drawable> *> find_tree_nodes(std::string attribute);
-    std::vector<const TreeNode<Drawable> *> find_tree_nodes(std::string attribute) const;
-
-    /**
-     * find first TreeNode in _drawable_tree with a certain attribute
-     * @param attribute attribute to find
-     */
-    TreeNode<Drawable> *find_first_tree_node(std::string attribute);
-    const TreeNode<Drawable> *find_first_tree_node(std::string attribute) const;
 
     /**
      * get bottommost drawable in tree whose bounding box surrounds a given position

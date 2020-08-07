@@ -36,7 +36,7 @@ void InterfaceView::render() {
         static_cast<int>(this->_interface_model->window_width()),
         static_cast<int>(this->_interface_model->window_height())
     };
-    this->_interface_model->drawable_tree()->reduce<std::tuple<Position, Position, SDL_Rect, bool>>([renderer](const Drawable *drawable, auto v) {
+    this->_interface_model->drawable_root()->reduce<std::tuple<Position, Position, SDL_Rect, bool>>([renderer](const Drawable *drawable, auto v) {
             Position scroll_position = std::get<1>(v);
             Position position = std::get<0>(v) + drawable->position();
             Position position_with_scrolling = position + scroll_position;
