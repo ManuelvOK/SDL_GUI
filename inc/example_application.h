@@ -7,24 +7,24 @@
 #include "models/input_model.h"
 #include "models/mouse_input_model.h"
 
-namespace SDL_GUI {
-class ExampleApplication : public Application {
-    InputModel<InputKey> *_input_model = nullptr;
-
-    /**
-     * update this->is_running variable
-     */
-    void update_running() override;
-public:
-    /**
-     * Constructor
-     * @param application_title title string for the application
-     */
-    ExampleApplication(std::string application_title) : Application(application_title) {}
-
-    /**
-     * creates all the needed Models, Controllers and Views
-     */
-    void init_MVCs() override;
-};
-}
+//namespace SDL_GUI {
+//class ExampleApplication : public Application<DefaultPlugin> {
+//    InputModel<InputKey> *_input_model = nullptr;
+//
+//    /**
+//     * update this->is_running variable
+//     */
+//    void update_running() override;
+//public:
+//    /**
+//     * Constructor
+//     * @param application_title title string for the application
+//     */
+//    ExampleApplication(std::string application_title) : Application(application_title) {}
+//
+//    /**
+//     * creates all the needed Models, Controllers and Views
+//     */
+//    void init_MVCs() override;
+//};
+//}
