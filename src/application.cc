@@ -7,6 +7,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
+#include <controllers/input_controller.h>
+
 
 using namespace SDL_GUI;
 
@@ -27,9 +29,10 @@ void ApplicationBase::run() {
         while(time_app - time_logic >= dt) {
             logic_count++;
             time_logic += dt;
-
+            read_sdl_events();
             this->update_controllers();
             this->update_views();
+            clear_sdl_events();
         }
 
         time_app = t_sys();

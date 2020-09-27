@@ -3,11 +3,18 @@
 #include <SDL2/SDL.h>
 
 #include <map>
+#include <vector>
 
 #include "controller_base.h"
 #include "../models/input_model.h"
 
 namespace SDL_GUI {
+
+void read_sdl_events();
+
+void clear_sdl_events();
+
+std::vector<SDL_Event> events();
 
 template<typename T>
 class InputController : public ControllerBase {
@@ -69,8 +76,7 @@ public:
         int x, y;
         SDL_GetMouseState(&x, &y);
         this->_input_model->set_mouse_position({x, y});
-        SDL_Event event;
-        while (0 != SDL_PollEvent(&event)) {
+        for (SDL_Event event: events()) {
             switch(event.type) {
                 case SDL_KEYDOWN:
                     this->handle_key_press(event.key);

@@ -12,7 +12,7 @@
 #include "plugins/plugin_base.h"
 #include "views/view_base.h"
 
-#include <gui/primitives/texture.h>
+#include "gui/primitives/texture.h"
 
 namespace SDL_GUI {
 

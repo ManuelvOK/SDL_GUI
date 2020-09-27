@@ -2,8 +2,5 @@
 
 namespace SDL_GUI {
 
-enum class InputKey {
-    QUIT,
-    RESIZED,
-};
+enum class InputKey {};
 }

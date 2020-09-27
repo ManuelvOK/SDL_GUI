@@ -3,14 +3,14 @@
 #include "../application.h"
 #include "plugin_base.h"
 
-#include "controllers/input_controller.h"
-#include "controllers/interface_controller.h"
-#include "models/interface_model.h"
-#include "models/input_model.h"
-#include "views/interface_view.h"
+#include "../controllers/input_controller.h"
+#include "../controllers/interface_controller.h"
+#include "../models/interface_model.h"
+#include "../models/input_model.h"
+#include "../views/interface_view.h"
 
-#include "config/input_config.h"
-#include "input_keys.h"
+#include "../config/input_config.h"
+#include "../input_keys.h"
 
 namespace SDL_GUI {
 class DefaultPlugin: public PluginBase {
