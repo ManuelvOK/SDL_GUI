@@ -50,25 +50,20 @@ public:
                     window_event_config, mouse_input_config);
         app->add_controller(input_controller);
 
-        SDL_GUI::InterfaceController *interface_controller =
-            new SDL_GUI::InterfaceController("templates/main.tpl", this->_interface_model,
-                                             this->_input_model);
+        InterfaceController *interface_controller = new InterfaceController("templates/main.tpl",
+                                                                            this->_interface_model,
+                                                                            this->_input_model);
         app->add_controller(interface_controller);
 
         /*********
          * Views *
          *********/
-        SDL_GUI::InterfaceView *interface_view =
-            new SDL_GUI::InterfaceView(app->renderer(), this->_interface_model);
+        InterfaceView *interface_view = new InterfaceView(app->renderer(), this->_interface_model);
         app->add_view(interface_view);
     }
 
-    InterfaceModel *interface_model() {
-        return this->_interface_model;
-    }
+    InterfaceModel *interface_model();
 
-    InputModel<InputKey> *input_model() {
-        return this->_input_model;
-    }
+    InputModel<InputKey> *input_model();
 };
 }
