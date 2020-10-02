@@ -44,8 +44,10 @@ public:
     ExamplePlugin(): PluginBase("Example Plugin") {}
 
     template <typename ... Ts>
-    void init(ApplicationBase *app, std::tuple<Ts...> previous) {
+    void init(ApplicationBase *app, std::tuple<Ts...> previous, int argc, char *argv[]) {
         (void)app;
+        (void)argc;
+        (void)argv;
         /* Models */
         InputModel<ExampleInputKey> *input_model = new InputModel<ExampleInputKey>();
         app->add_model(input_model);

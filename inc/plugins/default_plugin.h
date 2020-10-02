@@ -26,8 +26,10 @@ public:
      * creates all the needed Models, Controllers and Views
      */
     template <typename ... Ts>
-    void init(ApplicationBase *app, std::tuple<Ts...> previous) {
+    void init(ApplicationBase *app, std::tuple<Ts...> previous, int argc, char* argv[]) {
         (void)previous;
+        (void)argc;
+        (void)argv;
         std::cout << "Default Plugin\n";
         this->_application = app;
         /**********

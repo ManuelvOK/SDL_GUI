@@ -19,16 +19,18 @@ namespace SDL_GUI {
 class ApplicationBase;
 template <typename ... Ts>
 typename std::enable_if<(sizeof...(Ts) == 0), std::tuple<Ts...>>::type
-create_plugins(ApplicationBase *application) {
+create_plugins(ApplicationBase *application, int argc, char *argv[]) {
     (void)application;
+    (void)argc;
+    (void)argv;
     return std::make_tuple();
 }
 
 template <typename T, typename ... Ts>
-std::tuple<Ts..., T> create_plugins(ApplicationBase *application) {
-    std::tuple<Ts...> previous = create_plugins<Ts...>(application);
+std::tuple<Ts..., T> create_plugins(ApplicationBase *application, int argc, char *argv[]) {
+    std::tuple<Ts...> previous = create_plugins<Ts...>(application, argc, argv);
     T current = T();
-    current.init(application, previous);
+    current.init(application, previous, argc, argv);
     return std::tuple_cat(previous, std::make_tuple(current));
 }
 
@@ -285,10 +287,10 @@ public:
      * Constructor
      * @param application_title title string for the application
      */
-    Application(std::string application_title, unsigned window_width = 1920,
-                unsigned window_height = 1080)
+    Application(std::string application_title, int argc, char *argv[],
+                unsigned window_width = 1920, unsigned window_height = 1080)
         : ApplicationBase(application_title, window_width, window_height) {
-        this->_plugins = create_plugins<Ts...>(this);
+        this->_plugins = create_plugins<Ts...>(this, argc, argv);
     }
 
 
