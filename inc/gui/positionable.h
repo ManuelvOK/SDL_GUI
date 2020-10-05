@@ -20,13 +20,14 @@ protected:
      */
     Positionable() : _position(), _absolute_position() {}
 
+public:
     /**
      * Constructor
      * @param position position
      */
     Positionable(Position position, Position absolute_position)
         : _position(position), _absolute_position(absolute_position) {}
-public:
+
     /**
      * Setter for _position
      * This also changes _absolute_position.

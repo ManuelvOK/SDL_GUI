@@ -170,6 +170,7 @@ void Drawable::add_recalculation_callback(std::function<void(Drawable *)> callba
 }
 
 void Drawable::recalculate() {
+    this->update();
     for (std::function<void(Drawable *)> callback: this->_recalculation_callbacks) {
         callback(this);
     }

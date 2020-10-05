@@ -221,6 +221,8 @@ public:
      */
     void recalculate();
 
+    virtual void update() {}
+
     void show();
 
     void hide();
