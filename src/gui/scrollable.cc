@@ -35,7 +35,7 @@ void Scrollable::set_scroll_position(Position offset) {
 
 void Scrollable::set_scroll_position_x(int x) {
     if (this->_scrolling_x_enabled) {
-        this->_scroll_position._x = std::max(this->scroll_position_x_min(), std::min(this->scroll_position_y_max(), x));
+        this->_scroll_position._x = x;//std::max(this->scroll_position_x_min(), std::min(this->scroll_position_x_max(), x));
     }
 }
 
