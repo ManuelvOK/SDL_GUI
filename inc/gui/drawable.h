@@ -156,7 +156,8 @@ public:
      * @returns last aggregated propagation value
      */
     template<typename R>
-    R bottom_up_reduce(std::function<R (Drawable *, R)> f, R value, std::function<R (std::vector<R>)> aggregate, bool reversed = false) {
+    R bottom_up_reduce(std::function<R (Drawable *, R)> f, R value,
+                       std::function<R (std::vector<R>)> aggregate, bool reversed = false) {
         if (this->_children.empty()) {
             return f(this, value);
         }
@@ -179,6 +180,12 @@ public:
      * @param position Position to add to current position
      */
     void move(Position position) override;
+
+    /**
+     * render the subtree this drawable is root of.
+     */
+    void render(SDL_Renderer *renderer, Position parent_position, Position scroll_position,
+                SDL_Rect parent_clip_rect, bool hidden) const;
 
     /**
      * draw this Object. gets called by render()

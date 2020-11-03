@@ -176,6 +176,36 @@ void Drawable::recalculate() {
     }
 }
 
+void Drawable::render(SDL_Renderer *renderer, Position parent_position, Position scroll_position,
+                      SDL_Rect parent_clip_rect, bool hidden) const {
+    Position position = parent_position + this->_position;
+    Position position_with_scrolling = position + scroll_position;
+    if (hidden || this->is_hidden()) {
+        return;
+    }
+    SDL_RenderSetClipRect(renderer, &parent_clip_rect);
+    //std::cout << "rendering " << drawable->_type << " at position " << position_with_scrolling << "\n";
+    this->draw(renderer, position_with_scrolling);
+
+    /* calculate new clip rect */
+    int new_x = std::max(parent_clip_rect.x, position_with_scrolling._x);
+    int new_y = std::max(parent_clip_rect.y, position_with_scrolling._y);
+    int new_width = std::min(parent_clip_rect.x + parent_clip_rect.w, static_cast<int>(new_x + this->_width)) - new_x;
+    int new_height = std::min(parent_clip_rect.y + parent_clip_rect.h, static_cast<int>(new_y + this->_height)) - new_y;
+    SDL_Rect new_clip_rect = {new_x, new_y, new_width, new_height};
+
+    /* draw children */
+    for (Drawable *child: this->_children) {
+        child->render(renderer, position, scroll_position + this->scroll_position(), new_clip_rect, false);
+    }
+
+    SDL_RenderSetClipRect(renderer, &parent_clip_rect);
+    this->draw_border(renderer, position_with_scrolling);
+    this->draw_debug_information(renderer, position_with_scrolling);
+
+
+}
+
 void Drawable::draw_border(SDL_Renderer *renderer, Position position) const {
     if (not this->_current_style->_has_border) {
         return;
