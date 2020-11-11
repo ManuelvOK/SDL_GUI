@@ -17,6 +17,8 @@ DEPS         := $(patsubst $(SRCDIR)/%.cc, $(DEPDIR)/%.d, $(SRCSCC))
 CXXFLAGS     := -std=c++2a -Wall -Wextra -Wpedantic -ggdb -O0 `sdl2-config --cflags`
 CXXFLAGS     += -I$(INCDIR)
 
+DEPFLAGS     += -MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
+
 CXXFLAGSTAGS := -I/home/morion/.vim/tags
 
 LIBS         := -lSDL2 -lSDL2_gfx -lSDL2_ttf -lSDL2_image
@@ -56,12 +58,12 @@ tags: $(SRCSCC)
 	sed -e '/^$$/d' -e '/\.o:[ \t]*$$/d' | \
 	ctags -L - --c++-kinds=+p --fields=+iaS --extra=+q -o "tags" --language-force=C++
 
-$(OBJS): $(BUILD)/%.o: $(DEPDIR)/%.d
-$(OBJS): $(BUILD)/%.o: $(SRCDIR)/%.cc
-	$(CXX) -c $(CXXFLAGS) -o $@ $<
+$(OBJS): $(BUILD)/%.o: $(SRCDIR)/%.cc $(DEPDIR)/%.d | $(DEPDIR)
+	$(CXX) $(DEPFLAGS) $(CXXFLAGS) -c -o $@ $<
 
-$(DEPS): $(DEPDIR)/%.d: $(SRCDIR)/%.cc
-	$(CXX) $(CXXFLAGS) -MM -o $@ $<
+$(DEPDIR): ; @mkdir -p $@
+
+$(DEPS):
 
 $(TARGET): $(BUILD)/main.o $(TARGET).a
 	$(CXX) -o $@ $< $(TARGET).a $(LIBS)
@@ -73,4 +75,4 @@ $(LIBRARIES): $(LIBDIR)/%.a: $(LIBDIR)/%/
 	$(MAKE) -C $(LIBDIR)/$* lib
 	ln -fs $(CURDIR)/$(LIBDIR)/$*/build/$*.a $(LIBDIR)/$*.a
 
--include $(DEPS)
+-include $(wildcard $(DEPS))

@@ -20,6 +20,8 @@ protected:
 
     Position _mouse_wheel;
 public:
+
+    void update();
     /**
      * set the position of the mouse pointer
      * @param position the Position to set the mouse pointer to
@@ -53,6 +55,7 @@ public:
     InputModel() = default;
 
     void update() {
+        InputModelBase::update();
         this->_down.clear();
         this->_up.clear();
     }
