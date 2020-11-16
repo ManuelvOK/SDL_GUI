@@ -11,7 +11,7 @@
  */
 namespace SDL_GUI {
 class Text : public Drawable {
-private:
+protected:
     SDL_Surface *_surface = nullptr; /**< SDL surface to put text on */
     TTF_Font *_font; /**< Font to use */
     std::string _text; /**< text to display */

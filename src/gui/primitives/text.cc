@@ -1,5 +1,7 @@
 #include <gui/primitives/text.h>
 
+#include <cassert>
+
 using namespace SDL_GUI;
 
 Text::Text(TTF_Font *font, const std::string text) : Drawable("Text"), _font(font), _text(text) {
@@ -37,4 +39,14 @@ void Text::draw(SDL_Renderer *renderer, Position position) const {
 void Text::set_text(const std::string text) {
     this->_text = text;
     this->create_surface();
+}
+
+unsigned Text::height() const {
+    assert(this->_surface != nullptr);
+    return this->_surface->h;
+}
+
+unsigned Text::width() const {
+    assert(this->_surface != nullptr);
+    return this->_surface->w;
 }
