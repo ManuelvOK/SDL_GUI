@@ -7,13 +7,10 @@ namespace SDL_GUI {
 class Rect : public Drawable {
 public:
     /**
-     * default Constructor
-     */
-    Rect() : Drawable("Rect") {}
-
-    /**
      * Constructor
      *
+     * @param position
+     *   absolute position of parent
      * @param position
      *   local position inside parent drawable
      * @param width
@@ -21,7 +18,8 @@ public:
      * @param height
      *   height of rect
      */
-    Rect(Position position, unsigned width, unsigned height);
+    Rect(Position parent_position = {0, 0}, Position position = {0, 0}, unsigned width = 0,
+         unsigned height = 0);
 
     void draw(SDL_Renderer *renderer, Position position) const override;
 };
