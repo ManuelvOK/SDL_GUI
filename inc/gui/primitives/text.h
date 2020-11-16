@@ -31,7 +31,8 @@ public:
      * @param text
      *   the text to display
      */
-    Text(TTF_Font *font, const std::string text = "");
+    Text(TTF_Font *font, const std::string text = "", Position parent_position = {0, 0},
+         Position position = {0, 0});
 
     /**
      * Destructor
