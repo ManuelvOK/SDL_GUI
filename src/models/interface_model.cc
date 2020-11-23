@@ -7,19 +7,22 @@ using namespace SDL_GUI;
 
 TTF_Font *InterfaceModel::_font;
 
-InterfaceModel::InterfaceModel(SDL_Renderer *renderer, unsigned window_width, unsigned window_height) : _renderer(renderer), _window_width(window_width), _window_height(window_height) {
-    this->init();
-}
-
-void InterfaceModel::init() {
+InterfaceModel::InterfaceModel(SDL_Renderer *renderer, unsigned window_width,
+                               unsigned window_height)
+    : _renderer(renderer), _window_width(window_width), _window_height(window_height) {
     /* init font */
     this->_font = TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf", 12);
     if (!this->_font) {
         std::cerr << "TTF_Error: " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
+    /* init null_drawable */
+    this->_null_drawable = new NullDrawable();
 }
 
+InterfaceModel::~InterfaceModel() {
+    delete this->_null_drawable;
+}
 
 TTF_Font *InterfaceModel::font() {
     return InterfaceModel::_font;

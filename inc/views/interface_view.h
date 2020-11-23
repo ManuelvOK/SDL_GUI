@@ -6,22 +6,21 @@
 #include "../models/interface_model.h"
 
 namespace SDL_GUI {
+/**
+ * View that renders the drawable tree to the applications renderer.
+ */
 class InterfaceView : public ViewBase {
 protected:
-    /**
-     * SDL Renderer to render on
-     */
-    SDL_Renderer *_renderer;
+    SDL_Renderer *_renderer;                    /**< SDL Renderer to render on */
 
-    /**
-     * pointer to the interface model
-     */
-    const InterfaceModel *_interface_model;
+    const InterfaceModel *_interface_model;     /**< The applications interface model */
 
 public:
     /**
      * Constructor
+     *
      * @param renderer The SDL renderer to render on
+     * @param interface_model The applications interface model
      */
     InterfaceView(SDL_Renderer *renderer, const InterfaceModel *interface_model);
 

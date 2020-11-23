@@ -9,35 +9,51 @@
 #include "../gui/position.h"
 
 namespace SDL_GUI {
-
+/**
+ *
+ */
 class InputModelBase : public ModelBase {
 protected:
-    /**
-     * current position of the mouse
-     */
-    Position _mouse_position;
-    Position _mouse_offset;
+    Position _mouse_position;   /**< current position of the mouse */
+    Position _mouse_offset;     /**< difference between current and previous mouse position */
 
-    Position _mouse_wheel;
+    Position _mouse_wheel;      /**< mouse wheel difference */
 public:
 
-    void update();
     /**
-     * set the position of the mouse pointer
-     * @param position the Position to set the mouse pointer to
+     * Reset mouse wheel difference
+     */
+    void update();
+
+    /**
+     * Setter for the mouse position.
+     * This will also change the mouse offset.
+     * @param position current position of the mouse
      */
     void set_mouse_position(Position position);
 
     /**
-     * get the mouse pointers current position
-     * @returns the mouse pointers current position:
+     * getter for _mouse_position
+     * @returns this->_mouse_position
      */
     Position mouse_position() const;
 
+    /**
+     * getter for _mouse_offset
+     * @returns this->_mouse_offset
+     */
     Position mouse_offset() const;
 
+    /**
+     * Setter for the mouse wheel change
+     * @param offset mouse wheel change
+     */
     void set_mouse_wheel(Position offset);
 
+    /**
+     * getter for _mouse_wheel
+     * @returns this->_mouse_wheel
+     */
     Position mouse_wheel() const;
 
 };
@@ -46,14 +62,20 @@ template<typename T>
 class InputModel : public InputModelBase {
     static_assert(std::is_enum<T>::value);
 
-    std::set<T> _pressed;
-    std::set<T> _down;
-    std::set<T> _up;
+    std::set<T> _pressed;   /**< active (pressed) inputs */
+    std::set<T> _down;      /**< inputs that just got activated (pressed) */
+    std::set<T> _up;        /**< inputs that just got deactivated (released) */
 
 
 public:
+    /**
+     * Constructor
+     */
     InputModel() = default;
 
+    /**
+     * Clear _down and _up
+     */
     void update() {
         InputModelBase::update();
         this->_down.clear();
@@ -61,25 +83,30 @@ public:
     }
 
     /**
-     * set the state of a given key to be pressed
-     * @param key The key to set as pressed
+     * set the state of a given input to be pressed
+     * @param input The input to set as pressed
      */
-    void press(T key) {
-        this->_down.insert(key);
-        this->_pressed.insert(key);
-    }
-
-    void press_once(T key) {
-        this->_down.insert(key);
+    void press(T input) {
+        this->_down.insert(input);
+        this->_pressed.insert(input);
     }
 
     /**
-     * set the state of a given key to be released
-     * @param key The key to set as released
+     * Set the state of a given input to be pressed just for this one tick.
+     * This is used for events that will not get released.
+     * @param input The input to trigger
      */
-    void release(T key) {
-        this->_pressed.erase(key);
-        this->_up.insert(key);
+    void trigger(T input) {
+        this->_down.insert(input);
+    }
+
+    /**
+     * set the state of a given input to be released
+     * @param input The input to set as released
+     */
+    void release(T input) {
+        this->_pressed.erase(input);
+        this->_up.insert(input);
     }
 
     /**

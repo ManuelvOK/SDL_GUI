@@ -13,17 +13,28 @@
 #include "../input_keys.h"
 
 namespace SDL_GUI {
+
+/**
+ * Plugin that hold the default default GUI rendering
+ */
 class DefaultPlugin: public PluginBase {
 private:
-    ApplicationBase *_application;
-    InterfaceModel *_interface_model;
-    InputModel<InputKey> *_input_model;
+    ApplicationBase *_application;      /**< The application */
+    InterfaceModel *_interface_model;   /**< The applications interface model */
+    InputModel<InputKey> *_input_model; /**< The applications input model */
 public:
-    DefaultPlugin() : PluginBase("DefaultPlugin") {
-    }
+    /**
+     * Constructor
+     */
+    DefaultPlugin() : PluginBase("DefaultPlugin") {}
 
     /**
-     * creates all the needed Models, Controllers and Views
+     * Create all the needed Models, Controllers and Views
+     * @tparam Ts List of already instantiated plugin types
+     * @param app The application
+     * @param previous tuple of already instantiated plugins
+     * @param argc programs argc
+     * @param argv[] programs argv
      */
     template <typename ... Ts>
     void init(ApplicationBase *app, std::tuple<Ts...> previous, int argc, char* argv[]) {
@@ -32,9 +43,8 @@ public:
         (void)argv;
         std::cout << "Default Plugin\n";
         this->_application = app;
-        /**********
-         * Models *
-         **********/
+
+        /* Models */
         this->_interface_model = new SDL_GUI::InterfaceModel(app->renderer(), app->window_width(),
                                                              app->window_height());
         app->add_model(this->_interface_model);
@@ -42,9 +52,7 @@ public:
         this->_input_model = new InputModel<InputKey>();
         app->add_model(this->_input_model);
 
-        /***************
-         * Controllers *
-         ***************/
+        /* Controllers */
         InputController<InputKey> *input_controller =
             new InputController<InputKey>(this->_input_model, keyboard_input_config,
                     window_event_config, mouse_input_config);
@@ -55,15 +63,21 @@ public:
                                                                             this->_input_model);
         app->add_controller(interface_controller);
 
-        /*********
-         * Views *
-         *********/
+        /* Views */
         InterfaceView *interface_view = new InterfaceView(app->renderer(), this->_interface_model);
         app->add_view(interface_view);
     }
 
+    /**
+     * Getter for _interface_model
+     * @return this->_interface_model
+     */
     InterfaceModel *interface_model();
 
+    /**
+     * Getter for _input_model
+     * @return this->_input_model
+     */
     InputModel<InputKey> *input_model();
 };
 }

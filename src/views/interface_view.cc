@@ -8,7 +8,8 @@
 
 using namespace SDL_GUI;
 
-InterfaceView::InterfaceView(SDL_Renderer *renderer, const InterfaceModel *interface_model) : _renderer(renderer), _interface_model(interface_model) {
+InterfaceView::InterfaceView(SDL_Renderer *renderer, const InterfaceModel *interface_model)
+    : _renderer(renderer), _interface_model(interface_model) {
     this->init();
 }
 
@@ -36,7 +37,8 @@ void InterfaceView::render() {
         static_cast<int>(this->_interface_model->window_width()),
         static_cast<int>(this->_interface_model->window_height())
     };
-    this->_interface_model->drawable_root()->render(this->_renderer, {0,0}, {0,0}, initial_clip_rect, false);
+    this->_interface_model->drawable_root()->render(this->_renderer, {0,0}, {0,0},
+                                                    initial_clip_rect, false);
 
     SDL_RenderPresent(this->_renderer);
 }

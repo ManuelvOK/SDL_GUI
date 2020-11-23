@@ -3,13 +3,23 @@
 #include "position.h"
 
 namespace SDL_GUI {
+/** Abstract class for Objects that can be hovered over */
 class Hoverable {
 protected:
-    Position _relative_mouse_position;  /**< mouse position inside of this object */
-    bool _mouse_is_inside = false;      /**< flag that determines whether the mouse is inside this object */
-    int _hover_distance = -1;           /**< integer stating how many drawables are between this object and the mouse. -1 if the mouse is not inside this object */
+    /** mouse position inside of this object */
+    Position _relative_mouse_position;
 
-    Hoverable() : _relative_mouse_position() {}
+    /** flag that determines whether the mouse is inside this object */
+    bool _mouse_is_inside = false;
+
+    /**
+     * integer stating how many drawables are between this object and the mouse. -1 if the mouse is
+     * not inside this object
+     */
+    int _hover_distance = -1;
+
+    /** Default constructor */
+    Hoverable() = default;
 public:
     /**
      * setter for _relative_mouse_position

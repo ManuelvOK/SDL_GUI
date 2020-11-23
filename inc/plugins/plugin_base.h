@@ -4,6 +4,9 @@
 #include <vector>
 
 namespace SDL_GUI {
+/**
+ * Base class for all the plugins.
+ */
 class PluginBase {
 protected:
 
@@ -15,7 +18,6 @@ protected:
     /**
      * Constructor
      * @param name Plugin name
-     * @param application reference to Application object
      */
     PluginBase(std::string name) : _name(name) {}
 };

@@ -15,6 +15,6 @@ void SDL_GUI::clear_sdl_events() {
     _events.clear();
 }
 
-std::vector<SDL_Event> SDL_GUI::events() {
+const std::vector<SDL_Event> SDL_GUI::events() {
     return _events;
 }

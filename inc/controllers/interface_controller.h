@@ -7,6 +7,10 @@
 #include "../models/interface_model.h"
 
 namespace SDL_GUI {
+/**
+ * Controller for the Interface model.
+ * This controller does change the style of a Drawable based on its hovering state.
+ */
 class InterfaceController : public ControllerBase {
 protected:
     /**
@@ -29,14 +33,17 @@ public:
      * Constructor
      * @param template_file_path path to the template file
      */
-    InterfaceController(const std::string template_file_path,
-            InterfaceModel *interface_model, const InputModelBase *input_model);
+    InterfaceController(const std::string template_file_path, InterfaceModel *interface_model,
+                        const InputModelBase *input_model);
 
     /**
      * init controller
      */
     virtual void init();
 
+    /**
+     * change style of hovered drawable
+     */
     virtual void update() override;
 };
 }

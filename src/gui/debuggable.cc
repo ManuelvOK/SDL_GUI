@@ -4,7 +4,8 @@
 using namespace SDL_GUI;
 
 Debuggable::Debuggable() {
-    this->_draw_debug_information = std::bind(&Debuggable::default_draw_debug_information, this, std::placeholders::_1, std::placeholders::_2);
+    this->_draw_debug_information = std::bind(&Debuggable::default_draw_debug_information, this,
+                                              std::placeholders::_1, std::placeholders::_2);
 }
 
 Debuggable::~Debuggable() {

@@ -2,28 +2,26 @@
 
 #include "position.h"
 
-/**
- * Objects consisting out of a position, width and height
- */
 namespace SDL_GUI {
+/**
+ * Objects consisting out of a position (relative and absolute), width and height
+ */
 class Positionable {
 protected:
-    Position _position;             /**< objects position */
+    Position _position;             /**< objects position relative to parent */
+    Position _absolute_position;    /**< objects absolute position in window */
     unsigned _width = 0;            /**< objects width */
     unsigned _height = 0;           /**< objects height */
 
-    Position _absolute_position;    /**< absolute position in window */
 
-    /**
-     * Constructor
-     * Position (0,0), width 0, height 0
-     */
-    Positionable() : _position(), _absolute_position() {}
+    /** Default constructor */
+    Positionable() = default;
 
 public:
     /**
      * Constructor
-     * @param position position
+     * @param position position relative to parent
+     * @param absolute absolute position in window
      */
     Positionable(Position position, Position absolute_position)
         : _position(position), _absolute_position(absolute_position) {}
@@ -128,14 +126,10 @@ public:
      */
     unsigned height() const;
 
-
     /**
      * check if Position is inside this
-     *
-     * @param position
-     *   Position to check for
-     * @returns
-     *   True if position is inside. False otherwise.
+     * @param position Position to check for
+     * @returns True if position is inside. False otherwise.
      */
     virtual bool is_inside(Position position) const;
 

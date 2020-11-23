@@ -14,46 +14,46 @@
 #include "style.h"
 
 namespace SDL_GUI {
-class Drawable : public Positionable, public Hoverable, public Scrollable, public Attributable, public Debuggable {
-    Drawable *_parent;
-    std::list<Drawable *> _children;
-    std::list<Drawable *> _children_reversed;
+class Drawable : public Positionable, public Hoverable, public Scrollable, public Attributable,
+                 public Debuggable {
+    Drawable *_parent;                          /**< parent Drawable in drawable tree */
+    std::list<Drawable *> _children;            /**< list of child drawables in drawable tree */
+    std::list<Drawable *> _children_reversed;   /**< reversed list of childs */
 protected:
+    /** Style that gets used to render this drawable */
     Style *_current_style = &this->_default_style;
+
+    /** Flag that determines whether there is a style fr hovering */
     bool _has_hover_style = false;
 
-    std::function<void ()> _init_debug_information_callback; /**< function to call for debug information initialisation */
+    /** function to call for debug information initialisation */
+    std::function<void ()> _init_debug_information_callback;
 
-    /**
-     * default debug information initialisation
-     */
+    /** default debug information initialisation */
     void default_init_debug_information();
 
     /**
      * Constructor
-     *
      * @param type name of drawable subclass
      * @param parent_position global position of parent
      * @param position local position inside parent drawable
      * @param init_debug_information_callback function to call for debug information initialisation
      */
-    Drawable(std::string type, Position parent_position = {0,0}, Position position = {0,0}, std::function<void ()> init_debug_information_callback = nullptr);
+    Drawable(std::string type, Position parent_position = {0,0}, Position position = {0,0},
+             std::function<void ()> init_debug_information_callback = nullptr);
 
-    /**
-     * vector of callbacks for recalculation
-     */
+    /** vector of callbacks for recalculation */
     std::vector<std::function<void(Drawable *)>> _recalculation_callbacks;
 
-    /**
-     * function to call after current_style is set
-     */
+    /** function to call after current_style is set */
     virtual void hook_set_current_style(Style *style);
 
 public:
-    const std::string _type;
-    Style _default_style;
-    Style _hover_style;
+    const std::string _type;    /**< Typename of this drawable */
+    Style _default_style;       /**< Style to use on default */
+    Style _hover_style;         /**< Style to use when hovered and hovering flag is true */
 
+    /** Default destructor */
     virtual ~Drawable() = default;
 
     /**
@@ -69,6 +69,8 @@ public:
      * @return list of children
      */
     std::list<Drawable *> children(bool reversed = false);
+
+    /** @copydoc children(bool) */
     const std::list<Drawable *> children(bool reversed = false) const;
 
 
@@ -81,7 +83,7 @@ public:
 
     /**
      * add a vector of drawables as children
-     * @params children drawables to adda s children
+     * @params children drawables to add as children
      */
     void add_children(std::vector<Drawable *> children);
 
@@ -106,6 +108,8 @@ public:
      * @return list of filtered drawables
      */
     std::vector<Drawable *> filter(std::function<bool (Drawable *)> f);
+
+    /** @copydoc filter(std::function<bool (Drawable *)>) */
     std::vector<const Drawable *> filter(std::function<bool (const Drawable *)> f) const;
 
     /**
@@ -126,10 +130,11 @@ public:
 
     /**
      * apply a function recursively to this and all children propagating a value
+     * @tparam R Type of the propagated value
      * @param f function to apply
      * @param value initial value
      * @param reversed flag to determine the order of child processing. If true, the list of
-     *   children gets reversed before applying f
+     * children gets reversed before applying f
      */
     template<typename R>
     void reduce(std::function<R (Drawable *, R)> f, R value, bool reversed = false) {
@@ -138,6 +143,8 @@ public:
             d->reduce(f, this_value, reversed);
         }
     }
+
+    /** @copydoc reduce(std::function<R (Drawable *, R)>, R, bool reversed) */
     template<typename R>
     void reduce(std::function<R (const Drawable *, R)> f, R value, bool reversed = false) const {
         R this_value = f(this, value);
@@ -147,12 +154,14 @@ public:
     }
 
     /**
-     * apply a function recursively reversed, from bottom to top of the tree aggregating the return value
+     * apply a function recursively reversed, from bottom to top of the tree aggregating the return
+     * value
+     * @tparam R type of the propagated value
      * @param f function to apply
      * @param value initial value
      * @param aggregate function to aggregate return values from all children
      * @param reversed flag to determine the order of child processing. If true, the list of
-     *  children gets reversed before applying f
+     * children gets reversed before applying f
      * @returns last aggregated propagation value
      */
     template<typename R>
@@ -169,9 +178,7 @@ public:
     }
 
 
-    /**
-     * initialise debug information
-     */
+    /** initialise debug information */
     void init_debug_information();
 
     /**
@@ -183,38 +190,40 @@ public:
 
     /**
      * render the subtree this drawable is root of.
+     * @param renderer The applications renderer
+     * @param parent_position position of parent Drawable
+     * @param scroll_position scrollposition of parent
+     * @param parent_clip_rect clip rectanlge of parent
+     * @param hidden flag that determines whether any parent is hidden. Rendering does not take
+     * place if true.
      */
     void render(SDL_Renderer *renderer, Position parent_position, Position scroll_position,
                 SDL_Rect parent_clip_rect, bool hidden) const;
 
     /**
      * draw this Object. gets called by render()
-     *
-     * @param renderer
-     *   renderer to draw on
-     * @param position
-     *   global offset in window
+     * @param renderer renderer to draw on
+     * @param position global offset in window
      */
     virtual void draw(SDL_Renderer *renderer, Position position) const = 0;
 
     /**
      * draw this Objects border. If it should have one. gets called by render()
-     *
-     * @param renderer
-     *   renderer to draw on
-     * @param position
-     *   global offset in window
+     * @param renderer renderer to draw on
+     * @param position global offset in window
      */
     void draw_border(SDL_Renderer *renderer, Position position) const;
 
     /**
      * change the style to use for rendering
-     *
-     * @param style
-     *   style to use
+     * @param style style to use
      */
     void set_current_style(Style *style);
 
+    /**
+     * Getter for _has_hover_style
+     * @return this->_has_hover_style
+     */
     bool has_hover_style();
 
     /**
@@ -223,28 +232,39 @@ public:
      */
     void add_recalculation_callback(std::function<void(Drawable *)> callback);
 
-    /**
-     * recalculate attributes of this drawable by calling all of the recalculation callbacks
-     */
+    /** recalculate attributes of this drawable by calling all of the recalculation callbacks */
     void recalculate();
 
+    /** Update this. This function gets called once every tick */
     virtual void update() {}
 
+    /** Set the current style `hidden` value to false */
     void show();
 
+    /** Set the current style `hidden` value to true */
     void hide();
 
+    /**
+     * Getter for the current style `hidden` value
+     * @return this->_current_style->_hidden
+     */
     bool is_hidden() const;
 };
 
+/** Drawable that does nothing. This is a tombstone. */
 class NullDrawable : public Drawable {
 public:
+    /** Default destructor */
     ~NullDrawable() = default;
+
+    /** Constructor */
     NullDrawable() : Drawable("Null") {}
+
     virtual void draw(SDL_Renderer *renderer, Position position) const {
         (void) renderer;
         (void) position;
     }
+
     void recalculate() {}
 };
 }

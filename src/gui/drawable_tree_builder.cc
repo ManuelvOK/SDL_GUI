@@ -11,20 +11,21 @@
 
 using namespace SDL_GUI;
 
-void DrawableTreeBuilder::set_style(Drawable *drawable, std::map<std::string, std::string> attributes) const {
+void DrawableTreeBuilder::set_style(Drawable *drawable,
+                                    std::map<std::string, std::string> attributes) {
     for (std::pair<std::string, std::string> attribute: attributes) {
         std::string key = attribute.first;
         std::string value = attribute.second;
-        if (this->_style_type_map.find(key) == this->_style_type_map.end()) {
+        if (STYLE_TYPE_MAP.find(key) == STYLE_TYPE_MAP.end()) {
             continue;
         }
-        switch (this->_style_type_map.at(key)) {
+        switch (STYLE_TYPE_MAP.at(key)) {
             case StyleType::BORDER:
                 drawable->_default_style._has_border = true;
                 break;
             case StyleType::BACKGROUND:
             case StyleType::COLOR:
-                this->set_color_of_drawable(drawable, value);
+                DrawableTreeBuilder::set_color_of_drawable(drawable, value);
                 break;
             case StyleType::WIDTH:
                 drawable->set_width(std::stoi(value));
@@ -46,11 +47,12 @@ void DrawableTreeBuilder::set_style(Drawable *drawable, std::map<std::string, st
     }
 }
 
-void DrawableTreeBuilder::set_color_of_drawable(Drawable *drawable, std::string color_value) const {
+void DrawableTreeBuilder::set_color_of_drawable(Drawable *drawable, std::string color_value) {
     RGB color;
     /* check for number */
     char *end;
-    unsigned char value_num = static_cast<unsigned char>(std::strtol(color_value.c_str(), &end, 10));
+    unsigned char value_num = static_cast<unsigned char>(std::strtol(color_value.c_str(), &end,
+                                                                     10));
     if (end != color_value.c_str()) {
         color = RGB(value_num);
     } else {
@@ -63,11 +65,12 @@ void DrawableTreeBuilder::set_color_of_drawable(Drawable *drawable, std::string 
 }
 
 
-Drawable *DrawableTreeBuilder::construct_node(std::string type, std::map<std::string, std::string> attributes) const {
+Drawable *DrawableTreeBuilder::construct_node(std::string type, std::map<std::string,
+                                              std::string> attributes) const {
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
     Drawable *drawable;
     /* TODO: use attributes */
-    switch(this->_type_map.at(type)) {
+    switch(TYPE_MAP.at(type)) {
         case Type::RECT:
             drawable = new Rect();
             break;

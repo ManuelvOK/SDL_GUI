@@ -17,6 +17,11 @@
 namespace SDL_GUI {
 
 class ApplicationBase;
+
+/**
+ * This function is used to recursively instantiate all the Plugins. This special case has an empty
+ * template list and results in an empty tuple. This is the last recursion.
+ */
 template <typename ... Ts>
 typename std::enable_if<(sizeof...(Ts) == 0), std::tuple<Ts...>>::type
 create_plugins(ApplicationBase *application, int argc, char *argv[]) {
@@ -26,151 +31,48 @@ create_plugins(ApplicationBase *application, int argc, char *argv[]) {
     return std::make_tuple();
 }
 
+
+/**
+ * This function is used to recursively instantiate all the Plugins. The first given template
+ * parameter gets instantiated with access to all the template parameters after it.
+ */
 template <typename T, typename ... Ts>
-std::tuple<Ts..., T> create_plugins(ApplicationBase *application, int argc, char *argv[]) {
+std::tuple<T, Ts...> create_plugins(ApplicationBase *application, int argc, char *argv[]) {
     std::tuple<Ts...> previous = create_plugins<Ts...>(application, argc, argv);
     T current = T();
     current.init(application, previous, argc, argv);
-    return std::tuple_cat(previous, std::make_tuple(current));
+    return std::tuple_cat(std::make_tuple(current), previous);
 }
-
-// https://stackoverflow.com/questions/17178075/how-do-i-reverse-the-order-of-element-types-in-a-tuple-type/17178399#17178399
-template <typename... Ts>
-struct tuple_reverse;
-
-template <>
-struct tuple_reverse<std::tuple<>>
-{
-    using type = std::tuple<>;
-};
-
-template <typename T, typename... Ts>
-struct tuple_reverse<std::tuple<T, Ts...>>
-{
-  using head = std::tuple<T>;
-  using tail = typename tuple_reverse<std::tuple<Ts...>>::type;
-
-  using type = decltype(std::tuple_cat(std::declval<tail>(), std::declval<head>()));
-};
-
 
 
 
 class ApplicationBase {
 protected:
+    std::string _application_title = "";            /**< title string of the Application */
+    std::vector<ModelBase *> _model_list;           /**< list of Models */
+    std::vector<ViewBase *> _view_list;             /**< list of views */
+    std::vector<ControllerBase *> _controller_list; /**< list of controllers */
+    SDL_Window *_window = nullptr;                  /**< window to render in */
+    SDL_Renderer *_renderer = nullptr;              /**< renderer to render on */
+    unsigned _window_width;                         /**< width of window */
+    unsigned _window_height;                        /**< height of window */
+    int _fps = 60;                                  /**< number of frames per second */
+
+
     /**
-     * title string of the Application
+     * initialise everything concerning SDL
      */
-    std::string _application_title = "";
+    static void init_SDL();
+
     /**
-     * list of Models
+     * initialise the window
      */
-    std::vector<ModelBase *> _model_list;
+    static SDL_Window *init_window(std::string title, unsigned width, unsigned height);
 
     /**
-     * list of views
+     * initialise the renderer
      */
-    std::vector<ViewBase *> _view_list;
-
-    /**
-     * list of controllers
-     */
-    std::vector<ControllerBase *> _controller_list;
-
-    /**
-     * window to render in
-     */
-    SDL_Window *_window = nullptr;
-
-    /**
-     * renderer to render on
-     */
-    SDL_Renderer *_renderer = nullptr;
-
-    unsigned _window_width;
-
-    unsigned _window_height;
-
-    /**
-     * number of frames per second
-     */
-    int _fps = 60;
-
-    /**
-        * trigger proper destruction of everything concerning SDL
-        */
-    static void quit_SDL() {
-        TTF_Quit();
-        SDL_Quit();
-    }
-
-    /**
-        * proper destruction of the SDL Window
-        * @param status TODO: what is this?
-        * @param window Pointer to the SDL Window to destroy
-        */
-    static void exit_SDL_DestroyWindow(int status, void *window) {
-        (void) status;
-        SDL_DestroyWindow(static_cast<SDL_Window *>(window));
-    }
-
-    /**
-        * proper destruction of the SDL Renderer
-        * @param status TODO: what is this?
-        * @param renderer Pointer to the SDL Renderer to destroy
-        */
-    static void exit_SDL_DestroyRenderer(int status, void *renderer) {
-        (void) status;
-        SDL_DestroyRenderer(static_cast<SDL_Renderer *>(renderer));
-    }
-
-
-    /**
-        * initialise everything concerning SDL
-        */
-    void init_SDL() {
-        if (0 != SDL_Init(SDL_INIT_VIDEO)) {
-            std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
-            exit(EXIT_FAILURE);
-        }
-        if (0 != TTF_Init()) {
-            std::cout << "TTF_Init Error: " << TTF_GetError() << std::endl;
-            exit(EXIT_FAILURE);
-        }
-        atexit(quit_SDL);
-    }
-
-    /**
-        * initialise the window
-        */
-    SDL_Window *init_window(std::string title, unsigned width, unsigned height) {
-        /* init window */
-        /* TODO: get rid of magic number */
-        SDL_Window *window = SDL_CreateWindow(title.c_str(), 0, 0, width, height, SDL_WINDOW_RESIZABLE);
-        if (window == nullptr) {
-            std::cerr << "unable to create window: " << SDL_GetError() << std::endl;
-            exit(EXIT_FAILURE);
-        }
-        on_exit(exit_SDL_DestroyWindow, window);
-        return window;
-    }
-
-    /**
-        * initialise the renderer
-        */
-    SDL_Renderer *init_renderer(SDL_Window *window) {
-        /* init renderer */
-        SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED |
-                SDL_RENDERER_PRESENTVSYNC);
-        if (renderer == nullptr) {
-            std::cerr << "unable to create renderer: " << SDL_GetError() << std::endl;
-            exit(EXIT_FAILURE);
-        }
-        SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-        on_exit(exit_SDL_DestroyRenderer, renderer);
-        return renderer;
-    }
-
+    static SDL_Renderer *init_renderer(SDL_Window *window);
 
     /**
      * do further initialisation in derived classes
@@ -203,13 +105,7 @@ protected:
      * @param application_title title string for the application
      */
     ApplicationBase(std::string application_title, unsigned window_width = 1920,
-                    unsigned window_height = 1080)
-        : _application_title(application_title), _window_width(window_width),
-          _window_height(window_height) {
-        init_SDL();
-        this->_window = init_window(application_title, window_width, window_height);
-        this->_renderer = init_renderer(this->_window);
-    }
+                    unsigned window_height = 1080);
 
     /**
      * Destructor
@@ -227,6 +123,14 @@ protected:
         for (std::pair<std::string, SDL_Texture *> t: Texture::_textures) {
             SDL_DestroyTexture(t.second);
         }
+
+        /* properly destroy renderer and window */
+        SDL_DestroyRenderer(this->_renderer);
+        SDL_DestroyWindow(this->_window);
+
+        /* properly shut down SDL */
+        TTF_Quit();
+        SDL_Quit();
     }
 
 
@@ -238,7 +142,7 @@ public:
     bool _is_running = true;
 
     /**
-       * run applicatoin
+     * run applicatoin
      * This starts the main loop that updates all the controllers and views and renders.
      */
     void run();
@@ -275,23 +179,23 @@ public:
 
 template<typename ... Ts>
 class Application : public ApplicationBase {
-protected:
-    /**
-     * list of Plugins
-     */
-    //std::tuple<Ts...> _plugins;
-    typename tuple_reverse<std::tuple<Ts...>>::type _plugins;
+    protected:
+        /**
+         * list of Plugins
+         */
+        //std::tuple<Ts...> _plugins;
+        typename std::tuple<Ts...> _plugins;
 
-public:
-    /**
-     * Constructor
-     * @param application_title title string for the application
-     */
-    Application(std::string application_title, int argc, char *argv[],
+    public:
+        /**
+         * Constructor
+         * @param application_title title string for the application
+         */
+        Application(std::string application_title, int argc, char *argv[],
                 unsigned window_width = 1920, unsigned window_height = 1080)
-        : ApplicationBase(application_title, window_width, window_height) {
-        this->_plugins = create_plugins<Ts...>(this, argc, argv);
-    }
+            : ApplicationBase(application_title, window_width, window_height) {
+                this->_plugins = create_plugins<Ts...>(this, argc, argv);
+            }
 
 
 };
