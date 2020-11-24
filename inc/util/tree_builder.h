@@ -7,7 +7,6 @@
 namespace SDL_GUI {
 /**
  * Base class for an xml Adapter
- *
  * @tparam T output Type
  */
 template <typename T>

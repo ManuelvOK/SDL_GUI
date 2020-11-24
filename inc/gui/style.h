@@ -3,9 +3,7 @@
 #include "rgb.h"
 
 namespace SDL_GUI {
-/**
- * All style related data a drawable can have.
- */
+/** All style related data a drawable can have. */
 class Style {
 public:
     RGB _color = RGB();                 /**< background color */
@@ -16,9 +14,7 @@ public:
     bool _overflow = false;             /**< overflow flag */
     bool _hidden = false;               /**< hidden flag */
 
-    /**
-     * Constructor
-     */
+    /** Constructor */
     Style() = default;
 };
 }

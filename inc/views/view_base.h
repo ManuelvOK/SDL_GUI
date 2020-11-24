@@ -3,26 +3,19 @@
 #include "../models/model_base.h"
 
 namespace SDL_GUI {
-/**
- * Base class for all the views.
- */
+/** Base class for all the views. */
 class ViewBase {
 public:
-    /**
-     * Destructor
-     */
+    /** Destructor */
     virtual ~ViewBase() = default;
 
     /**
      * initialise view. Has to be overridden by implementation
-     *
-     * @returns true if initialisation succeeded. Otherwise false.
+     * @return true if initialisation succeeded. Otherwise false.
      */
     virtual bool init() = 0;
 
-    /**
-     * deinitialise view. Has to be overridden by implementation
-     */
+    /** deinitialise view. Has to be overridden by implementation */
     virtual void deinit() = 0;
 
     /**
@@ -38,9 +31,7 @@ public:
     virtual void render() = 0;
 
 protected:
-    /**
-     * Constructor
-     */
+    /** Constructor */
     ViewBase() = default;
 
     ModelBase *_model = nullptr;    /**< pointer to the coupled model. */

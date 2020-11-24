@@ -17,6 +17,29 @@ inline std::chrono::high_resolution_clock::duration t_sys() {
     return std::chrono::high_resolution_clock::now().time_since_epoch();
 }
 
+ApplicationBase::~ApplicationBase() {
+    for (ModelBase *model: this->_model_list) {
+        delete model;
+    }
+    for (ViewBase *view: this->_view_list) {
+        delete view;
+    }
+    for (ControllerBase *controller: this->_controller_list) {
+        delete controller;
+    }
+    for (std::pair<std::string, SDL_Texture *> t: Texture::_textures) {
+        SDL_DestroyTexture(t.second);
+    }
+
+    /* properly destroy renderer and window */
+    SDL_DestroyRenderer(this->_renderer);
+    SDL_DestroyWindow(this->_window);
+
+    /* properly shut down SDL */
+    TTF_Quit();
+    SDL_Quit();
+}
+
 void ApplicationBase::init_SDL() {
     if (0 != SDL_Init(SDL_INIT_VIDEO)) {
         std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
@@ -101,4 +124,32 @@ void ApplicationBase::render_views() {
     for (ViewBase *view: this->_view_list) {
         view->render();
     }
+}
+
+SDL_Window *ApplicationBase::window() {
+    return this->_window;
+}
+
+SDL_Renderer *ApplicationBase::renderer() {
+    return this->_renderer;
+}
+
+unsigned ApplicationBase::window_width() {
+    return this->_window_width;
+}
+
+unsigned ApplicationBase::window_height() {
+    return this->_window_height;
+}
+
+void ApplicationBase::add_model(ModelBase *model) {
+    this->_model_list.push_back(model);
+}
+
+void ApplicationBase::add_controller(ControllerBase *controller) {
+    this->_controller_list.push_back(controller);
+}
+
+void ApplicationBase::add_view(ViewBase *view) {
+    this->_view_list.push_back(view);
 }

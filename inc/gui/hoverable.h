@@ -41,19 +41,19 @@ public:
 
     /**
      * getter for _relative_mouse_position
-     * @returns position of mouse relative to this object
+     * @return position of mouse relative to this object
      */
     Position relative_mouse_position() const;
 
     /**
      * getter for _mouse_is_inside
-     * @returns True if The mouse posiiton is inside this object. False otherwise.
+     * @return True if The mouse posiiton is inside this object. False otherwise.
      */
     bool mouse_is_inside() const;
 
     /**
      * getter for _hover_distance
-     * @returns number of objects between this and the mouse. -1 if mouse is not inside this.
+     * @return number of objects between this and the mouse. -1 if mouse is not inside this.
      */
     int hover_distance() const;
 

@@ -17,9 +17,7 @@ namespace SDL_GUI {
  */
 void read_sdl_events();
 
-/**
- * Clear event vector.
- */
+/** Clear event vector. */
 void clear_sdl_events();
 
 
@@ -115,7 +113,6 @@ protected:
     }
 
 public:
-
     /**
      * Constructor
      * @param input_model the applications input model
@@ -129,9 +126,7 @@ public:
         : _input_model(input_model), _keyboard_input_config(keyboard_input_config),
         _window_event_config(window_event_config), _mouse_input_config(mouse_input_config) {}
 
-    /**
-     * Generate input state
-     */
+    /** Generate input state */
     virtual void update() override {
         this->_input_model->update();
         int x, y;

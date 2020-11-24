@@ -3,9 +3,7 @@
 #include "position.h"
 
 namespace SDL_GUI {
-/**
- * Objects consisting out of a position (relative and absolute), width and height
- */
+/** Objects consisting out of a position (relative and absolute), width and height */
 class Positionable {
 protected:
     Position _position;             /**< objects position relative to parent */
@@ -13,15 +11,13 @@ protected:
     unsigned _width = 0;            /**< objects width */
     unsigned _height = 0;           /**< objects height */
 
-
     /** Default constructor */
     Positionable() = default;
-
 public:
     /**
      * Constructor
      * @param position position relative to parent
-     * @param absolute absolute position in window
+     * @param absolute_position position in window
      */
     Positionable(Position position, Position absolute_position)
         : _position(position), _absolute_position(absolute_position) {}
@@ -118,13 +114,13 @@ public:
      * getter for _width
      * @returns width of object
      */
-    unsigned width() const;
+    virtual unsigned width() const;
 
     /**
      * getter for _height
      * @returns height of object
      */
-    unsigned height() const;
+    virtual unsigned height() const;
 
     /**
      * check if Position is inside this
@@ -132,6 +128,5 @@ public:
      * @returns True if position is inside. False otherwise.
      */
     virtual bool is_inside(Position position) const;
-
 };
 }

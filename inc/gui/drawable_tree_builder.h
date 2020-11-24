@@ -6,7 +6,6 @@
 #include "../util/tree_builder.h"
 
 namespace SDL_GUI {
-
 /** types of Drawables to build */
 enum class Type {
     RECT,

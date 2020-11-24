@@ -13,6 +13,7 @@ protected:
 
     /** flag describing whether scrolling on x axis is enabled */
     bool _scrolling_x_enabled = false;
+
     /** flag describing whether scrolling on y axis is enabled */
     bool _scrolling_y_enabled = false;
 

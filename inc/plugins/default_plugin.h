@@ -14,18 +14,14 @@
 
 namespace SDL_GUI {
 
-/**
- * Plugin that hold the default default GUI rendering
- */
+/** Plugin that hold the default default GUI rendering */
 class DefaultPlugin: public PluginBase {
 private:
     ApplicationBase *_application;      /**< The application */
     InterfaceModel *_interface_model;   /**< The applications interface model */
     InputModel<InputKey> *_input_model; /**< The applications input model */
 public:
-    /**
-     * Constructor
-     */
+    /** Constructor */
     DefaultPlugin() : PluginBase("DefaultPlugin") {}
 
     /**

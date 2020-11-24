@@ -41,9 +41,7 @@ static const std::map<SDL_WindowEventID, ExampleInputKey> example_window_event_c
  */
 static const std::map<Uint8, ExampleInputKey> example_mouse_input_config;
 
-/**
- * Plugins controller
- */
+/** Plugins controller */
 class ExampleController : public ControllerBase {
     ApplicationBase *_application;              /**< The application */
     InputModel<ExampleInputKey> *_input_model;  /**< The applications input model */
@@ -66,11 +64,10 @@ public:
     }
 };
 
+/** The Plugin we use to show what this library can do */
 class ExamplePlugin: public PluginBase {
 public:
-    /**
-     * Constructor
-     */
+    /** Constructor */
     ExamplePlugin(): PluginBase("Example Plugin") {}
 
     /**

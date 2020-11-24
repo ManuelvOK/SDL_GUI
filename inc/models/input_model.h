@@ -9,20 +9,14 @@
 #include "../gui/position.h"
 
 namespace SDL_GUI {
-/**
- *
- */
+/** Base Model for all input related data */
 class InputModelBase : public ModelBase {
 protected:
     Position _mouse_position;   /**< current position of the mouse */
     Position _mouse_offset;     /**< difference between current and previous mouse position */
-
     Position _mouse_wheel;      /**< mouse wheel difference */
 public:
-
-    /**
-     * Reset mouse wheel difference
-     */
+    /** Reset mouse wheel difference */
     void update();
 
     /**
@@ -58,8 +52,13 @@ public:
 
 };
 
+/**
+ * Atual input model that also holds information about possible input values
+ * @tparam T enum with all the possible input values
+ */
 template<typename T>
 class InputModel : public InputModelBase {
+    /* make sure T is actually an enum */
     static_assert(std::is_enum<T>::value);
 
     std::set<T> _pressed;   /**< active (pressed) inputs */
@@ -68,14 +67,10 @@ class InputModel : public InputModelBase {
 
 
 public:
-    /**
-     * Constructor
-     */
+    /** Constructor */
     InputModel() = default;
 
-    /**
-     * Clear _down and _up
-     */
+    /** Clear _down and _up */
     void update() {
         InputModelBase::update();
         this->_down.clear();

@@ -7,7 +7,6 @@
 
 namespace SDL_GUI {
 namespace util {
-
 /**
  * convert HSV color value to RGB
  * @param h h value in HSV
@@ -18,5 +17,4 @@ namespace util {
  * @param[out] b b value in RGB
  */
 void HSV_to_RGB(float h, float s, float v, float *r, float *g, float *b);
-
 }}

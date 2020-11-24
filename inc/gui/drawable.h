@@ -14,6 +14,7 @@
 #include "style.h"
 
 namespace SDL_GUI {
+/** base class for Objects that get rendered.  */
 class Drawable : public Positionable, public Hoverable, public Scrollable, public Attributable,
                  public Debuggable {
     Drawable *_parent;                          /**< parent Drawable in drawable tree */
@@ -45,7 +46,10 @@ protected:
     /** vector of callbacks for recalculation */
     std::vector<std::function<void(Drawable *)>> _recalculation_callbacks;
 
-    /** function to call after current_style is set */
+    /**
+     * function to call after current_style is set
+     * @param style style that has just been set
+     */
     virtual void hook_set_current_style(Style *style);
 
 public:
@@ -62,7 +66,6 @@ public:
      */
     Drawable *parent();
 
-
     /**
      * getter for the list of children
      * @param reversed flag to determine whether the list should be returned in reversed order
@@ -73,20 +76,17 @@ public:
     /** @copydoc children(bool) */
     const std::list<Drawable *> children(bool reversed = false) const;
 
-
     /**
      * add a given drawable as child
      * @param child drawable to add as child
      */
     void add_child(Drawable *child);
 
-
     /**
      * add a vector of drawables as children
-     * @params children drawables to add as children
+     * @param children drawables to add as children
      */
     void add_children(std::vector<Drawable *> children);
-
 
     /**
      * find the first drawable DFS that hols a given condition
@@ -177,7 +177,6 @@ public:
         return f(this, aggregate(vec));
     }
 
-
     /** initialise debug information */
     void init_debug_information();
 
@@ -260,11 +259,6 @@ public:
     /** Constructor */
     NullDrawable() : Drawable("Null") {}
 
-    virtual void draw(SDL_Renderer *renderer, Position position) const {
-        (void) renderer;
-        (void) position;
-    }
-
-    void recalculate() {}
+    virtual void draw(SDL_Renderer *renderer, Position position) const;
 };
 }

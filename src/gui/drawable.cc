@@ -241,3 +241,7 @@ void Drawable::hide() {
 bool Drawable::is_hidden() const {
     return this->_current_style->_hidden;
 }
+void NullDrawable::draw(SDL_Renderer *renderer, Position position) const {
+    (void) renderer;
+    (void) position;
+}

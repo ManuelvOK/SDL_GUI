@@ -6,9 +6,7 @@
 #include <SDL2/SDL.h>
 
 namespace SDL_GUI {
-/**
- * Color Code for RGB color
- */
+/** Color Code for RGB color */
 class RGB {
 public:
     unsigned char _r = 0; /**< red value between 0 and 255 */
@@ -41,6 +39,7 @@ public:
      */
     RGB(unsigned char r, unsigned char g, unsigned char b, unsigned char a = 255) : _r(r), _g(g), _b(b), _a(a) {}
 
+    /** Constructor for predefined colors */
     RGB(std::string color);
 
     /** conversion operator for SDL_Color */

@@ -4,15 +4,10 @@
 #include <vector>
 
 namespace SDL_GUI {
-/**
- * Base class for all the plugins.
- */
+/** Base class for all the plugins. */
 class PluginBase {
 protected:
-
-    /**
-     * Plugin name
-     */
+    /** Plugin name */
     std::string _name = "";
 
     /**

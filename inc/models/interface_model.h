@@ -6,20 +6,14 @@
 #include "../gui/drawable.h"
 
 namespace SDL_GUI {
-/**
- * Model for all the Data related to the grafical interface that actually gets rendered
- */
+/** Model for all the Data related to the grafical interface that actually gets rendered */
 class InterfaceModel : public ModelBase {
 protected:
     static TTF_Font *_font;     /**< Font to use for text */
-
     Drawable *_drawable_root;   /**< Tree of Drawables that get rendered */
-
     SDL_Renderer *_renderer;    /**< The applications renderer */
-
     unsigned _window_width;     /**< applications windows width */
     unsigned _window_height;    /**< applications windows height */
-
     Drawable *_null_drawable;   /**< drawable tombstone */
 public:
     /**
@@ -30,9 +24,7 @@ public:
      */
     InterfaceModel(SDL_Renderer *renderer, unsigned window_width, unsigned window_height);
 
-    /**
-     * Destructor
-     */
+    /** Destructor */
     ~InterfaceModel();
 
     /**
@@ -93,6 +85,7 @@ public:
     /**
      * find first Drawable in _drawable_root with a certain attribute
      * @param attribute attribute to find
+     * @return first drawable with the given attribute
      */
     Drawable *find_first_drawable(std::string attribute);
 
@@ -102,6 +95,8 @@ public:
     /**
      * get bottommost drawable in tree whose bounding box surrounds a given position
      * This gets the first drawable the mouse hovers over
+     * @param position position to look at
+     * @return first drawable at given position
      */
     Drawable *find_first_drawable_at_position(Position position);
 

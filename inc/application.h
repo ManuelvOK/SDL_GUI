@@ -21,6 +21,11 @@ class ApplicationBase;
 /**
  * This function is used to recursively instantiate all the Plugins. This special case has an empty
  * template list and results in an empty tuple. This is the last recursion.
+ * @tparam Ts Plugins to instantiate
+ * @param application The application
+ * @param argc The programs argc
+ * @param argv[] The programs argv
+ * @return tuple with all instantiated plugins
  */
 template <typename ... Ts>
 typename std::enable_if<(sizeof...(Ts) == 0), std::tuple<Ts...>>::type
@@ -31,10 +36,15 @@ create_plugins(ApplicationBase *application, int argc, char *argv[]) {
     return std::make_tuple();
 }
 
-
 /**
  * This function is used to recursively instantiate all the Plugins. The first given template
  * parameter gets instantiated with access to all the template parameters after it.
+ * @tparam T type of first Plugin in plugin List
+ * @tparam Ts remaining plugins to instantiate
+ * @param application The application
+ * @param argc The programs argc
+ * @param argv[] The programs argv
+ * @return tuple with all instantiated plugins
  */
 template <typename T, typename ... Ts>
 std::tuple<T, Ts...> create_plugins(ApplicationBase *application, int argc, char *argv[]) {
@@ -44,8 +54,7 @@ std::tuple<T, Ts...> create_plugins(ApplicationBase *application, int argc, char
     return std::tuple_cat(std::make_tuple(current), previous);
 }
 
-
-
+/** Abstract class for Application Objects */
 class ApplicationBase {
 protected:
     std::string _application_title = "";            /**< title string of the Application */
@@ -58,7 +67,6 @@ protected:
     unsigned _window_height;                        /**< height of window */
     int _fps = 60;                                  /**< number of frames per second */
 
-
     /**
      * initialise everything concerning SDL
      */
@@ -66,11 +74,17 @@ protected:
 
     /**
      * initialise the window
+     * @param title window title
+     * @param width window width
+     * @param height window height
+     * @return pointer to the initialised window
      */
     static SDL_Window *init_window(std::string title, unsigned width, unsigned height);
 
     /**
      * initialise the renderer
+     * @param window window to initialise renderer for
+     * @return pointer to initialised renderer
      */
     static SDL_Renderer *init_renderer(SDL_Window *window);
 
@@ -103,100 +117,90 @@ protected:
     /**
      * Constructor
      * @param application_title title string for the application
+     * @param window_width initial width of window
+     * @param window_height initial height of window
      */
     ApplicationBase(std::string application_title, unsigned window_width = 1920,
                     unsigned window_height = 1080);
 
-    /**
-     * Destructor
-     */
-    ~ApplicationBase() {
-        for (ModelBase *model: this->_model_list) {
-            delete model;
-        }
-        for (ViewBase *view: this->_view_list) {
-            delete view;
-        }
-        for (ControllerBase *controller: this->_controller_list) {
-            delete controller;
-        }
-        for (std::pair<std::string, SDL_Texture *> t: Texture::_textures) {
-            SDL_DestroyTexture(t.second);
-        }
-
-        /* properly destroy renderer and window */
-        SDL_DestroyRenderer(this->_renderer);
-        SDL_DestroyWindow(this->_window);
-
-        /* properly shut down SDL */
-        TTF_Quit();
-        SDL_Quit();
-    }
-
+    /** Destructor */
+    ~ApplicationBase();
 
 public:
 
-    /**
-     * flag that determines whether this application should continue running
-     */
+    /** flag that determines whether this application should continue running */
     bool _is_running = true;
 
     /**
-     * run applicatoin
+     * run application
      * This starts the main loop that updates all the controllers and views and renders.
      */
     void run();
 
-    SDL_Window *window() {
-        return this->_window;
-    }
+    /**
+     * Getter for _window
+     * @return this->_window
+     */
+    SDL_Window *window();
 
-    SDL_Renderer *renderer() {
-        return this->_renderer;
-    }
+    /**
+     * Getter for _renderer
+     * @return this->_renderer
+     */
+    SDL_Renderer *renderer();
 
-    unsigned window_width() {
-        return this->_window_width;
-    }
+    /**
+     * Getter for _window_width
+     * @return this->_window_width
+     */
+    unsigned window_width();
 
-    unsigned window_height() {
-        return this->_window_height;
-    }
+    /**
+     * Getter for _window_height
+     * @return this->_window_height
+     */
+    unsigned window_height();
 
-    void add_model(ModelBase *model) {
-        this->_model_list.push_back(model);
-    }
+    /**
+     * Add Model to applications model list
+     * @param model model to add
+     */
+    void add_model(ModelBase *model);
 
-    void add_controller(ControllerBase *controller) {
-        this->_controller_list.push_back(controller);
-    }
+    /**
+     * Add controller to applications model list
+     * @param controller controller to add
+     */
+    void add_controller(ControllerBase *controller);
 
-    void add_view(ViewBase *view) {
-        this->_view_list.push_back(view);
-    }
-
+    /**
+     * Add view to applications model list
+     * @param view view to add
+     */
+    void add_view(ViewBase *view);
 };
 
+/**
+ * Actual Application class
+ * @tparam Ts list of Plugins the application uses
+ */
 template<typename ... Ts>
 class Application : public ApplicationBase {
-    protected:
-        /**
-         * list of Plugins
-         */
-        //std::tuple<Ts...> _plugins;
-        typename std::tuple<Ts...> _plugins;
-
-    public:
-        /**
-         * Constructor
-         * @param application_title title string for the application
-         */
-        Application(std::string application_title, int argc, char *argv[],
-                unsigned window_width = 1920, unsigned window_height = 1080)
-            : ApplicationBase(application_title, window_width, window_height) {
-                this->_plugins = create_plugins<Ts...>(this, argc, argv);
-            }
-
-
+protected:
+    std::tuple<Ts...> _plugins;     /**< list of Plugins */
+public:
+    /**
+     * Constructor
+     * @param application_title itle string for the application
+     * @param argc the programs argc
+     * @param argv[] the programs argv
+     * @param window_width initial window width
+     * @param window_height initial window height
+     */
+    Application(std::string application_title, int argc, char *argv[], unsigned window_width = 1920,
+                unsigned window_height = 1080)
+        : ApplicationBase(application_title, window_width, window_height) {
+            this->_plugins = create_plugins<Ts...>(this, argc, argv);
+        }
 };
 }
