@@ -36,11 +36,10 @@ protected:
     /**
      * Constructor
      * @param type name of drawable subclass
-     * @param parent_position global position of parent
      * @param position local position inside parent drawable
      * @param init_debug_information_callback function to call for debug information initialisation
      */
-    Drawable(std::string type, Position parent_position = {0,0}, Position position = {0,0},
+    Drawable(std::string type, Position position = {0,0},
              std::function<void ()> init_debug_information_callback = nullptr);
 
     /** vector of callbacks for recalculation */
@@ -52,6 +51,13 @@ protected:
      */
     virtual void hook_set_current_style(Style *style);
 
+    /**
+     * recalculate absolute position of this and all childs with regard to the absolute position of
+     * the parent in the drawable tree
+     * @param parent_position absolute position of parent
+     */
+    void set_parents_absolute_position(Position parent_position);
+
 public:
     const std::string _type;    /**< Typename of this drawable */
     Style _default_style;       /**< Style to use on default */
@@ -61,10 +67,17 @@ public:
     virtual ~Drawable() = default;
 
     /**
-     * getter for _parent
+     * Getter for _parent
      * @return parent
      */
     Drawable *parent();
+
+    /**
+     * Setter for _parent
+     * This also updates the absolute position of this and all childs
+     * @param parent Drawable to set as parent in drawable tree
+     */
+    void set_parent(Drawable *parent);
 
     /**
      * getter for the list of children

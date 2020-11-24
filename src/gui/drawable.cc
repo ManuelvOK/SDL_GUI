@@ -7,9 +7,9 @@
 
 using namespace SDL_GUI;
 
-Drawable::Drawable(std::string type, Position parent_position, Position position,
+Drawable::Drawable(std::string type, Position position,
                    std::function<void ()> init_debug_information_callback)
-    : Positionable(position, parent_position), _type(type) {
+    : Positionable(position), _type(type) {
     if (init_debug_information_callback) {
         this->_init_debug_information_callback = init_debug_information_callback;
     } else {
@@ -18,8 +18,21 @@ Drawable::Drawable(std::string type, Position parent_position, Position position
     }
 }
 
+void Drawable::set_parents_absolute_position(Position parent_position) {
+    Position absolute_position = this->position() + parent_position;
+    this->set_absolute_position(absolute_position);
+    for (Drawable *d: this->_children) {
+        d->set_parents_absolute_position(absolute_position);
+    }
+}
+
 Drawable *Drawable::parent() {
     return this->_parent;
+}
+
+void Drawable::set_parent(Drawable *parent) {
+    this->_parent = parent;
+    this->set_parents_absolute_position(parent->_absolute_position);
 }
 
 std::list<Drawable *> Drawable::children(bool reversed) {
@@ -34,6 +47,7 @@ void Drawable::add_child(Drawable *child) {
     this->_children.push_back(child);
     this->_children_reversed.push_front(child);
     child->init_debug_information();
+    child->set_parent(this);
 }
 
 void Drawable::add_children(std::vector<Drawable *> children) {

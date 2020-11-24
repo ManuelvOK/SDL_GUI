@@ -19,7 +19,7 @@ public:
      * @param position position relative to parent
      * @param absolute_position position in window
      */
-    Positionable(Position position, Position absolute_position)
+    Positionable(Position position, Position absolute_position = {0,0})
         : _position(position), _absolute_position(absolute_position) {}
 
     /**

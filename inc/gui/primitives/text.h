@@ -23,11 +23,9 @@ public:
      * Constructor
      * @param font font to display the text in
      * @param text the text to display
-     * @param parent_position position of parent drawable
      * @param position local position inside parent drawable
      */
-    Text(TTF_Font *font, const std::string text = "", Position parent_position = {0, 0},
-         Position position = {0, 0});
+    Text(TTF_Font *font, const std::string text = "", Position position = {0, 0});
 
     /** Destructor */
     ~Text();

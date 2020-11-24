@@ -4,8 +4,8 @@
 
 using namespace SDL_GUI;
 
-Text::Text(TTF_Font *font, const std::string text, Position parent_position, Position position)
-    : Drawable("Text", parent_position, position), _font(font), _text(text) {
+Text::Text(TTF_Font *font, const std::string text, Position position)
+    : Drawable("Text", position), _font(font), _text(text) {
     this->create_surface();
 }
 

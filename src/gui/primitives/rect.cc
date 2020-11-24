@@ -2,7 +2,8 @@
 
 using namespace SDL_GUI;
 
-Rect::Rect(Position parent_position, Position position, unsigned width, unsigned height) : Drawable("Rect", parent_position, position) {
+Rect::Rect(Position position, unsigned width, unsigned height)
+    : Drawable("Rect", position) {
     this->_width = width;
     this->_height = height;
 }

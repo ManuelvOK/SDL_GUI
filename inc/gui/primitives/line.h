@@ -11,11 +11,11 @@ protected:
 public:
     /**
      * Constructor
-     * @param parent_position position of parent drawable
      * @param begin begin of line
      * @param end end of line relative to begin
      */
-    Line(Position parent_position = {0,0}, Position begin = {0,0}, Position end = {0,0}) : Drawable("Line", parent_position, begin), _end(end, end - begin) {}
+    Line(Position begin = {0,0}, Position end = {0,0})
+        : Drawable("Line", begin), _end(end, end - begin) {}
 
     void draw(SDL_Renderer *renderer, Position position) const override;
 
