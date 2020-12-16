@@ -18,9 +18,13 @@ public:
      * Constructor
      * @param position position relative to parent
      * @param absolute_position position in window
+     * @param width width
+     * @param height height
      */
-    Positionable(Position position, Position absolute_position = {0,0})
-        : _position(position), _absolute_position(absolute_position) {}
+    Positionable(Position position, Position absolute_position = {0,0}, unsigned width = 0,
+                 unsigned height = 0)
+        : _position(position), _absolute_position(absolute_position), _width(width),
+        _height(height) {}
 
     /**
      * Setter for _position
