@@ -195,6 +195,7 @@ void Drawable::recalculate() {
 
 void Drawable::render(SDL_Renderer *renderer, Position parent_position, Position scroll_position,
                       SDL_Rect parent_clip_rect, bool hidden) const {
+    this->hook_pre_render();
     Position position = parent_position + this->_position;
     Position position_with_scrolling = position + scroll_position;
     if (hidden || this->is_hidden()) {
