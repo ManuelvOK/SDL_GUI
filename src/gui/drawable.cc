@@ -56,6 +56,54 @@ void Drawable::add_children(std::vector<Drawable *> children) {
     }
 }
 
+std::vector<Drawable *> Drawable::find(std::function<bool (Drawable *)> f) {
+    std::vector<Drawable *> drawables;
+    if (f(this)) {
+        drawables.push_back(this);
+    }
+    for (Drawable *d: this->children(true)) {
+        std::vector<Drawable *> childs_drawables = d->find(f);
+        drawables.insert(drawables.end(), childs_drawables.begin(), childs_drawables.end());
+    }
+    return drawables;
+}
+
+std::vector<const Drawable *> Drawable::find(std::function<bool (const Drawable *)> f) const {
+    std::vector<const Drawable *> drawables;
+    if (f(this)) {
+        drawables.push_back(this);
+    }
+    for (const Drawable *d: this->children(true)) {
+        std::vector<const Drawable *> childs_drawables = d->find(f);
+        drawables.insert(drawables.end(), childs_drawables.begin(), childs_drawables.end());
+    }
+    return drawables;
+}
+
+std::vector<Drawable *> Drawable::find_bottom_up(std::function<bool (Drawable *)> f) {
+    std::vector<Drawable *> drawables;
+    for (Drawable *d: this->children()) {
+        std::vector<Drawable *> childs_drawables = d->find(f);
+        drawables.insert(drawables.end(), childs_drawables.begin(), childs_drawables.end());
+    }
+    if (f(this)) {
+        drawables.push_back(this);
+    }
+    return drawables;
+}
+
+std::vector<const Drawable *> Drawable::find_bottom_up(std::function<bool (const Drawable *)> f) const {
+    std::vector<const Drawable *> drawables;
+    for (const Drawable *d: this->children()) {
+        std::vector<const Drawable *> childs_drawables = d->find(f);
+        drawables.insert(drawables.end(), childs_drawables.begin(), childs_drawables.end());
+    }
+    if (f(this)) {
+        drawables.push_back(this);
+    }
+    return drawables;
+}
+
 Drawable *Drawable::find_first(std::function<bool (Drawable *)> f) {
     if (f(this)) {
         return this;

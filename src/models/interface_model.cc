@@ -85,14 +85,42 @@ const Drawable * InterfaceModel::find_first_drawable(std::string attribute) cons
     return drawables[0];
 }
 
-Drawable *InterfaceModel::find_first_drawable_at_position(Position position) {
-    return this->_drawable_root->find_first_bottom_up([position](Drawable *d){
+std::vector<Drawable *> InterfaceModel::find_drawables_at_position(Position position,
+                                                                   Drawable *root) {
+    if (not root) {
+        root = this->_drawable_root;
+    }
+    return root->find_bottom_up([position](Drawable *d){
         return d->is_inside(position);
     });
 }
 
-const Drawable *InterfaceModel::find_first_drawable_at_position(Position position) const {
-    return this->_drawable_root->find_first_bottom_up([position](Drawable *d){
+std::vector<const Drawable *> InterfaceModel::find_drawables_at_position(Position position,
+                                                                         Drawable *root) const {
+    const Drawable *drawable_root = root;
+    if (not drawable_root) {
+        drawable_root = this->_drawable_root;
+    }
+    return drawable_root->find_bottom_up([position](const Drawable *d){
+        return d->is_inside(position);
+    });
+}
+
+Drawable *InterfaceModel::find_first_drawable_at_position(Position position, Drawable *root) {
+    if (not root) {
+        root = this->_drawable_root;
+    }
+    return root->find_first_bottom_up([position](Drawable *d){
+        return d->is_inside(position);
+    });
+}
+
+const Drawable *InterfaceModel::find_first_drawable_at_position(Position position,
+                                                                Drawable *root) const {
+    if (not root) {
+        root = this->_drawable_root;
+    }
+    return root->find_first_bottom_up([position](Drawable *d){
         return d->is_inside(position);
     });
 }

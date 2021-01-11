@@ -93,14 +93,28 @@ public:
     const Drawable *find_first_drawable(std::string attribute) const;
 
     /**
+     * get all drawables in tree whose bounding box surrounds a given position
+     * This gets the first drawable the mouse hovers over
+     * @param position position to look at
+     * @param root drawable subtree or nullptr for whole tree
+     * @return drawables at given position
+     */
+    std::vector<Drawable *> find_drawables_at_position(Position position, Drawable *root = nullptr);
+
+    /** @copydoc find_drawables_at_position(Position) */
+    std::vector<const Drawable *> find_drawables_at_position(Position position,
+                                                             Drawable *root = nullptr) const;
+
+    /**
      * get bottommost drawable in tree whose bounding box surrounds a given position
      * This gets the first drawable the mouse hovers over
      * @param position position to look at
+     * @param root drawable subtree or nullptr for whole tree
      * @return first drawable at given position
      */
-    Drawable *find_first_drawable_at_position(Position position);
+    Drawable *find_first_drawable_at_position(Position position, Drawable *root = nullptr);
 
     /** @copydoc find_first_drawable_at_position(Position) */
-    const Drawable *find_first_drawable_at_position(Position position) const;
+    const Drawable *find_first_drawable_at_position(Position position, Drawable *root = nullptr) const;
 };
 }

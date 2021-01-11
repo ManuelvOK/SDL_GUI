@@ -105,6 +105,26 @@ public:
     void add_children(std::vector<Drawable *> children);
 
     /**
+     * find the all drawable DFS that hols a given condition
+     * @param f condition
+     * @return drawables that hold for the given condition
+     */
+    std::vector<Drawable *> find(std::function<bool (Drawable *)> f);
+
+    /** @copydoc find(std::function<bool (Drawable *)>) */
+    std::vector<const Drawable *> find(std::function<bool (const Drawable *)> f) const;
+
+    /**
+     * find the all drawable DFS reversed that hols a given condition
+     * @param f condition
+     * @return drawables that hold for the given condition
+     */
+    std::vector<Drawable *> find_bottom_up(std::function<bool (Drawable *)> f);
+
+    /** @copydoc find_bottom_up(std::function<bool (Drawable *)>) */
+    std::vector<const Drawable *> find_bottom_up(std::function<bool (const Drawable *)> f) const;
+
+    /**
      * find the first drawable DFS that hols a given condition
      * @param f condition
      * @return first drawable that holds for the given condition
