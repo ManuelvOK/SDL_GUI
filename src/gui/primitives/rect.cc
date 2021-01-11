@@ -2,6 +2,12 @@
 
 using namespace SDL_GUI;
 
+Rect::Rect(std::string type, Position position, unsigned width, unsigned height)
+    : Drawable(type, position) {
+    this->_width = width;
+    this->_height = height;
+}
+
 Rect::Rect(Position position, unsigned width, unsigned height)
     : Drawable("Rect", position) {
     this->_width = width;
