@@ -52,7 +52,7 @@ protected:
     virtual void hook_set_current_style(Style *style);
 
     /** function to call before the drawable gets rendered */
-    virtual void hook_pre_render() {}
+    virtual void hook_pre_render() const {}
 
     /**
      * recalculate absolute position of this and all childs with regard to the absolute position of

@@ -14,14 +14,17 @@ InterfaceController::InterfaceController(const std::string template_file_path,
 
 void InterfaceController::update() {
     Position mouse_position = this->_input_model->mouse_position();
-    this->_interface_model->drawable_root()->map([mouse_position](Drawable *drawable){
-            drawable->recalculate();
-            if (drawable->has_hover_style() && drawable->is_inside(mouse_position)) {
-                drawable->set_current_style(&drawable->_hover_style);
-            } else {
-                drawable->set_current_style(&drawable->_default_style);
-            }
-        });
+    this->_interface_model->drawable_root()->map([mouse_position](Drawable *drawable) {
+        drawable->recalculate();
+        if (drawable->has_hover_style() && drawable->is_inside(mouse_position)) {
+            drawable->set_current_style(&drawable->_hover_style);
+        } else {
+            drawable->set_current_style(&drawable->_default_style);
+        }
+    });
+    this->_interface_model->drawable_root()->map([mouse_position](Drawable *drawable) {
+        drawable->update();
+    });
 }
 
 void InterfaceController::init() {
