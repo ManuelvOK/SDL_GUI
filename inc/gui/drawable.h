@@ -121,6 +121,11 @@ public:
     void add_children(std::vector<Drawable *> children);
 
     /**
+     * change the order of all children with a sorting function
+     */
+    void sort_children(std::function<bool (Drawable *, Drawable *)> f);
+
+    /**
      * find the all drawable DFS that hols a given condition
      * @param f condition
      * @return drawables that hold for the given condition

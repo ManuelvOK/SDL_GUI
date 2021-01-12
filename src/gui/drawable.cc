@@ -73,6 +73,14 @@ void Drawable::add_children(std::vector<Drawable *> children) {
     }
 }
 
+void Drawable::sort_children(std::function<bool (Drawable *, Drawable *)> f) {
+    this->_children.sort(f);
+    this->_children_reversed.clear();
+    for (Drawable *child: this->_children) {
+        this->_children_reversed.push_front(child);
+    }
+}
+
 std::vector<Drawable *> Drawable::find(std::function<bool (Drawable *)> f) {
     std::vector<Drawable *> drawables;
     if (f(this)) {
