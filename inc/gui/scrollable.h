@@ -1,13 +1,16 @@
 #pragma once
 
+#include <functional>
+
 #include "position.h"
+#include "positionable.h"
 
 namespace SDL_GUI {
 /**
  * Abstract class for objects that can be scrolled.
  * TODO: This should have some kind of bounds checking on the actual scrolling.
  */
-class Scrollable {
+class Scrollable: public Positionable {
 protected:
     Position _scroll_position;  /**< current offset from the original position */
 
@@ -18,7 +21,10 @@ protected:
     bool _scrolling_y_enabled = false;
 
     /** Constructor */
-    Scrollable() = default;
+    Scrollable(Position position);
+
+    /** hook to execute after changing the scroll position */
+    std::function<void(Position)> _hook_post_scroll;
 public:
     /**
      * Getter for _scroll_position

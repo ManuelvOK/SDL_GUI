@@ -2,11 +2,11 @@
 
 using namespace SDL_GUI;
 
-Position Position::operator+(const Position &p) {
+Position Position::operator+(const Position &p) const {
     return Position(this->_x + p._x, this->_y + p._y);
 }
 
-Position Position::operator-(const Position &p) {
+Position Position::operator-(const Position &p) const {
     return Position(this->_x - p._x, this->_y - p._y);
 }
 

@@ -15,7 +15,7 @@
 
 namespace SDL_GUI {
 /** base class for Objects that get rendered.  */
-class Drawable : public Positionable, public Hoverable, public Scrollable, public Attributable,
+class Drawable : public Hoverable, public Scrollable, public Attributable,
                  public Debuggable {
     Drawable *_parent;                          /**< parent Drawable in drawable tree */
     std::list<Drawable *> _children;            /**< list of child drawables in drawable tree */
@@ -53,6 +53,9 @@ protected:
 
     /** function to call before the drawable gets rendered */
     virtual void hook_pre_render() const {}
+
+    /** function to call after scrolling happened */
+    void hook_post_scroll(Position scroll_offset);
 
     /**
      * recalculate absolute position of this and all childs with regard to the absolute position of
@@ -227,13 +230,12 @@ public:
      * render the subtree this drawable is root of.
      * @param renderer The applications renderer
      * @param parent_position position of parent Drawable
-     * @param scroll_position scrollposition of parent
      * @param parent_clip_rect clip rectanlge of parent
      * @param hidden flag that determines whether any parent is hidden. Rendering does not take
      * place if true.
      */
-    void render(SDL_Renderer *renderer, Position parent_position, Position scroll_position,
-                SDL_Rect parent_clip_rect, bool hidden) const;
+    void render(SDL_Renderer *renderer, Position parent_position, SDL_Rect parent_clip_rect,
+                bool hidden) const;
 
     /**
      * draw this Object. gets called by render()

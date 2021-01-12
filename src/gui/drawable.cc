@@ -9,13 +9,14 @@ using namespace SDL_GUI;
 
 Drawable::Drawable(std::string type, Position position,
                    std::function<void ()> init_debug_information_callback)
-    : Positionable(position), _type(type) {
+    : Scrollable(position), _type(type) {
     if (init_debug_information_callback) {
         this->_init_debug_information_callback = init_debug_information_callback;
     } else {
         this->_init_debug_information_callback =
             std::bind(&Drawable::default_init_debug_information, this);
     }
+    this->_hook_post_scroll = std::bind(&Drawable::hook_post_scroll, this, std::placeholders::_1);
 }
 
 void Drawable::set_parents_absolute_position(Position parent_position) {
@@ -230,6 +231,13 @@ void Drawable::hook_set_current_style(Style *style) {
     (void) style;
 }
 
+
+void Drawable::hook_post_scroll(Position scroll_offset) {
+    for (Drawable *child: this->_children) {
+        child->move(scroll_offset);
+    }
+}
+
 void Drawable::add_recalculation_callback(std::function<void(Drawable *)> callback) {
     this->_recalculation_callbacks.push_back(callback);
 }
@@ -241,20 +249,19 @@ void Drawable::recalculate() {
     }
 }
 
-void Drawable::render(SDL_Renderer *renderer, Position parent_position, Position scroll_position,
-                      SDL_Rect parent_clip_rect, bool hidden) const {
+void Drawable::render(SDL_Renderer *renderer, Position parent_position, SDL_Rect parent_clip_rect,
+                      bool hidden) const {
     this->hook_pre_render();
     Position position = parent_position + this->_position;
-    Position position_with_scrolling = position + scroll_position;
     if (hidden || this->is_hidden()) {
         return;
     }
     SDL_RenderSetClipRect(renderer, &parent_clip_rect);
-    this->draw(renderer, position_with_scrolling);
+    this->draw(renderer, position);
 
     /* calculate new clip rect */
-    int new_x = std::max(parent_clip_rect.x, position_with_scrolling._x);
-    int new_y = std::max(parent_clip_rect.y, position_with_scrolling._y);
+    int new_x = std::max(parent_clip_rect.x, position._x);
+    int new_y = std::max(parent_clip_rect.y, position._y);
     int new_width = std::min(parent_clip_rect.x + parent_clip_rect.w,
                              static_cast<int>(new_x + this->_width)) - new_x;
     int new_height = std::min(parent_clip_rect.y + parent_clip_rect.h,
@@ -263,13 +270,12 @@ void Drawable::render(SDL_Renderer *renderer, Position parent_position, Position
 
     /* draw children */
     for (Drawable *child: this->_children) {
-        child->render(renderer, position, scroll_position + this->scroll_position(), new_clip_rect,
-                      false);
+        child->render(renderer, position, new_clip_rect, false);
     }
 
     SDL_RenderSetClipRect(renderer, &parent_clip_rect);
-    this->draw_border(renderer, position_with_scrolling);
-    this->draw_debug_information(renderer, position_with_scrolling);
+    this->draw_border(renderer, position);
+    this->draw_debug_information(renderer, position);
 
 
 }

@@ -24,14 +24,14 @@ public:
      * @param p position to add
      * @return this + p
      */
-    Position operator+(const Position &p);
+    Position operator+(const Position &p) const;
 
     /**
      * memberwise substraction of two Positions
      * @param p position to substract
      * @return this - p
      */
-    Position operator-(const Position &p);
+    Position operator-(const Position &p) const;
 
     /**
      * Unary Addition
