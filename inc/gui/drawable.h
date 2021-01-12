@@ -247,7 +247,7 @@ public:
      * @param renderer renderer to draw on
      * @param position global offset in window
      */
-    void draw_border(SDL_Renderer *renderer, Position position) const;
+    virtual void draw_border(SDL_Renderer *renderer, Position position) const;
 
     /**
      * change the style to use for rendering
