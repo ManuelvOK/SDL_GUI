@@ -54,15 +54,28 @@ protected:
     /** function to call before the drawable gets rendered */
     virtual void hook_pre_render() const {}
 
-    /** function to call after scrolling happened */
-    void hook_post_scroll(Position scroll_offset);
+    /** @copydoc Positionable::hook_post_move(Position) */
+    void hook_post_move(Position offset) override;
+
+    /** @copydoc Positionable::hook_post_resize(unsigned, unsigned) */
+    void hook_post_resize(unsigned width, unsigned height) override;
+
+    /** @copydoc Scrollable::hook_post_scroll(Position) */
+    void hook_post_scroll(Position scroll_offset) override;
 
     /**
      * recalculate absolute position of this and all childs with regard to the absolute position of
      * the parent in the drawable tree
      * @param parent_position absolute position of parent
      */
-    void set_parents_absolute_position(Position parent_position);
+    void apply_parents_absolute_position(Position parent_position);
+
+    /**
+     * recalculate the clip rect of this and all childs with regard to the clip rect of the parent
+     * in the drawable tree
+     * @param parent_clip_rect clip rect of parent
+     */
+    void apply_parents_clip_rect(SDL_Rect parent_clip_rect);
 
 public:
     const std::string _type;    /**< Typename of this drawable */
@@ -218,13 +231,6 @@ public:
 
     /** initialise debug information */
     void init_debug_information();
-
-    /**
-     * Offset position.
-     * This also updates the absolute position of all children
-     * @param position Position to add to current position
-     */
-    void move(Position position) override;
 
     /**
      * render the subtree this drawable is root of.

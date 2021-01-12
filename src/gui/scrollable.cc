@@ -21,14 +21,14 @@ void Scrollable::set_scroll_position(Position offset) {
         scrolled._y = offset._y - this->_scroll_position._y;
         this->_scroll_position._y = offset._y;
     }
-    this->_hook_post_scroll(scrolled);
+    this->hook_post_scroll(scrolled);
 }
 
 void Scrollable::set_scroll_position_x(int x) {
     if (this->_scrolling_x_enabled) {
         Position scrolled{x - this->_scroll_position._x, 0};
         this->_scroll_position._x = x;
-        this->_hook_post_scroll(scrolled);
+        this->hook_post_scroll(scrolled);
     }
 }
 
@@ -36,7 +36,7 @@ void Scrollable::set_scroll_position_y(int y) {
     if (this->_scrolling_y_enabled) {
         Position scrolled{0, y - this->_scroll_position._y};
         this->_scroll_position._y = y;
-        this->_hook_post_scroll(scrolled);
+        this->hook_post_scroll(scrolled);
     }
 }
 

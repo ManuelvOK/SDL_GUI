@@ -16,14 +16,29 @@ Drawable::Drawable(std::string type, Position position,
         this->_init_debug_information_callback =
             std::bind(&Drawable::default_init_debug_information, this);
     }
-    this->_hook_post_scroll = std::bind(&Drawable::hook_post_scroll, this, std::placeholders::_1);
 }
 
-void Drawable::set_parents_absolute_position(Position parent_position) {
+void Drawable::apply_parents_absolute_position(Position parent_position) {
     Position absolute_position = this->position() + parent_position;
     this->set_absolute_position(absolute_position);
     for (Drawable *d: this->_children) {
-        d->set_parents_absolute_position(absolute_position);
+        d->apply_parents_absolute_position(absolute_position);
+    }
+}
+
+void Drawable::apply_parents_clip_rect(SDL_Rect parent_clip_rect) {
+    this->_parent_clip_rect = parent_clip_rect;
+    int new_x = std::max(parent_clip_rect.x, this->_absolute_position._x);
+    int new_y = std::max(parent_clip_rect.y, this->_absolute_position._y);
+    int new_width = std::min(parent_clip_rect.x + parent_clip_rect.w,
+                             static_cast<int>(new_x + this->_width)) - new_x;
+    int new_height = std::min(parent_clip_rect.y + parent_clip_rect.h,
+                              static_cast<int>(new_y + this->_height)) - new_y;
+    SDL_Rect clip_rect = {new_x, new_y, new_width, new_height};
+
+    this->set_clip_rect(clip_rect);
+    for (Drawable *d: this->_children) {
+        d->apply_parents_clip_rect(clip_rect);
     }
 }
 
@@ -33,7 +48,8 @@ Drawable *Drawable::parent() {
 
 void Drawable::set_parent(Drawable *parent) {
     this->_parent = parent;
-    this->set_parents_absolute_position(parent->_absolute_position);
+    this->apply_parents_absolute_position(parent->_absolute_position);
+    this->apply_parents_clip_rect(parent->_clip_rect);
 }
 
 std::list<Drawable *> Drawable::children(bool reversed) {
@@ -208,16 +224,6 @@ void Drawable::init_debug_information() {
     this->_debug_information_initialised = true;
 }
 
-void Drawable::move(Position position) {
-    Positionable::move(position);
-    for (Drawable *child: this->_children) {
-        child->map([position](Drawable *d){
-            d->move_absolute(position);
-        });
-    }
-}
-
-
 void Drawable::set_current_style(Style *style) {
     this->_current_style = style;
     this->hook_set_current_style(style);
@@ -231,6 +237,20 @@ void Drawable::hook_set_current_style(Style *style) {
     (void) style;
 }
 
+void Drawable::hook_post_move(Position offset) {
+    this->apply_parents_clip_rect(this->_parent_clip_rect);
+    for (Drawable *child: this->_children) {
+        child->map([offset](Drawable *d){
+            d->move_absolute(offset);
+        });
+    }
+}
+
+void Drawable::hook_post_resize(unsigned width, unsigned height) {
+    this->_clip_rect.w = width;
+    this->_clip_rect.h = height;
+    this->apply_parents_clip_rect(this->_parent_clip_rect);
+}
 
 void Drawable::hook_post_scroll(Position scroll_offset) {
     for (Drawable *child: this->_children) {
@@ -259,18 +279,9 @@ void Drawable::render(SDL_Renderer *renderer, Position parent_position, SDL_Rect
     SDL_RenderSetClipRect(renderer, &parent_clip_rect);
     this->draw(renderer, position);
 
-    /* calculate new clip rect */
-    int new_x = std::max(parent_clip_rect.x, position._x);
-    int new_y = std::max(parent_clip_rect.y, position._y);
-    int new_width = std::min(parent_clip_rect.x + parent_clip_rect.w,
-                             static_cast<int>(new_x + this->_width)) - new_x;
-    int new_height = std::min(parent_clip_rect.y + parent_clip_rect.h,
-                              static_cast<int>(new_y + this->_height)) - new_y;
-    SDL_Rect new_clip_rect = {new_x, new_y, new_width, new_height};
-
     /* draw children */
     for (Drawable *child: this->_children) {
-        child->render(renderer, position, new_clip_rect, false);
+        child->render(renderer, position, this->_clip_rect, false);
     }
 
     SDL_RenderSetClipRect(renderer, &parent_clip_rect);

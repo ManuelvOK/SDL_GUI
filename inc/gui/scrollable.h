@@ -23,8 +23,11 @@ protected:
     /** Constructor */
     Scrollable(Position position);
 
-    /** hook to execute after changing the scroll position */
-    std::function<void(Position)> _hook_post_scroll;
+    /**
+     * hook to execute after changing the scroll position
+     * @param scroll_offset scrolling that happened
+     */
+    virtual void hook_post_scroll(Position scroll_offset) {(void)scroll_offset;};
 public:
     /**
      * Getter for _scroll_position
