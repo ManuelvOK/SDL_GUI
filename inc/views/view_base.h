@@ -6,6 +6,7 @@ namespace SDL_GUI {
 /** Base class for all the views. */
 class ViewBase {
 public:
+    int _weight = 99;
     /** Destructor */
     virtual ~ViewBase() = default;
 

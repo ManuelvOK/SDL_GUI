@@ -37,7 +37,6 @@ public:
         (void)previous;
         (void)argc;
         (void)argv;
-        std::cout << "Default Plugin\n";
         this->_application = app;
 
         /* Models */
@@ -57,6 +56,7 @@ public:
         InterfaceController *interface_controller = new InterfaceController("templates/main.tpl",
                                                                             this->_interface_model,
                                                                             this->_input_model);
+        interface_controller->_weight = 200;
         app->add_controller(interface_controller);
 
         /* Views */

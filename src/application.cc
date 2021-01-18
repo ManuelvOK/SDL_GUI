@@ -42,11 +42,11 @@ ApplicationBase::~ApplicationBase() {
 
 void ApplicationBase::init_SDL() {
     if (0 != SDL_Init(SDL_INIT_VIDEO)) {
-        std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
+        std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
     if (0 != TTF_Init()) {
-        std::cout << "TTF_Init Error: " << TTF_GetError() << std::endl;
+        std::cerr << "TTF_Init Error: " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
     }
 }
@@ -144,12 +144,28 @@ unsigned ApplicationBase::window_height() {
 
 void ApplicationBase::add_model(ModelBase *model) {
     this->_model_list.push_back(model);
+    std::sort(this->_model_list.begin(), this->_model_list.end(),
+        [](ModelBase *a, ModelBase *b){
+            return a->_weight < b->_weight;
+        }
+    );
 }
 
 void ApplicationBase::add_controller(ControllerBase *controller) {
     this->_controller_list.push_back(controller);
+    std::sort(this->_controller_list.begin(), this->_controller_list.end(),
+        [](ControllerBase *a, ControllerBase *b){
+            return a->_weight < b->_weight;
+        }
+    );
+
 }
 
 void ApplicationBase::add_view(ViewBase *view) {
     this->_view_list.push_back(view);
+    std::sort(this->_view_list.begin(), this->_view_list.end(),
+        [](ViewBase *a, ViewBase *b){
+            return a->_weight < b->_weight;
+        }
+    );
 }

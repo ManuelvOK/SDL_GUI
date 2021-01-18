@@ -6,6 +6,7 @@ namespace SDL_GUI {
 /** Base class for all the controllers.  */
 class ControllerBase {
 public:
+    int _weight = 99;
     /** Default destructor */
     virtual ~ControllerBase() = default;
 
