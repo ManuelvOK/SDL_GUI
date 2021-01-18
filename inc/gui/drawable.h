@@ -83,7 +83,7 @@ public:
     Style _hover_style;         /**< Style to use when hovered and hovering flag is true */
 
     /** Default destructor */
-    virtual ~Drawable() = default;
+    virtual ~Drawable();
 
     /**
      * Getter for _parent
@@ -124,6 +124,16 @@ public:
      * change the order of all children with a sorting function
      */
     void sort_children(std::function<bool (Drawable *, Drawable *)> f);
+
+    /**
+     * remove all children that hold a given condition
+     */
+    void remove_children(std::function<bool(Drawable *)> f);
+
+    /**
+     * remove all the children
+     */
+    void remove_all_children();
 
     /**
      * find the all drawable DFS that hols a given condition

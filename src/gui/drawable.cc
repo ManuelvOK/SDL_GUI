@@ -18,6 +18,12 @@ Drawable::Drawable(std::string type, Position position,
     }
 }
 
+Drawable::~Drawable() {
+    for (Drawable *child: this->_children) {
+        delete child;
+    }
+}
+
 void Drawable::apply_parents_absolute_position(Position parent_position) {
     Position absolute_position = this->position() + parent_position;
     this->set_absolute_position(absolute_position);
@@ -79,6 +85,29 @@ void Drawable::sort_children(std::function<bool (Drawable *, Drawable *)> f) {
     for (Drawable *child: this->_children) {
         this->_children_reversed.push_front(child);
     }
+}
+
+void Drawable::remove_children(std::function<bool(Drawable *)> f) {
+    std::list<Drawable *> new_children;
+    std::list<Drawable *> new_children_reversed;
+    for (Drawable *child: this->_children) {
+        if (f(child)) {
+            delete child;
+        } else {
+            new_children.push_back(child);
+            new_children_reversed.push_front(child);
+        }
+    }
+    this->_children = new_children;
+    this->_children_reversed = new_children_reversed;
+}
+
+void Drawable::remove_all_children() {
+    for (Drawable *child: this->_children) {
+        delete child;
+    }
+    this->_children.clear();
+    this->_children_reversed.clear();
 }
 
 std::vector<Drawable *> Drawable::find(std::function<bool (Drawable *)> f) {
