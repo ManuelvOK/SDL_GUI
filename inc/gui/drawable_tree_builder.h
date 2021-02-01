@@ -11,6 +11,7 @@ enum class Type {
     RECT,
     TEXT,
     VERTICAL_LINE,
+    NONE,
 };
 
 /** mapping from xml type to Type */
@@ -18,6 +19,7 @@ static const std::map<std::string, Type> TYPE_MAP = {
     {"rect", Type::RECT},
     {"text", Type::TEXT},
     {"vertical-line", Type::VERTICAL_LINE},
+    {"", Type::NONE},
 };
 
 /** attribute types */
@@ -69,7 +71,7 @@ public:
      */
     DrawableTreeBuilder(TTF_Font *font): _font(font) {}
 
-    Drawable *construct_node(std::string type,
+    Drawable *construct_node(std::string type, std::string value,
                              std::map<std::string, std::string> attributes) const override;
 };
 }

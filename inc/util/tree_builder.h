@@ -18,7 +18,7 @@ public:
      * @param attributes the xml nodes attribute map
      * @return adapted node
      */
-    virtual T *construct_node(std::string type,
+    virtual T *construct_node(std::string type, std::string value,
                               std::map<std::string, std::string> attributes) const = 0;
 };
 }

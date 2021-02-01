@@ -1,13 +1,11 @@
 #include <util/command_line.h>
 
 #include <iostream>
-
 #include <limits>
 
-using namespace SDL_GUI;
+#include <util/string.h>
 
-static std::vector<std::string> split_string(std::string s, std::string delimiter,
-                                             unsigned max = -1);
+using namespace SDL_GUI;
 
 bool CommandLine::parse_option(std::string argument) {
     /* options start with - */
@@ -72,19 +70,6 @@ bool CommandLine::parse_positional(unsigned position, std::string argument) {
     std::string key = this->_positionals[position];
     this->_parsed_positionals.emplace(key, argument);
     return true;
-}
-
-std::vector<std::string> split_string(std::string s, std::string delimiter, unsigned max){
-    std::vector<std::string> ret;
-    std::string part;
-    unsigned pos;
-    while (max != 0 and (pos = s.find(delimiter) != std::string::npos)) {
-        ret.push_back(s.substr(0, pos));
-        s.erase(0, pos + delimiter.length());
-        --max;
-    }
-    ret.push_back(s);
-    return ret;
 }
 
 void CommandLine::register_option(std::string key, std::string shortcut, std::string name) {

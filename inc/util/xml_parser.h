@@ -40,7 +40,7 @@ class XmlParser {
      * @return the adapted node
      */
     T *parse_node(rapidxml::xml_node<> *node) const {
-        T *parsed_object = this->_builder->construct_node(node->name(), this->parse_attributes(node));
+        T *parsed_object = this->_builder->construct_node(node->name(), node->value(), this->parse_attributes(node));
         for (rapidxml::xml_node<> *child = node->first_node(); child != nullptr; child = child->next_sibling()) {
             parsed_object->add_child(this->parse_node(child));
         }

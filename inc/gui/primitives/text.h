@@ -10,12 +10,13 @@ namespace SDL_GUI {
 /** primitive for rendering text */
 class Text : public Drawable {
 protected:
-    SDL_Surface *_surface = nullptr;    /**< SDL surface to put text on */
-    TTF_Font *_font;                    /**< Font to use */
-    std::string _text;                  /**< text to display */
+    std::vector<SDL_Surface *>_surfaces;    /**< SDL surfaces to put text on */
+    SDL_Surface *_surface = nullptr;
+    TTF_Font *_font;                        /**< Font to use */
+    std::string _text;                      /**< text to display */
 
     /** apply the current style and render the text to the surface */
-    void create_surface();
+    void create_surfaces();
 
     void hook_set_current_style(Style *style) override;
 public:

@@ -65,8 +65,8 @@ void DrawableTreeBuilder::set_color_of_drawable(Drawable *drawable, std::string 
 }
 
 
-Drawable *DrawableTreeBuilder::construct_node(std::string type, std::map<std::string,
-                                              std::string> attributes) const {
+Drawable *DrawableTreeBuilder::construct_node(std::string type, std::string value,
+                                              std::map<std::string, std::string> attributes) const {
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
     Drawable *drawable;
     /* TODO: use attributes */
@@ -75,10 +75,14 @@ Drawable *DrawableTreeBuilder::construct_node(std::string type, std::map<std::st
             drawable = new Rect();
             break;
         case Type::TEXT:
-            drawable = new Text(this->_font, "test text");
+            drawable = new Text(this->_font, value);
             break;
         case Type::VERTICAL_LINE:
             drawable = new VerticalLine();
+            break;
+        default:
+            drawable = new NullDrawable();
+            break;
     }
     if (attributes.find("attributes") != attributes.end()) {
         std::stringstream ss(attributes["attributes"]);
