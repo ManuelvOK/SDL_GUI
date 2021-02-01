@@ -42,6 +42,9 @@ void Text::create_surfaces() {
     for (std::string line: lines) {
         SDL_Surface *s = TTF_RenderText_Blended(this->_font, line.c_str(),
                                                 this->_current_style->_color);
+        if (s == nullptr) {
+            continue;
+        }
         this->_surfaces.push_back(s);
     }
 
