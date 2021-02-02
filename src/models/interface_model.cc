@@ -3,15 +3,33 @@
 #include <iostream>
 #include <string>
 
+#include <fontconfig/fontconfig.h>
+
 using namespace SDL_GUI;
 
 TTF_Font *InterfaceModel::_font;
+
 
 InterfaceModel::InterfaceModel(SDL_Renderer *renderer, unsigned window_width,
                                unsigned window_height)
     : _renderer(renderer), _window_width(window_width), _window_height(window_height) {
     /* init font */
-    this->_font = TTF_OpenFont("/usr/share/fonts/TTF/DejaVuSans.ttf", 12);
+    FcConfig* config = FcInitLoadConfigAndFonts();
+    FcPattern *pat = FcNameParse((const FcChar8 *)"");
+    FcConfigSubstitute(config, pat, FcMatchPattern);
+	FcDefaultSubstitute(pat);
+    char *font_file;
+    FcResult result;
+    FcPattern *font = FcFontMatch(config, pat, &result);
+    if (font) {
+        FcChar8 *file = nullptr;
+        if (FcPatternGetString(font, FC_FILE, 0, &file) == FcResultMatch) {
+            font_file = (char *)file;
+        }
+    }
+    FcPatternDestroy(pat);
+    std::cout << "Font: " << font_file << std::endl;
+    this->_font = TTF_OpenFont(font_file, 12);
     if (!this->_font) {
         std::cerr << "TTF_Error: " << TTF_GetError() << std::endl;
         exit(EXIT_FAILURE);
