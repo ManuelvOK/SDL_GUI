@@ -5,6 +5,8 @@
 namespace SDL_GUI {
 /** primitive for drawing a vertical line */
 class VerticalLine : public Drawable {
+protected:
+    virtual Drawable *clone() const override;
 public:
     /** Constructor */
     VerticalLine() : Drawable("VerticalLine") {}

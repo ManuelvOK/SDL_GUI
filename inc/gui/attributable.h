@@ -22,6 +22,10 @@ public:
      */
     void add_attributes(std::vector<std::string> attributes);
 
+    void remove_attribute(std::string attribute);
+
+    void clear_attributes();
+
     /**
      * check if the Object holds a given attribute
      * @param attribute attribute to check for

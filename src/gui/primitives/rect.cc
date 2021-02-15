@@ -14,6 +14,10 @@ Rect::Rect(Position position, unsigned width, unsigned height)
     this->_height = height;
 }
 
+Drawable *Rect::clone() const {
+    return new Rect(*this);
+}
+
 void Rect::draw(SDL_Renderer *renderer, Position position) const {
     SDL_Rect r = {position._x,
                   position._y,

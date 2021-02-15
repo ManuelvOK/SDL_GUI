@@ -8,6 +8,8 @@ class Line : public Drawable {
 protected:
     Position &_begin = this->_position; /**< begin of line (reference to this->_position */
     Positionable _end;                  /**< end of line as an offset related to the begin */
+
+    virtual Drawable *clone() const override;
 public:
     /**
      * Constructor

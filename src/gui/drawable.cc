@@ -18,6 +18,13 @@ Drawable::Drawable(std::string type, Position position,
     }
 }
 
+Drawable::Drawable(const Drawable &d) :
+    Hoverable(d),
+    Scrollable(d),
+    Attributable(d),
+    Debuggable(d)
+    {}
+
 Drawable::~Drawable() {
     for (Drawable *child: this->_children) {
         delete child;
@@ -358,7 +365,23 @@ void Drawable::hide() {
 bool Drawable::is_hidden() const {
     return this->_current_style->_hidden;
 }
+
+Drawable *Drawable::deepcopy() const {
+    Drawable *new_root = this->clone();
+    new_root->_children.clear();
+    new_root->_children_reversed.clear();
+    for (Drawable *child: this->_children) {
+        new_root->add_child(child->deepcopy());
+    }
+    return new_root;
+}
+
+Drawable *NullDrawable::clone() const {
+    return new NullDrawable(*this);
+}
+
 void NullDrawable::draw(SDL_Renderer *renderer, Position position) const {
     (void) renderer;
     (void) position;
 }
+

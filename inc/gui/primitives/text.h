@@ -19,6 +19,8 @@ protected:
     void create_surfaces();
 
     void hook_set_current_style(Style *style) override;
+
+    Drawable *clone() const override;
 public:
     /**
      * Constructor

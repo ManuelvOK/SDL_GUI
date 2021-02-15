@@ -15,6 +15,8 @@ protected:
      * @param height height of rect
      */
     Rect(std::string type, Position position = {0, 0}, unsigned width = 0, unsigned height = 0);
+
+    virtual Drawable *clone() const override;
 public:
     /**
      * Constructor

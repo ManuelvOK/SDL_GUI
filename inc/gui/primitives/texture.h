@@ -9,6 +9,7 @@ namespace SDL_GUI {
 class Texture : public Drawable {
     std::string _path;      /**< path to texture file */
     SDL_Texture *_texture;  /**< actual texture object */
+    virtual Drawable *clone() const override;
 public:
     /** mapping from paths to already existent textures */
     static std::map<std::string, SDL_Texture *> _textures;

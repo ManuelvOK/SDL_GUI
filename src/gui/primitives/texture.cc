@@ -12,6 +12,10 @@ Texture::Texture(std::string path, SDL_Renderer *renderer) : Drawable("Texture")
     this->_texture = Texture::_textures[path];
 }
 
+Drawable *Texture::clone() const {
+    return new Texture(*this);
+}
+
 void Texture::draw(SDL_Renderer *renderer, Position position) const {
     SDL_Rect rect = {
         position._x,

@@ -17,6 +17,10 @@ Text::~Text() {
     }
 }
 
+Drawable *Text::clone() const {
+    return new Text(this->_font, this->_text, this->_position);
+}
+
 void Text::create_surfaces() {
     for (SDL_Surface *s: this->_surfaces) {
         SDL_FreeSurface(s);

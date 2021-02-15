@@ -42,6 +42,8 @@ protected:
     Drawable(std::string type, Position position = {0,0},
              std::function<void ()> init_debug_information_callback = nullptr);
 
+    Drawable(const Drawable &d);
+
     /** vector of callbacks for recalculation */
     std::vector<std::function<void(Drawable *)>> _recalculation_callbacks;
 
@@ -76,6 +78,8 @@ protected:
      * @param parent_clip_rect clip rect of parent
      */
     void apply_parents_clip_rect(SDL_Rect parent_clip_rect);
+
+    virtual Drawable *clone() const = 0;
 
 public:
     const std::string _type;    /**< Typename of this drawable */
@@ -307,10 +311,15 @@ public:
      * @return this->_current_style->_hidden
      */
     bool is_hidden() const;
+
+    /** copy the subtree defined by this drawable */
+    Drawable *deepcopy() const;
 };
 
 /** Drawable that does nothing. This is a tombstone. */
 class NullDrawable : public Drawable {
+protected:
+    virtual Drawable *clone() const override;
 public:
     /** Default destructor */
     ~NullDrawable() = default;

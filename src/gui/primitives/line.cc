@@ -2,6 +2,10 @@
 
 using namespace SDL_GUI;
 
+Drawable *Line::clone() const {
+    return new Line(*this);
+}
+
 void Line::draw(SDL_Renderer *renderer, Position position) const {
     this->_current_style->_color.activate(renderer);
     SDL_RenderDrawLine(renderer, position._x, position._y,
