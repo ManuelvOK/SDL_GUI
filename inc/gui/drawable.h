@@ -42,8 +42,6 @@ protected:
     Drawable(std::string type, Position position = {0,0},
              std::function<void ()> init_debug_information_callback = nullptr);
 
-    Drawable(const Drawable &d);
-
     /** vector of callbacks for recalculation */
     std::vector<std::function<void(Drawable *)>> _recalculation_callbacks;
 

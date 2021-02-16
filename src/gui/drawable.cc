@@ -18,13 +18,6 @@ Drawable::Drawable(std::string type, Position position,
     }
 }
 
-Drawable::Drawable(const Drawable &d) :
-    Hoverable(d),
-    Scrollable(d),
-    Attributable(d),
-    Debuggable(d)
-    {}
-
 Drawable::~Drawable() {
     for (Drawable *child: this->_children) {
         delete child;
