@@ -122,6 +122,13 @@ std::vector<Drawable *> Drawable::find(std::function<bool (Drawable *)> f) {
     return drawables;
 }
 
+std::vector<Drawable *> Drawable::find(std::string attribute) {
+    return this->find(
+        [attribute](Drawable *d) {
+            return d->has_attribute(attribute);
+        });
+}
+
 std::vector<const Drawable *> Drawable::find(std::function<bool (const Drawable *)> f) const {
     std::vector<const Drawable *> drawables;
     if (f(this)) {
@@ -170,6 +177,13 @@ Drawable *Drawable::find_first(std::function<bool (Drawable *)> f) {
         }
     }
     return nullptr;
+}
+
+Drawable *Drawable::find_first(std::string attribute) {
+    return this->find_first(
+        [attribute](Drawable *d) {
+            return d->has_attribute(attribute);
+        });
 }
 
 Drawable *Drawable::find_first_bottom_up(std::function<bool (Drawable *)> f) {

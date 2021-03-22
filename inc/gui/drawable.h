@@ -144,11 +144,18 @@ public:
      */
     std::vector<Drawable *> find(std::function<bool (Drawable *)> f);
 
+    /**
+     * find the all drawable DFS that holds a given attribute
+     * @param attribute attribute to filter for
+     * @return drawables with given attribute
+     */
+    std::vector<Drawable *> find(std::string attribute);
+
     /** @copydoc find(std::function<bool (Drawable *)>) */
     std::vector<const Drawable *> find(std::function<bool (const Drawable *)> f) const;
 
     /**
-     * find the all drawable DFS reversed that hols a given condition
+     * find the all drawable DFS reversed that holds a given condition
      * @param f condition
      * @return drawables that hold for the given condition
      */
@@ -158,14 +165,21 @@ public:
     std::vector<const Drawable *> find_bottom_up(std::function<bool (const Drawable *)> f) const;
 
     /**
-     * find the first drawable DFS that hols a given condition
+     * find the first drawable DFS that holds a given condition
      * @param f condition
      * @return first drawable that holds for the given condition
      */
     Drawable *find_first(std::function<bool (Drawable *)> f);
 
     /**
-     * find the first drawable DFS reversed that hols a given condition
+     * find the first drawable DFS that holds a given attribute
+     * @param attribute attribute to filter for
+     * @return first drawable with given attribute
+     */
+    Drawable *find_first(std::string attribute);
+
+    /**
+     * find the first drawable DFS reversed that holds a given condition
      * @param f condition
      * @return first drawable that holds for the given condition
      */
