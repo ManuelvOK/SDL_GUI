@@ -145,10 +145,12 @@ protected:
             }
         }
 
-        /* look up key releases */
+        /* look up key releases. release for every modifier. */
         for (SDL_Scancode input: this->_low_level_input_model->up()) {
-            if (relevant_keyboard_config.contains(input)) {
-                this->_input_model->release(relevant_keyboard_config[input]);
+            for (const auto &[_, config]: this->_keyboard_input_config) {
+                if (config.contains(input)) {
+                    this->_input_model->release(config.at(input));
+                }
             }
         }
 
