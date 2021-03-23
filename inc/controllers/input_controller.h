@@ -221,6 +221,7 @@ public:
     /** Generate input state */
     virtual void update() override {
         this->_low_level_input_model->update();
+        this->_input_model->update();
         int x, y;
         SDL_GetMouseState(&x, &y);
         this->_input_model->set_mouse_position({x, y});
@@ -250,7 +251,6 @@ public:
             }
         }
         /* calculate high level inputs */
-        this->_input_model->update();
         this->register_high_level_input();
     }
 };
