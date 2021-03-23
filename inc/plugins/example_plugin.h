@@ -24,9 +24,24 @@ enum class ExampleInputKey {
  * Keyboard input config.
  * Keypresses of `[ESC]` and `[Q]` both will result in quitting the application
  */
-static const std::map<SDL_Scancode, ExampleInputKey> example_keyboard_input_config = {
-    {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
-    {SDL_SCANCODE_ESCAPE, ExampleInputKey::QUIT},
+static const std::map<std::set<SDL_Scancode>, std::map<SDL_Scancode, ExampleInputKey>>
+example_keyboard_input_config = {
+    {
+        {}, {
+            {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
+            {SDL_SCANCODE_ESCAPE, ExampleInputKey::QUIT},
+        }
+    },
+    {
+        {SDL_SCANCODE_LSHIFT}, {
+            {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
+        }
+    },
+    {
+        {SDL_SCANCODE_RSHIFT}, {
+            {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
+        }
+    },
 };
 
 /**
@@ -39,7 +54,7 @@ static const std::map<SDL_WindowEventID, ExampleInputKey> example_window_event_c
  * Mouse input config
  * This could be used to react to mouse clicks or movements or scrolling.
  */
-static const std::map<Uint8, ExampleInputKey> example_mouse_input_config;
+static const std::map<std::set<SDL_Scancode>, std::map<Uint8, ExampleInputKey>> example_mouse_input_config;
 
 /** Plugins controller */
 class ExampleController : public ControllerBase {

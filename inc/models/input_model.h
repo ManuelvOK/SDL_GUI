@@ -71,17 +71,29 @@ public:
     InputModel() = default;
 
     /** Clear _down and _up */
-    void update() {
+    virtual void update() {
         InputModelBase::update();
         this->_down.clear();
         this->_up.clear();
+    }
+
+    const std::set<T> pressed() const {
+        return this->_pressed;
+    }
+
+    const std::set<T> down() const {
+        return this->_down;
+    }
+
+    const std::set<T> up() const {
+        return this->_up;
     }
 
     /**
      * set the state of a given input to be pressed
      * @param input The input to set as pressed
      */
-    void press(T input) {
+    virtual void press(T input) {
         this->_down.insert(input);
         this->_pressed.insert(input);
     }
@@ -91,7 +103,7 @@ public:
      * This is used for events that will not get released.
      * @param input The input to trigger
      */
-    void trigger(T input) {
+    virtual void trigger(T input) {
         this->_down.insert(input);
     }
 
@@ -99,7 +111,10 @@ public:
      * set the state of a given input to be released
      * @param input The input to set as released
      */
-    void release(T input) {
+    virtual void release(T input) {
+        if (not this->_pressed.contains(input)) {
+            return;
+        }
         this->_pressed.erase(input);
         this->_up.insert(input);
     }

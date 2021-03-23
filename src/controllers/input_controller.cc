@@ -18,3 +18,39 @@ void SDL_GUI::clear_sdl_events() {
 const std::vector<SDL_Event> SDL_GUI::events() {
     return _events;
 }
+
+void LowLevelInputModel::press(Uint8 button) {
+    this->_button_down.insert(button);
+    this->_button_pressed.insert(button);
+}
+
+void LowLevelInputModel::release(Uint8 button) {
+    if (not this->_button_pressed.contains(button)) {
+        return;
+    }
+    this->_button_pressed.erase(button);
+    this->_button_up.insert(button);
+}
+
+void LowLevelInputModel::trigger(Uint8 button) {
+    this->_button_pressed.insert(button);
+}
+
+void LowLevelInputModel::update() {
+    InputModel::update();
+    this->_button_down.clear();
+    this->_button_up.clear();
+}
+
+const std::set<Uint8> LowLevelInputModel::button_pressed() const {
+    return this->_button_pressed;
+}
+
+const std::set<Uint8> LowLevelInputModel::button_down() const {
+    return this->_button_down;
+}
+
+const std::set<Uint8> LowLevelInputModel::button_up() const {
+    return this->_button_up;
+}
+
