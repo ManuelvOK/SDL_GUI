@@ -10,36 +10,27 @@ Debuggable::Debuggable() {
 }
 
 Debuggable::~Debuggable() {
-    if (this->_debug_information) {
-        delete this->_debug_information;
+    for (const auto &[d, _]: this->_debug_information) {
+        delete d;
     }
 }
 
 void Debuggable::default_draw_debug_information(SDL_Renderer *renderer, Position position,
                                                 SDL_Rect parent_clip_rect) const {
-    if (not this->_debug_information) {
-        return;
+    for (const auto &[d, shown]: this->_debug_information) {
+        if (not shown()) {
+            continue;
+        }
+        d->recalculate();
+        d->render(renderer, position, parent_clip_rect, false, true);
     }
-    if (not this->_debug_information_shown) {
-        return;
-    }
-    this->_debug_information->recalculate();
-    this->_debug_information->render(renderer, position, parent_clip_rect, false, true);
+}
+
+void Debuggable::add_debug_drawable(Drawable *drawable, std::function<bool()> criteria) {
+    this->_debug_information.emplace(drawable, criteria);
 }
 
 void Debuggable::draw_debug_information(SDL_Renderer *renderer, Position position,
                                         SDL_Rect parent_clip_rect) const {
     this->_draw_debug_information(renderer, position, parent_clip_rect);
-}
-
-void Debuggable::set_debug_information_shown(bool debug_information_shown) {
-    this->_debug_information_shown = debug_information_shown;
-}
-
-void Debuggable::show_debug_information() {
-    this->_debug_information_shown = true;
-}
-
-void Debuggable::hide_debug_information() {
-    this->_debug_information_shown = false;
 }

@@ -43,6 +43,7 @@ public:
         this->_interface_model = new SDL_GUI::InterfaceModel(app->renderer(), app->window_width(),
                                                              app->window_height());
         app->add_model(this->_interface_model);
+        Drawable::set_interface_model(this->_interface_model);
 
         this->_input_model = new InputModel<InputKey>();
         app->add_model(this->_input_model);

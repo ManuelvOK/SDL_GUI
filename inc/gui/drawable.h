@@ -14,6 +14,7 @@
 #include "style.h"
 
 namespace SDL_GUI {
+class InterfaceModel;
 /** base class for Objects that get rendered.  */
 class Drawable : public Hoverable, public Scrollable, public Attributable,
                  public Debuggable {
@@ -21,6 +22,8 @@ class Drawable : public Hoverable, public Scrollable, public Attributable,
     std::list<Drawable *> _children;            /**< list of child drawables in drawable tree */
     std::list<Drawable *> _children_reversed;   /**< reversed list of childs */
 protected:
+    static const InterfaceModel *_interface_model;
+
     /** Style that gets used to render this drawable */
     Style *_current_style = &this->_default_style;
 
@@ -86,6 +89,8 @@ public:
 
     /** Default destructor */
     virtual ~Drawable();
+
+    static void set_interface_model(InterfaceModel *interface_model);
 
     /**
      * Getter for _parent
@@ -329,6 +334,7 @@ public:
     /** copy the subtree defined by this drawable */
     Drawable *deepcopy() const;
 };
+
 
 /** Drawable that does nothing. This is a tombstone. */
 class NullDrawable : public Drawable {

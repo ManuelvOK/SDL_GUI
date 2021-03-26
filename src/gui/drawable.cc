@@ -8,6 +8,8 @@
 
 using namespace SDL_GUI;
 
+const InterfaceModel *Drawable::_interface_model = nullptr;
+
 Drawable::Drawable(std::string type, Position position,
                    std::function<void ()> init_debug_information_callback)
     : Scrollable(position), _type(type) {
@@ -47,6 +49,13 @@ void Drawable::apply_parents_clip_rect(SDL_Rect parent_clip_rect) {
     for (Drawable *d: this->_children) {
         d->apply_parents_clip_rect(clip_rect);
     }
+}
+
+void Drawable::set_interface_model(InterfaceModel *interface_model) {
+    if (Drawable::_interface_model) {
+        return;
+    }
+    Drawable::_interface_model = interface_model;
 }
 
 Drawable *Drawable::parent() {
@@ -253,9 +262,13 @@ void Drawable::default_init_debug_information() {
         attribute_string << "--noname--";
     }
 
-    this->_debug_information = new WrapRect();
-    this->_debug_information->_default_style._color = RGB(255, 255, 255, 150);
-    this->_debug_information->_default_style._has_background = true;
+    WrapRect *rect = new WrapRect();
+    rect->_default_style._color = RGB(255, 255, 255, 150);
+    rect->_default_style._has_background = true;
+    this->add_debug_drawable(rect,
+        [this](){
+            return this->_interface_model->debug_information_drawn();
+        });
 
     Text *position_text = new Text(InterfaceModel::font(), position_string.str());
     position_text->set_position({3,3});
@@ -267,13 +280,13 @@ void Drawable::default_init_debug_information() {
             position_string << drawable->absolute_position();
             position_text->set_text(position_string.str());
         });
-    this->_debug_information->add_child(position_text, true);
+    rect->add_child(position_text, true);
 
     Text *attribute_text = new Text(InterfaceModel::font(), attribute_string.str());
     /* TODO: get rid of magic numbers */
     attribute_text->set_position({3,16});
     attribute_text->add_attribute("debug");
-    this->_debug_information->add_child(attribute_text, true);
+    rect->add_child(attribute_text, true);
 }
 
 void Drawable::init_debug_information() {

@@ -15,6 +15,10 @@ protected:
     unsigned _window_width;     /**< applications windows width */
     unsigned _window_height;    /**< applications windows height */
     Drawable *_null_drawable;   /**< drawable tombstone */
+
+    /** flag that demetermines whether position and attributes position of drawables will be
+     * shown */
+    bool _debug_information_drawn = false;
 public:
     /**
      * Constructor
@@ -71,6 +75,15 @@ public:
      * @return this->_null_drawable
      */
     Drawable *null_drawable() const;
+
+    /**
+     * Getter fot _debug_information_drawm
+     * @return this->_debug_information_drawn
+     */
+    bool debug_information_drawn() const;
+
+    /** toggle this->_draw_debug_information */
+    void toggle_debug_information_drawn();
 
     /**
      * find all Drawables in _drawable_root with a certain attribute

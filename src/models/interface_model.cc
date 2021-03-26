@@ -74,6 +74,14 @@ Drawable *InterfaceModel::null_drawable() const {
     return new NullDrawable();
 }
 
+bool InterfaceModel::debug_information_drawn() const {
+    return this->_debug_information_drawn;
+}
+
+void InterfaceModel::toggle_debug_information_drawn() {
+    this->_debug_information_drawn = !this->_debug_information_drawn;
+}
+
 std::vector<Drawable *> InterfaceModel::find_drawables(std::string attribute) {
     return this->_drawable_root->filter([attribute](Drawable *d){
         return d->has_attribute(attribute);

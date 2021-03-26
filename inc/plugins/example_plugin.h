@@ -18,6 +18,7 @@ namespace SDL_GUI {
  */
 enum class ExampleInputKey {
     QUIT,
+    DEBUG,
 };
 
 /**
@@ -26,22 +27,18 @@ enum class ExampleInputKey {
  */
 static const std::map<std::set<SDL_Scancode>, std::map<SDL_Scancode, ExampleInputKey>>
 example_keyboard_input_config = {
-    {
-        {}, {
-            {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
-            {SDL_SCANCODE_ESCAPE, ExampleInputKey::QUIT},
-        }
-    },
-    {
-        {SDL_SCANCODE_LSHIFT}, {
-            {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
-        }
-    },
-    {
-        {SDL_SCANCODE_RSHIFT}, {
-            {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
-        }
-    },
+    {{}, {
+        {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
+        {SDL_SCANCODE_ESCAPE, ExampleInputKey::QUIT},
+    }},
+    {{SDL_SCANCODE_LSHIFT}, {
+        {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
+        {SDL_SCANCODE_D, ExampleInputKey::DEBUG},
+    }},
+    {{SDL_SCANCODE_RSHIFT}, {
+        {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
+        {SDL_SCANCODE_D, ExampleInputKey::DEBUG},
+    }},
 };
 
 /**
@@ -60,14 +57,16 @@ static const std::map<std::set<SDL_Scancode>, std::map<Uint8, ExampleInputKey>> 
 class ExampleController : public ControllerBase {
     ApplicationBase *_application;              /**< The application */
     InputModel<ExampleInputKey> *_input_model;  /**< The applications input model */
+    InterfaceModel *_interface_model;
 public:
     /**
      * Constructor
      * @param application The application
      * @param input_model The applications input model
      */
-    ExampleController(ApplicationBase *application, InputModel<ExampleInputKey> *input_model)
-        : _application(application), _input_model(input_model) {}
+    ExampleController(ApplicationBase *application, InputModel<ExampleInputKey> *input_model,
+                      InterfaceModel *interface_model)
+        : _application(application), _input_model(input_model), _interface_model(interface_model) {}
 
     /**
      * Check if application should quit
@@ -76,11 +75,15 @@ public:
         if (this->_input_model->is_pressed(ExampleInputKey::QUIT)) {
             this->_application->_is_running = false;
         }
+        if (this->_input_model->is_down(ExampleInputKey::DEBUG)) {
+            this->_interface_model->toggle_debug_information_drawn();
+        }
     }
 };
 
 /** The Plugin we use to show what this library can do */
 class ExamplePlugin: public PluginBase {
+    InterfaceModel *_interface_model;
 public:
     /** Constructor */
     ExamplePlugin(): PluginBase("Example Plugin") {}
@@ -109,12 +112,14 @@ public:
                                                  example_mouse_input_config);
         app->add_controller(input_controller);
 
-        ExampleController *example_controller = new ExampleController(app, input_model);
+        DefaultPlugin &default_plugin = std::get<DefaultPlugin>(previous);
+        this->_interface_model = default_plugin.interface_model();
+
+        ExampleController *example_controller = new ExampleController(app, input_model,
+                                                                      this->_interface_model);
         app->add_controller(example_controller);
 
-        DefaultPlugin &default_plugin = std::get<DefaultPlugin>(previous);
-        InterfaceModel *interface_model = default_plugin.interface_model();
-        Drawable *main = interface_model->find_first_drawable("main");
+        Drawable *main = this->_interface_model->find_first_drawable("main");
         Texture *t = new Texture("textures/strichmann.png", app->renderer());
         t->set_width(500);
         t->set_height(200);
