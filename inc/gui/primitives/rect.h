@@ -24,7 +24,8 @@ public:
      * @param width width of rect
      * @param height height of rect
      */
-    Rect(Position position = {0, 0}, unsigned width = 0, unsigned height = 0);
+    Rect(Position position = {0, 0}, unsigned width = 0, unsigned height = 0)
+        : Rect("Rect", position, width, height) {}
 
 
     void draw(SDL_Renderer *renderer, Position position) const override;

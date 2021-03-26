@@ -3,6 +3,7 @@
 #include <sstream>
 
 #include <gui/primitives/text.h>
+#include <gui/primitives/wrap_rect.h>
 #include <models/interface_model.h>
 
 using namespace SDL_GUI;
@@ -66,16 +67,18 @@ const std::list<Drawable *> Drawable::children(bool reversed) const {
     return reversed ? this->_children_reversed : this->_children;
 }
 
-void Drawable::add_child(Drawable *child) {
+void Drawable::add_child(Drawable *child, bool is_debug_information) {
     this->_children.push_back(child);
     this->_children_reversed.push_front(child);
-    child->init_debug_information();
+    if (not is_debug_information) {
+        child->init_debug_information();
+    }
     child->set_parent(this);
 }
 
-void Drawable::add_children(std::vector<Drawable *> children) {
+void Drawable::add_children(std::vector<Drawable *> children, bool is_debug_information) {
     for (Drawable *child: children) {
-        this->add_child(child);
+        this->add_child(child, is_debug_information);
     }
 }
 
@@ -250,21 +253,27 @@ void Drawable::default_init_debug_information() {
         attribute_string << "--noname--";
     }
 
+    this->_debug_information = new WrapRect();
+    this->_debug_information->_default_style._color = RGB(255, 255, 255, 150);
+    this->_debug_information->_default_style._has_background = true;
+
     Text *position_text = new Text(InterfaceModel::font(), position_string.str());
     position_text->set_position({3,3});
     position_text->add_attribute("debug");
     Drawable *drawable = this;
     position_text->add_recalculation_callback([drawable, position_text](Drawable *){
+            std::cout << "recalculation debug info for " << drawable->_type << std::endl;
             std::stringstream position_string;
             position_string << drawable->absolute_position();
             position_text->set_text(position_string.str());
         });
-    this->_debug_information.push_back(position_text);
+    this->_debug_information->add_child(position_text, true);
 
     Text *attribute_text = new Text(InterfaceModel::font(), attribute_string.str());
+    /* TODO: get rid of magic numbers */
     attribute_text->set_position({3,16});
     attribute_text->add_attribute("debug");
-    this->_debug_information.push_back(attribute_text);
+    this->_debug_information->add_child(attribute_text, true);
 }
 
 void Drawable::init_debug_information() {
@@ -321,7 +330,7 @@ void Drawable::recalculate() {
 }
 
 void Drawable::render(SDL_Renderer *renderer, Position parent_position, SDL_Rect parent_clip_rect,
-                      bool hidden) const {
+                      bool hidden, bool is_debug_information) const {
     this->hook_pre_render();
     Position position = parent_position + this->_position;
     if (hidden || this->is_hidden()) {
@@ -330,16 +339,18 @@ void Drawable::render(SDL_Renderer *renderer, Position parent_position, SDL_Rect
     SDL_RenderSetClipRect(renderer, &parent_clip_rect);
     this->draw(renderer, position);
 
+    SDL_Rect clip_rect = is_debug_information ? parent_clip_rect : this->_clip_rect;
+
     /* draw children */
     for (Drawable *child: this->_children) {
-        child->render(renderer, position, this->_clip_rect, false);
+        child->render(renderer, position, clip_rect, false, is_debug_information);
     }
 
     SDL_RenderSetClipRect(renderer, &parent_clip_rect);
     this->draw_border(renderer, position);
-    this->draw_debug_information(renderer, position);
-
-
+    if (not is_debug_information) {
+        this->draw_debug_information(renderer, position, this->_clip_rect);
+    }
 }
 
 void Drawable::draw_border(SDL_Renderer *renderer, Position position) const {

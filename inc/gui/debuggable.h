@@ -19,13 +19,14 @@ protected:
     bool _debug_information_shown = false;
 
     /** Drawables to draw as debug information */
-    std::vector<Drawable *> _debug_information;
+    Drawable * _debug_information = nullptr;
 
     /** function to call for drawing debug information */
-    std::function<void (SDL_Renderer *, Position)> _draw_debug_information;
+    std::function<void (SDL_Renderer *, Position, SDL_Rect)> _draw_debug_information;
 
     /** default function to call for drawing debug information */
-    void default_draw_debug_information(SDL_Renderer *renderer, Position position) const;
+    void default_draw_debug_information(SDL_Renderer *renderer, Position position,
+                                        SDL_Rect parent_clip_rect) const;
 
     /** Constructor */
     Debuggable();
@@ -38,7 +39,8 @@ public:
      * @param renderer the aplications renderer
      * @param position absolute position to draw debug information
      */
-    void draw_debug_information(SDL_Renderer *renderer, Position position) const;
+    void draw_debug_information(SDL_Renderer *renderer, Position position,
+                                SDL_Rect parent_clip_rect) const;
 
     /**
      * Setter for _debug_information_shown

@@ -113,14 +113,16 @@ public:
     /**
      * add a given drawable as child
      * @param child drawable to add as child
+     * @param is_debug_information flag that determines if the added child is debug information.
      */
-    void add_child(Drawable *child);
+    void add_child(Drawable *child, bool is_debug_information = false);
 
     /**
      * add a vector of drawables as children
      * @param children drawables to add as children
+     * @param is_debug_information flag that determines if the added child is debug information.
      */
-    void add_children(std::vector<Drawable *> children);
+    void add_children(std::vector<Drawable *> children, bool is_debug_information = false);
 
     /**
      * change the order of all children with a sorting function
@@ -272,7 +274,7 @@ public:
      * place if true.
      */
     void render(SDL_Renderer *renderer, Position parent_position, SDL_Rect parent_clip_rect,
-                bool hidden) const;
+                bool hidden, bool is_debug_information = false) const;
 
     /**
      * draw this Object. gets called by render()
