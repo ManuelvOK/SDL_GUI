@@ -5,7 +5,8 @@
 using namespace SDL_GUI;
 std::map<std::string, SDL_Texture *> Texture::_textures;
 
-Texture::Texture(std::string path, SDL_Renderer *renderer) : Drawable("Texture"), _path(path) {
+Texture::Texture(std::string type, std::string path, SDL_Renderer *renderer)
+    : Drawable(type), _path(path) {
     if (!Texture::_textures.contains(path)) {
         Texture::_textures.insert({path, IMG_LoadTexture(renderer, this->_path.c_str())});
     }

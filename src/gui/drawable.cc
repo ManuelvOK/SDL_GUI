@@ -153,9 +153,10 @@ std::vector<const Drawable *> Drawable::find(std::function<bool (const Drawable 
     return drawables;
 }
 
-std::vector<Drawable *> Drawable::find_bottom_up(std::function<bool (Drawable *)> f) {
+std::vector<Drawable *> Drawable::find_bottom_up(std::function<bool (Drawable *)> f,
+                                                 bool reversed) {
     std::vector<Drawable *> drawables;
-    for (Drawable *d: this->children()) {
+    for (Drawable *d: this->children(reversed)) {
         std::vector<Drawable *> childs_drawables = d->find(f);
         drawables.insert(drawables.end(), childs_drawables.begin(), childs_drawables.end());
     }
@@ -165,9 +166,10 @@ std::vector<Drawable *> Drawable::find_bottom_up(std::function<bool (Drawable *)
     return drawables;
 }
 
-std::vector<const Drawable *> Drawable::find_bottom_up(std::function<bool (const Drawable *)> f) const {
+std::vector<const Drawable *> Drawable::find_bottom_up(std::function<bool (const Drawable *)> f,
+                                                       bool reversed) const {
     std::vector<const Drawable *> drawables;
-    for (const Drawable *d: this->children()) {
+    for (const Drawable *d: this->children(reversed)) {
         std::vector<const Drawable *> childs_drawables = d->find(f);
         drawables.insert(drawables.end(), childs_drawables.begin(), childs_drawables.end());
     }
@@ -198,9 +200,9 @@ Drawable *Drawable::find_first(std::string attribute) {
         });
 }
 
-Drawable *Drawable::find_first_bottom_up(std::function<bool (Drawable *)> f) {
+Drawable *Drawable::find_first_bottom_up(std::function<bool (Drawable *)> f, bool reversed) {
     Drawable *found = nullptr;
-    for (Drawable *d: this->_children) {
+    for (Drawable *d: this->children(reversed)) {
         found = d->find_first_bottom_up(f);
         if (found != nullptr) {
             return found;

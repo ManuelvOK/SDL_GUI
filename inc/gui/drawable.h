@@ -166,10 +166,12 @@ public:
      * @param f condition
      * @return drawables that hold for the given condition
      */
-    std::vector<Drawable *> find_bottom_up(std::function<bool (Drawable *)> f);
+    std::vector<Drawable *> find_bottom_up(std::function<bool (Drawable *)> f,
+                                           bool reversed = false);
 
     /** @copydoc find_bottom_up(std::function<bool (Drawable *)>) */
-    std::vector<const Drawable *> find_bottom_up(std::function<bool (const Drawable *)> f) const;
+    std::vector<const Drawable *> find_bottom_up(std::function<bool (const Drawable *)> f,
+                                                 bool reversed = false) const;
 
     /**
      * find the first drawable DFS that holds a given condition
@@ -190,7 +192,7 @@ public:
      * @param f condition
      * @return first drawable that holds for the given condition
      */
-    Drawable *find_first_bottom_up(std::function<bool (Drawable *)> f);
+    Drawable *find_first_bottom_up(std::function<bool (Drawable *)> f, bool reversed = false);
 
     /**
      * create list of Drawables by filtering this subtree
