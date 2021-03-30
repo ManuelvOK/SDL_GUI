@@ -65,7 +65,11 @@ protected:
     SDL_Renderer *_renderer = nullptr;              /**< renderer to render on */
     unsigned _window_width;                         /**< width of window */
     unsigned _window_height;                        /**< height of window */
-    int _fps = 60;                                  /**< number of frames per second */
+    unsigned _target_fps = 60;                      /**< number of targeted frames per second */
+    unsigned _current_fps = 0;                      /**< number of frames in the last second */
+    unsigned _target_tps = 60;                      /**< number of targeted ticks per second */
+    unsigned _current_tps = 0;                      /**< number of ticks in the last second */
+
 
     /**
      * initialise everything concerning SDL
@@ -153,13 +157,18 @@ public:
      * Getter for _window_width
      * @return this->_window_width
      */
-    unsigned window_width();
+    unsigned window_width() const;
 
     /**
      * Getter for _window_height
      * @return this->_window_height
      */
-    unsigned window_height();
+    unsigned window_height() const;
+
+    unsigned target_fps() const;
+    unsigned current_fps() const;
+    unsigned target_tps() const;
+    unsigned current_tps() const;
 
     /**
      * Add Model to applications model list
