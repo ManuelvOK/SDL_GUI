@@ -24,12 +24,6 @@ class Drawable : public Hoverable, public Scrollable, public Attributable,
 protected:
     static const InterfaceModel *_interface_model;
 
-    /** Style that gets used to render this drawable */
-    Style *_current_style = &this->_default_style;
-
-    /** Flag that determines whether there is a style fr hovering */
-    bool _has_hover_style = false;
-
     /** function to call for debug information initialisation */
     std::function<void ()> _init_debug_information_callback;
 
@@ -47,12 +41,6 @@ protected:
 
     /** vector of callbacks for recalculation */
     std::vector<std::function<void(Drawable *)>> _recalculation_callbacks;
-
-    /**
-     * function to call after current_style is set
-     * @param style style that has just been set
-     */
-    virtual void hook_set_current_style(Style *style);
 
     /** function to call before the drawable gets rendered */
     virtual void hook_pre_render() const {}
@@ -84,8 +72,7 @@ protected:
 
 public:
     const std::string _type;    /**< Typename of this drawable */
-    Style _default_style;       /**< Style to use on default */
-    Style _hover_style;         /**< Style to use when hovered and hovering flag is true */
+    Style _style;       /**< Style */
 
     /** Default destructor */
     virtual ~Drawable();
@@ -298,18 +285,6 @@ public:
     virtual void draw_border(SDL_Renderer *renderer, Position position) const;
 
     /**
-     * change the style to use for rendering
-     * @param style style to use
-     */
-    void set_current_style(Style *style);
-
-    /**
-     * Getter for _has_hover_style
-     * @return this->_has_hover_style
-     */
-    bool has_hover_style();
-
-    /**
      * add a callback function for data binding
      * @param callback callback function that gets executed every tick
      */
@@ -321,15 +296,15 @@ public:
     /** Update this. This function gets called once every tick */
     virtual void update() {}
 
-    /** Set the current style `hidden` value to false */
+    /** Set the style's `hidden` value to false */
     void show();
 
-    /** Set the current style `hidden` value to true */
+    /** Set the style's `hidden` value to true */
     void hide();
 
     /**
-     * Getter for the current style `hidden` value
-     * @return this->_current_style->_hidden
+     * Getter for the style's `hidden` value
+     * @return this->_style._hidden
      */
     bool is_hidden() const;
 

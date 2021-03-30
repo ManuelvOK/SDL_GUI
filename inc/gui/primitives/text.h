@@ -18,8 +18,6 @@ protected:
     /** apply the current style and render the text to the surface */
     void create_surfaces();
 
-    void hook_set_current_style(Style *style) override;
-
     Drawable *clone() const override;
 public:
     /**

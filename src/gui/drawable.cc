@@ -265,8 +265,8 @@ void Drawable::default_init_debug_information() {
     }
 
     WrapRect *rect = new WrapRect();
-    rect->_default_style._color = RGB(255, 255, 255, 150);
-    rect->_default_style._has_background = true;
+    rect->_style._color = RGB(255, 255, 255, 150);
+    rect->_style._has_background = true;
     this->add_debug_drawable(rect,
         [this](){
             return this->_interface_model->debug_information_drawn();
@@ -297,19 +297,6 @@ void Drawable::init_debug_information() {
     }
     this->_init_debug_information_callback();
     this->_debug_information_initialised = true;
-}
-
-void Drawable::set_current_style(Style *style) {
-    this->_current_style = style;
-    this->hook_set_current_style(style);
-}
-
-bool Drawable::has_hover_style() {
-    return this->_has_hover_style;
-}
-
-void Drawable::hook_set_current_style(Style *style) {
-    (void) style;
 }
 
 void Drawable::hook_post_move(Position offset) {
@@ -369,17 +356,17 @@ void Drawable::render(SDL_Renderer *renderer, Position parent_position, SDL_Rect
 }
 
 void Drawable::draw_border(SDL_Renderer *renderer, Position position) const {
-    if (not this->_current_style->_has_border) {
+    if (not this->_style._has_border) {
         return;
     }
-    for (int i = 0; i < static_cast<int>(this->_current_style->_border_width); ++i) {
+    for (int i = 0; i < static_cast<int>(this->_style._border_width); ++i) {
         SDL_Rect r = {
             position._x + i,
             position._y + i,
             static_cast<int>(this->_width - 2*i),
             static_cast<int>(this->_height - 2*i),
         };
-        this->_current_style->_border_color.activate(renderer);
+        this->_style._border_color.activate(renderer);
         SDL_RenderDrawRect(renderer, &r);
         /* since the drawn rect does not include the lower right point, we have to draw it
          * manually */
@@ -388,15 +375,15 @@ void Drawable::draw_border(SDL_Renderer *renderer, Position position) const {
 }
 
 void Drawable::show() {
-    this->_current_style->_hidden = false;
+    this->_style._hidden = false;
 }
 
 void Drawable::hide() {
-    this->_current_style->_hidden = true;
+    this->_style._hidden = true;
 }
 
 bool Drawable::is_hidden() const {
-    return this->_current_style->_hidden;
+    return this->_style._hidden;
 }
 
 Drawable *Drawable::deepcopy() const {

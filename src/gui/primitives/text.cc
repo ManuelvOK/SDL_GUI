@@ -45,7 +45,7 @@ void Text::create_surfaces() {
     std::vector<std::string> lines = split_string(this->_text, "\n");
     for (std::string line: lines) {
         SDL_Surface *s = TTF_RenderText_Blended(this->_font, line.c_str(),
-                                                this->_current_style->_color);
+                                                this->_style._color);
         if (s == nullptr) {
             continue;
         }
@@ -60,11 +60,6 @@ void Text::create_surfaces() {
         SDL_BlitSurface(s, NULL, this->_surface, &dstrect);
         dstrect.y += lineskip;
     }
-}
-
-void Text::hook_set_current_style(Style *style) {
-    (void) style;
-    this->create_surfaces();
 }
 
 void Text::draw(SDL_Renderer *renderer, Position position) const {

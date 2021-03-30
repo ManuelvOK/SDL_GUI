@@ -18,8 +18,8 @@ void Rect::draw(SDL_Renderer *renderer, Position position) const {
                   static_cast<int>(this->_width),
                   static_cast<int>(this->_height)};
 
-    if (this->_current_style->_has_background) {
-        this->_current_style->_color.activate(renderer);
+    if (this->_style._has_background) {
+        this->_style._color.activate(renderer);
         SDL_RenderFillRect(renderer, &r);
     }
 }
