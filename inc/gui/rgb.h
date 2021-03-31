@@ -14,15 +14,6 @@ public:
     unsigned char _b = 0; /**< blue value between 0 and 255 */
     unsigned char _a = 0; /**< apha value between 0 and 255 */
 
-    /** prediefined color codes the object can be instantiated with. */
-    const std::map<std::string, std::array<unsigned char, 4>> _predefinitions = {
-        {"red",   {255,   0,   0, 255}},
-        {"green", {  0, 255,   0, 255}},
-        {"blue",  {  0,   0, 255, 255}},
-        {"white", {255, 255, 255, 255}},
-        {"black", {  0,   0,   0, 255}},
-    };
-
     /** Default constructor */
     RGB() = default;
 
@@ -46,8 +37,6 @@ public:
 
     /** conversion operator for SDL_Color */
     operator SDL_Color() const;
-
-    RGB &operator=(const RGB &rgb);
 
     /**
      * activate color for a given alpha on a given renderer
