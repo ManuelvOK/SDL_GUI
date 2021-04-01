@@ -12,7 +12,7 @@ public:
     unsigned char _r = 0; /**< red value between 0 and 255 */
     unsigned char _g = 0; /**< green value between 0 and 255 */
     unsigned char _b = 0; /**< blue value between 0 and 255 */
-    unsigned char _a = 0; /**< apha value between 0 and 255 */
+    unsigned char _a = 255; /**< apha value between 0 and 255 */
 
     /** Default constructor */
     RGB() = default;
