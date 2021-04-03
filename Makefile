@@ -66,8 +66,8 @@ $(DEPDIR): ; @mkdir -p $@
 
 $(DEPS):
 
-$(TARGET): $(BUILD)/main.o $(TARGET).a
-	$(CXX) -o $@ $< $(TARGET).a $(LIBS)
+$(TARGET): $(BUILD)/main.o $(LIB_TARGET)
+	$(CXX) -o $@ $^ $(LIBS)
 
 $(LIB_TARGET): $(filter-out $(BUILD)/main.o, $(OBJS))
 	$(AR) rvs $@ $^

@@ -17,12 +17,14 @@ Debuggable::~Debuggable() {
 
 void Debuggable::default_draw_debug_information(SDL_Renderer *renderer, Position position,
                                                 SDL_Rect parent_clip_rect) const {
-    for (const auto &[d, shown]: this->_debug_information) {
+    for (const auto &[wrapper, shown]: this->_debug_information) {
         if (not shown()) {
             continue;
         }
-        d->recalculate();
-        d->render(renderer, position, parent_clip_rect, false, true);
+        wrapper->map([](Drawable *d) {
+                d->recalculate();
+            });
+        wrapper->render(renderer, position, parent_clip_rect, false, true);
     }
 }
 

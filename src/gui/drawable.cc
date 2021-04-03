@@ -277,7 +277,6 @@ void Drawable::default_init_debug_information() {
     position_text->add_attribute("debug");
     Drawable *drawable = this;
     position_text->add_recalculation_callback([drawable, position_text](Drawable *){
-            std::cout << "recalculation debug info for " << drawable->_type << std::endl;
             std::stringstream position_string;
             position_string << drawable->absolute_position();
             position_text->set_text(position_string.str());
