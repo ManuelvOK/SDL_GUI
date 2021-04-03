@@ -4,9 +4,10 @@ INCDIR := inc
 LIBDIR := lib
 DEPDIR := .d
 
-RM     := rm -rf
-MKDIR  := mkdir -p
-TARGET := $(BUILD)/SDL_GUI
+RM         := rm -rf
+MKDIR      := mkdir -p
+TARGET     := $(BUILD)/SDL_GUI
+LIB_TARGET := $(BUILD)/libSDL_GUI.a
 SRCSALL      := $(patsubst ./%, %, $(shell find -name "*.cc" -o -name "*.h"))
 SRCSCC       := $(filter %.cc, $(SRCSALL))
 SRCH         := $(filter %.h, $(SRCSALL))
@@ -51,7 +52,7 @@ debug:
 .PHONY: lib
 #lib: CXXFLAGS += -fsanitize=address
 #lib: LIBS += -fsanitize=address
-lib: $(TARGET).a
+lib: $(LIB_TARGET)
 
 tags: $(SRCSCC)
 	$(CXX) $(CXXFLAGSTAGS) $(CXXFLAGS) -M $(SRCSCC) | sed -e 's/[\\ ]/\n/g' | \
@@ -68,7 +69,7 @@ $(DEPS):
 $(TARGET): $(BUILD)/main.o $(TARGET).a
 	$(CXX) -o $@ $< $(TARGET).a $(LIBS)
 
-$(TARGET).a: $(filter-out $(BUILD)/main.o, $(OBJS))
+$(LIB_TARGET): $(filter-out $(BUILD)/main.o, $(OBJS))
 	$(AR) rvs $@ $^
 
 $(LIBRARIES): $(LIBDIR)/%.a: $(LIBDIR)/%/
