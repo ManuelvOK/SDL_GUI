@@ -21,23 +21,31 @@ enum class ExampleInputKey {
     DEBUG,
 };
 
+enum class ExampleInputState {
+    ALL,
+};
+
 /**
  * Keyboard input config.
  * Keypresses of `[ESC]` and `[Q]` both will result in quitting the application
  */
-static const std::map<std::set<SDL_Scancode>, std::map<SDL_Scancode, ExampleInputKey>>
+static const std::map<ExampleInputState,
+                      std::map<std::set<SDL_Scancode>,
+                               std::map<SDL_Scancode, ExampleInputKey>>>
 example_keyboard_input_config = {
-    {{}, {
-        {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
-        {SDL_SCANCODE_ESCAPE, ExampleInputKey::QUIT},
-    }},
-    {{SDL_SCANCODE_LSHIFT}, {
-        {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
-        {SDL_SCANCODE_D, ExampleInputKey::DEBUG},
-    }},
-    {{SDL_SCANCODE_RSHIFT}, {
-        {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
-        {SDL_SCANCODE_D, ExampleInputKey::DEBUG},
+    {ExampleInputState::ALL, {
+        {{}, {
+            {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
+            {SDL_SCANCODE_ESCAPE, ExampleInputKey::QUIT},
+        }},
+        {{SDL_SCANCODE_LSHIFT}, {
+            {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
+            {SDL_SCANCODE_D, ExampleInputKey::DEBUG},
+        }},
+        {{SDL_SCANCODE_RSHIFT}, {
+            {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
+            {SDL_SCANCODE_D, ExampleInputKey::DEBUG},
+        }},
     }},
 };
 
@@ -51,12 +59,14 @@ static const std::map<SDL_WindowEventID, ExampleInputKey> example_window_event_c
  * Mouse input config
  * This could be used to react to mouse clicks or movements or scrolling.
  */
-static const std::map<std::set<SDL_Scancode>, std::map<Uint8, ExampleInputKey>> example_mouse_input_config;
+static const std::map<ExampleInputState,
+                      std::map<std::set<SDL_Scancode>,
+                               std::map<Uint8, ExampleInputKey>>> example_mouse_input_config;
 
 /** Plugins controller */
 class ExampleController : public ControllerBase {
     ApplicationBase *_application;              /**< The application */
-    InputModel<ExampleInputKey> *_input_model;  /**< The applications input model */
+    InputModel<ExampleInputKey, ExampleInputState> *_input_model;  /**< The applications input model */
     InterfaceModel *_interface_model;
 public:
     /**
@@ -64,9 +74,11 @@ public:
      * @param application The application
      * @param input_model The applications input model
      */
-    ExampleController(ApplicationBase *application, InputModel<ExampleInputKey> *input_model,
+    ExampleController(ApplicationBase *application,
+                      InputModel<ExampleInputKey, ExampleInputState> *input_model,
                       InterfaceModel *interface_model)
-        : _application(application), _input_model(input_model), _interface_model(interface_model) {}
+        : _application(application), _input_model(input_model),
+          _interface_model(interface_model) {}
 
     /**
      * Check if application should quit
@@ -102,14 +114,15 @@ public:
         (void)argc;
         (void)argv;
         /* Models */
-        InputModel<ExampleInputKey> *input_model = new InputModel<ExampleInputKey>();
+        InputModel<ExampleInputKey, ExampleInputState> *input_model =
+            new InputModel<ExampleInputKey, ExampleInputState>();
         app->add_model(input_model);
 
         /* Controllers */
-        InputController<ExampleInputKey> *input_controller =
-            new InputController<ExampleInputKey>(input_model, example_keyboard_input_config,
-                                                 example_window_event_config,
-                                                 example_mouse_input_config);
+        InputController<ExampleInputKey, ExampleInputState> *input_controller =
+            new InputController<ExampleInputKey, ExampleInputState>(
+                    input_model, example_keyboard_input_config, example_window_event_config,
+                    example_mouse_input_config, ExampleInputState::ALL);
         app->add_controller(input_controller);
 
         DefaultPlugin &default_plugin = std::get<DefaultPlugin>(previous);

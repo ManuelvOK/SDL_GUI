@@ -54,16 +54,18 @@ public:
 
 /**
  * Atual input model that also holds information about possible input values
- * @tparam T enum with all the possible input values
+ * @tparam IType enum with all the possible input values
+ * @tparam IState enum with all the possible input states
  */
-template<typename T>
+template<typename IType, typename IState>
 class InputModel : public InputModelBase {
-    /* make sure T is actually an enum */
-    static_assert(std::is_enum<T>::value);
+    /* make sure IType and IState are actually enums */
+    static_assert(std::is_enum<IType>::value);
+    static_assert(std::is_enum<IState>::value);
 
-    std::set<T> _pressed;   /**< active (pressed) inputs */
-    std::set<T> _down;      /**< inputs that just got activated (pressed) */
-    std::set<T> _up;        /**< inputs that just got deactivated (released) */
+    std::set<IType> _pressed;   /**< active (pressed) inputs */
+    std::set<IType> _down;      /**< inputs that just got activated (pressed) */
+    std::set<IType> _up;        /**< inputs that just got deactivated (released) */
 
 
 public:
@@ -77,15 +79,15 @@ public:
         this->_up.clear();
     }
 
-    const std::set<T> pressed() const {
+    const std::set<IType> pressed() const {
         return this->_pressed;
     }
 
-    const std::set<T> down() const {
+    const std::set<IType> down() const {
         return this->_down;
     }
 
-    const std::set<T> up() const {
+    const std::set<IType> up() const {
         return this->_up;
     }
 
@@ -93,7 +95,7 @@ public:
      * set the state of a given input to be pressed
      * @param input The input to set as pressed
      */
-    virtual void press(T input) {
+    virtual void press(IType input) {
         this->_down.insert(input);
         this->_pressed.insert(input);
     }
@@ -103,7 +105,7 @@ public:
      * This is used for events that will not get released.
      * @param input The input to trigger
      */
-    virtual void trigger(T input) {
+    virtual void trigger(IType input) {
         this->_down.insert(input);
     }
 
@@ -111,7 +113,7 @@ public:
      * set the state of a given input to be released
      * @param input The input to set as released
      */
-    virtual void release(T input) {
+    virtual void release(IType input) {
         if (not this->_pressed.contains(input)) {
             return;
         }
@@ -124,7 +126,7 @@ public:
      * @param key the key to check
      * @returns True if key is pressed. False otherwise
      */
-    bool is_pressed(T key) const {
+    bool is_pressed(IType key) const {
         return this->_pressed.contains(key);
     }
 
@@ -133,7 +135,7 @@ public:
      * @param key the key to check
      * @returns True if key has pressed down. False otherwise
      */
-    bool is_down(T key) const {
+    bool is_down(IType key) const {
         return this->_down.contains(key);
     }
 
@@ -142,7 +144,7 @@ public:
      * @param key the key to check
      * @returns True if key has just been released. False otherwise
      */
-    bool is_up(T key) const {
+    bool is_up(IType key) const {
         return this->_up.contains(key);
     }
 };

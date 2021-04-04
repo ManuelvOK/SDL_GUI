@@ -10,7 +10,6 @@
 #include "../views/interface_view.h"
 
 #include "../config/input_config.h"
-#include "../input_keys.h"
 
 namespace SDL_GUI {
 
@@ -19,7 +18,7 @@ class DefaultPlugin: public PluginBase {
 private:
     ApplicationBase *_application;      /**< The application */
     InterfaceModel *_interface_model;   /**< The applications interface model */
-    InputModel<InputKey> *_input_model; /**< The applications input model */
+    InputModel<InputKey, InputState> *_input_model; /**< The applications input model */
 public:
     /** Constructor */
     DefaultPlugin() : PluginBase("DefaultPlugin") {}
@@ -45,13 +44,13 @@ public:
         app->add_model(this->_interface_model);
         Drawable::set_interface_model(this->_interface_model);
 
-        this->_input_model = new InputModel<InputKey>();
+        this->_input_model = new InputModel<InputKey, InputState>();
         app->add_model(this->_input_model);
 
         /* Controllers */
-        InputController<InputKey> *input_controller =
-            new InputController<InputKey>(this->_input_model, keyboard_input_config,
-                    window_event_config, mouse_input_config);
+        InputController<InputKey, InputState> *input_controller =
+            new InputController<InputKey, InputState>(this->_input_model, keyboard_input_config,
+                    window_event_config, mouse_input_config, InputState::ALL);
         app->add_controller(input_controller);
 
         InterfaceController *interface_controller = new InterfaceController("templates/main.tpl",
@@ -75,6 +74,6 @@ public:
      * Getter for _input_model
      * @return this->_input_model
      */
-    InputModel<InputKey> *input_model();
+    InputModel<InputKey, InputState> *input_model();
 };
 }

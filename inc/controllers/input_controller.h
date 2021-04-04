@@ -29,7 +29,11 @@ void clear_sdl_events();
  */
 const std::vector<SDL_Event> events();
 
-class LowLevelInputModel: public InputModel<SDL_Scancode> {
+enum class SingleState {
+    ALL,
+};
+
+class LowLevelInputModel: public InputModel<SDL_Scancode, SingleState> {
     std::set<Uint8> _button_pressed;
     std::set<Uint8> _button_down;
     std::set<Uint8> _button_up;
@@ -49,29 +53,45 @@ public:
 /**
  * This controller handles the mouse and keyboard input and changes on the window. These events get
  * propagated to the given input model.
- * @tparam T the applications Input Keys Enum
+ * @tparam IType the applications Input Keys Enum
+ * @tparam IStyte the applications Input States Enum
  */
-template<typename T>
+template<typename IType, typename IState>
 class InputController : public ControllerBase {
-    static_assert(std::is_enum<T>::value);
+    static_assert(std::is_enum<IType>::value);
 
 protected:
     /** the applications input model */
-    InputModel<T> *_input_model = nullptr;
+    InputModel<IType, IState> *_input_model = nullptr;
 
     LowLevelInputModel *_low_level_input_model = nullptr;
 
     /** the applications keyboard input config */
-    std::map<std::set<SDL_Scancode>, std::map<SDL_Scancode, T>> _keyboard_input_config;
+    std::map<IState, std::map<std::set<SDL_Scancode>, std::map<SDL_Scancode, IType>>> _keyboard_input_config;
 
     /** the applications window event config */
-    std::map<SDL_WindowEventID, T> _window_event_config;
+    std::map<SDL_WindowEventID, IType> _window_event_config;
 
     /** the applications mouse input config */
-    std::map<std::set<SDL_Scancode>, std::map<Uint8, T>> _mouse_input_config;
+    std::map<IState, std::map<std::set<SDL_Scancode>, std::map<Uint8, IType>>> _mouse_input_config;
 
-    std::set<SDL_Scancode> _modifiers;
+    std::map<IState, std::set<SDL_Scancode>> _modifiers;
 
+    IState _current_state;
+    IState _default_state;
+
+
+    std::set<SDL_Scancode> &current_modifiers() {
+        return this->_modifiers[this->_current_state];
+    }
+
+    std::map<std::set<SDL_Scancode>, std::map<SDL_Scancode, IType>> current_keyboard_input_config() {
+        return this->_keyboard_input_config[this->_current_state];
+    }
+
+    std::map<std::set<SDL_Scancode>, std::map<Uint8, IType>> current_mouse_input_config() {
+        return this->_mouse_input_config[this->_current_state];
+    }
 
     /**
      * propagate key press to low level input model
@@ -81,7 +101,7 @@ protected:
         if (kb_event.repeat) {
                 return;
             }
-        this->_low_level_input_model->InputModel<SDL_Scancode>::press(kb_event.keysym.scancode);
+        this->_low_level_input_model->InputModel<SDL_Scancode, SingleState>::press(kb_event.keysym.scancode);
     }
 
     /**
@@ -89,7 +109,7 @@ protected:
      * @param kb_event event to propagate
      */
     virtual void handle_key_release(SDL_KeyboardEvent kb_event) {
-        this->_low_level_input_model->InputModel<SDL_Scancode>::release(kb_event.keysym.scancode);
+        this->_low_level_input_model->InputModel<SDL_Scancode, SingleState>::release(kb_event.keysym.scancode);
     }
 
     /**
@@ -128,15 +148,18 @@ protected:
         }
     }
 
-    void register_high_level_input() {
+    void register_high_level_input(IState state) {
         /* get set of pressed modifiers and load relevant config for that set */
         const std::set<SDL_Scancode> ll_pressed = this->_low_level_input_model->pressed();
         std::set<SDL_Scancode> pressed_modifiers;
-        std::set_intersection(this->_modifiers.begin(), this->_modifiers.end(), ll_pressed.begin(), ll_pressed.end(), std::inserter(pressed_modifiers, pressed_modifiers.begin()));
-        std::map<SDL_Scancode, T> relevant_keyboard_config =
-            this->_keyboard_input_config[pressed_modifiers];
-        std::map<Uint8, T> relevant_mouse_config =
-            this->_mouse_input_config[pressed_modifiers];
+        auto current_modifiers = this->_modifiers[state];
+        auto keyboard_config = this->_keyboard_input_config[state];
+        auto mouse_config = this->_mouse_input_config[state];
+
+        std::set_intersection(current_modifiers.begin(), current_modifiers.end(),
+                              ll_pressed.begin(), ll_pressed.end(),
+                              std::inserter(pressed_modifiers, pressed_modifiers.begin()));
+        std::map<SDL_Scancode, IType> relevant_keyboard_config = keyboard_config[pressed_modifiers];
 
         /* look up key presses */
         for (SDL_Scancode input: this->_low_level_input_model->down()) {
@@ -147,13 +170,14 @@ protected:
 
         /* look up key releases. release for every modifier. */
         for (SDL_Scancode input: this->_low_level_input_model->up()) {
-            for (const auto &[_, config]: this->_keyboard_input_config) {
+            for (const auto &[_, config]: keyboard_config) {
                 if (config.contains(input)) {
                     this->_input_model->release(config.at(input));
                 }
             }
         }
 
+        std::map<Uint8, IType> relevant_mouse_config = mouse_config[pressed_modifiers];
         /* look up button presses */
         for (Uint8 input: this->_low_level_input_model->button_down()) {
             if (relevant_mouse_config.contains(input)) {
@@ -171,13 +195,17 @@ protected:
         /* handle modifier releases */
         auto ll_up = this->_low_level_input_model->up();
         std::set<SDL_Scancode> released_modifiers;
-        std::set_intersection(this->_modifiers.begin(), this->_modifiers.end(), ll_up.begin(), ll_up.end(), std::inserter(released_modifiers, released_modifiers.begin()));
+        std::set_intersection(current_modifiers.begin(), current_modifiers.end(),
+                              ll_up.begin(), ll_up.end(),
+                              std::inserter(released_modifiers, released_modifiers.begin()));
 
         /* check wich configs have this modifier */
-        std::set<std::map<SDL_Scancode, T>> released_configs;
-        for (const auto &[modifiers, config]: this->_keyboard_input_config) {
+        std::set<std::map<SDL_Scancode, IType>> released_configs;
+        for (const auto &[modifiers, config]: keyboard_config) {
             std::set<SDL_Scancode> intersect;
-            std::set_intersection(released_modifiers.begin(), released_modifiers.end(), modifiers.begin(), modifiers.end(), std::inserter(intersect, intersect.begin()));
+            std::set_intersection(released_modifiers.begin(), released_modifiers.end(),
+                                  modifiers.begin(), modifiers.end(),
+                                  std::inserter(intersect, intersect.begin()));
             if (not intersect.empty()) {
                 released_configs.insert(config);
             }
@@ -200,18 +228,30 @@ public:
      * @param window_event_config the applicatoins window input config
      * @param mouse_input_config the applications mouse input config
      */
-    InputController(InputModel<T> *input_model,
-                    std::map<std::set<SDL_Scancode>, std::map<SDL_Scancode, T>> keyboard_input_config,
-                    std::map<SDL_WindowEventID, T> window_event_config,
-                    std::map<std::set<SDL_Scancode>, std::map<Uint8, T>> mouse_input_config)
-        : _input_model(input_model), _keyboard_input_config(keyboard_input_config),
-        _window_event_config(window_event_config), _mouse_input_config(mouse_input_config) {
+    InputController(InputModel<IType, IState> *input_model,
+                    std::map<IState, std::map<std::set<SDL_Scancode>, std::map<SDL_Scancode, IType>>> keyboard_input_config,
+                    std::map<SDL_WindowEventID, IType> window_event_config,
+                    std::map<IState, std::map<std::set<SDL_Scancode>, std::map<Uint8, IType>>> mouse_input_config,
+                    IState default_input_state)
+        : _input_model(input_model),
+        _keyboard_input_config(keyboard_input_config),
+        _window_event_config(window_event_config),
+        _mouse_input_config(mouse_input_config),
+        _current_state(default_input_state),
+        _default_state(default_input_state) {
+
         this->_low_level_input_model = new LowLevelInputModel();
-        for (const auto &[modifier, _]: this->_keyboard_input_config) {
-            this->_modifiers.insert(modifier.begin(), modifier.end());
+
+        for (const auto &[state, config]: this->_keyboard_input_config) {
+            for (const auto &[modifier, _]: config) {
+                this->_modifiers[state].insert(modifier.begin(), modifier.end());
+            }
         }
-        for (const auto &[modifier, _]: this->_mouse_input_config) {
-            this->_modifiers.insert(modifier.begin(), modifier.end());
+
+        for (const auto &[state, config]: this->_mouse_input_config) {
+            for (const auto &[modifier, _]: config) {
+                this->_modifiers[state].insert(modifier.begin(), modifier.end());
+            }
         }
     }
 
@@ -219,6 +259,13 @@ public:
         delete this->_low_level_input_model;
     }
 
+    IState state() const {
+        return this->_current_state;
+    }
+
+    void set_state(IState state) {
+        this->_current_state = state;
+    }
 
     /** Generate input state */
     virtual void update() override {
@@ -253,7 +300,10 @@ public:
             }
         }
         /* calculate high level inputs */
-        this->register_high_level_input();
+        this->register_high_level_input(this->_default_state);
+        if (this->_current_state != this->_default_state) {
+            this->register_high_level_input(this->_current_state);
+        }
     }
 };
 }
