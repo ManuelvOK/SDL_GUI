@@ -67,16 +67,25 @@ class InputModel : public InputModelBase {
     std::set<IType> _down;      /**< inputs that just got activated (pressed) */
     std::set<IType> _up;        /**< inputs that just got deactivated (released) */
 
+    IState _current_state;
+    IState _default_state;
+
+    bool _state_changed = false;
 
 public:
     /** Constructor */
-    InputModel() = default;
+    InputModel(IState default_input_state)
+        : _current_state(default_input_state), _default_state(default_input_state) {}
 
     /** Clear _down and _up */
     virtual void update() {
         InputModelBase::update();
         this->_down.clear();
         this->_up.clear();
+        if (this->_state_changed) {
+            this->_pressed.clear();
+            this->_state_changed = false;
+        }
     }
 
     const std::set<IType> pressed() const {
@@ -89,6 +98,14 @@ public:
 
     const std::set<IType> up() const {
         return this->_up;
+    }
+
+    IState state() const {
+        return this->_current_state;
+    }
+
+    IState default_state() const {
+        return this->_default_state;
     }
 
     /**
@@ -119,6 +136,14 @@ public:
         }
         this->_pressed.erase(input);
         this->_up.insert(input);
+    }
+
+    void set_state(IState state) {
+        if (state == this->_current_state) {
+            return;
+        }
+        this->_current_state = state;
+        this->_state_changed = true;
     }
 
     /**

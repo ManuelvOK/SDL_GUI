@@ -39,6 +39,7 @@ class LowLevelInputModel: public InputModel<SDL_Scancode, SingleState> {
     std::set<Uint8> _button_up;
 
 public:
+    LowLevelInputModel() : InputModel<SDL_Scancode, SingleState>(SingleState::ALL) {}
     const std::set<Uint8> button_pressed() const;
     const std::set<Uint8> button_down() const;
     const std::set<Uint8> button_up() const;
@@ -77,20 +78,17 @@ protected:
 
     std::map<IState, std::set<SDL_Scancode>> _modifiers;
 
-    IState _current_state;
-    IState _default_state;
-
 
     std::set<SDL_Scancode> &current_modifiers() {
-        return this->_modifiers[this->_current_state];
+        return this->_modifiers[this->_input_model->state()];
     }
 
     std::map<std::set<SDL_Scancode>, std::map<SDL_Scancode, IType>> current_keyboard_input_config() {
-        return this->_keyboard_input_config[this->_current_state];
+        return this->_keyboard_input_config[this->_input_model->state()];
     }
 
     std::map<std::set<SDL_Scancode>, std::map<Uint8, IType>> current_mouse_input_config() {
-        return this->_mouse_input_config[this->_current_state];
+        return this->_mouse_input_config[this->_input_model->state()];
     }
 
     /**
@@ -231,14 +229,11 @@ public:
     InputController(InputModel<IType, IState> *input_model,
                     std::map<IState, std::map<std::set<SDL_Scancode>, std::map<SDL_Scancode, IType>>> keyboard_input_config,
                     std::map<SDL_WindowEventID, IType> window_event_config,
-                    std::map<IState, std::map<std::set<SDL_Scancode>, std::map<Uint8, IType>>> mouse_input_config,
-                    IState default_input_state)
+                    std::map<IState, std::map<std::set<SDL_Scancode>, std::map<Uint8, IType>>> mouse_input_config)
         : _input_model(input_model),
         _keyboard_input_config(keyboard_input_config),
         _window_event_config(window_event_config),
-        _mouse_input_config(mouse_input_config),
-        _current_state(default_input_state),
-        _default_state(default_input_state) {
+        _mouse_input_config(mouse_input_config) {
 
         this->_low_level_input_model = new LowLevelInputModel();
 
@@ -257,14 +252,6 @@ public:
 
     ~InputController() {
         delete this->_low_level_input_model;
-    }
-
-    IState state() const {
-        return this->_current_state;
-    }
-
-    void set_state(IState state) {
-        this->_current_state = state;
     }
 
     /** Generate input state */
@@ -300,9 +287,9 @@ public:
             }
         }
         /* calculate high level inputs */
-        this->register_high_level_input(this->_default_state);
-        if (this->_current_state != this->_default_state) {
-            this->register_high_level_input(this->_current_state);
+        this->register_high_level_input(this->_input_model->default_state());
+        if (this->_input_model->state() != this->_input_model->default_state()) {
+            this->register_high_level_input(this->_input_model->state());
         }
     }
 };

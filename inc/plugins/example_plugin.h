@@ -115,14 +115,14 @@ public:
         (void)argv;
         /* Models */
         InputModel<ExampleInputKey, ExampleInputState> *input_model =
-            new InputModel<ExampleInputKey, ExampleInputState>();
+            new InputModel<ExampleInputKey, ExampleInputState>(ExampleInputState::ALL);
         app->add_model(input_model);
 
         /* Controllers */
         InputController<ExampleInputKey, ExampleInputState> *input_controller =
             new InputController<ExampleInputKey, ExampleInputState>(
                     input_model, example_keyboard_input_config, example_window_event_config,
-                    example_mouse_input_config, ExampleInputState::ALL);
+                    example_mouse_input_config);
         app->add_controller(input_controller);
 
         DefaultPlugin &default_plugin = std::get<DefaultPlugin>(previous);

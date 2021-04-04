@@ -44,13 +44,13 @@ public:
         app->add_model(this->_interface_model);
         Drawable::set_interface_model(this->_interface_model);
 
-        this->_input_model = new InputModel<InputKey, InputState>();
+        this->_input_model = new InputModel<InputKey, InputState>(InputState::ALL);
         app->add_model(this->_input_model);
 
         /* Controllers */
         InputController<InputKey, InputState> *input_controller =
             new InputController<InputKey, InputState>(this->_input_model, keyboard_input_config,
-                    window_event_config, mouse_input_config, InputState::ALL);
+                    window_event_config, mouse_input_config);
         app->add_controller(input_controller);
 
         InterfaceController *interface_controller = new InterfaceController("templates/main.tpl",
