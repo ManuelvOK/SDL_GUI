@@ -6,8 +6,12 @@ namespace SDL_GUI {
 /** primitive for drawing a line */
 class Line : public Drawable {
 protected:
-    Position &_begin = this->_position; /**< begin of line (reference to this->_position */
-    Positionable _end;                  /**< end of line as an offset related to the begin */
+    Position _begin;   /**< begin of line */
+    Position _end; /**< end of line */
+
+    unsigned _line_width = 1;
+
+    void update_dimensions();
 
     virtual Drawable *clone() const override;
 public:
@@ -16,8 +20,7 @@ public:
      * @param begin begin of line
      * @param end end of line relative to begin
      */
-    Line(Position begin = {0,0}, Position end = {0,0})
-        : Drawable("Line", begin), _end(end, end - begin) {}
+    Line(Position begin = {0,0}, Position end = {0,0});
 
     void draw(SDL_Renderer *renderer, Position position) const override;
 
@@ -38,6 +41,11 @@ public:
      * @param position begin
      */
     void set_begin(Position position);
+
+    /** @copydoc Positionable::move(Position) */
+    void move(Position direction) override;
+
+    void set_line_width(unsigned width);
 
     /**
      * Getter for _end

@@ -40,6 +40,13 @@ public:
      */
     Position & operator+=(const Position &p);
 
+    /**
+     * Unary Substraction
+     * @param p position to substract
+     * @return this - p
+     */
+    Position & operator-=(const Position &p);
+
     friend std::ostream& operator<<(std::ostream& os, const Position& pos);
 };
 

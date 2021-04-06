@@ -2,6 +2,8 @@
 
 #include <sstream>
 
+#include <SDL2/SDL2_gfxPrimitives.h>
+
 #include <gui/primitives/text.h>
 #include <gui/primitives/wrap_rect.h>
 #include <models/interface_model.h>
@@ -359,17 +361,10 @@ void Drawable::draw_border(SDL_Renderer *renderer, Position position) const {
         return;
     }
     for (int i = 0; i < static_cast<int>(this->_style._border_width); ++i) {
-        SDL_Rect r = {
-            position._x + i,
-            position._y + i,
-            static_cast<int>(this->_width - 2*i),
-            static_cast<int>(this->_height - 2*i),
-        };
-        this->_style._border_color.activate(renderer);
-        SDL_RenderDrawRect(renderer, &r);
-        /* since the drawn rect does not include the lower right point, we have to draw it
-         * manually */
-        SDL_RenderDrawPoint(renderer, r.x + r.w - 1, r.y + r.h - 1);
+        const RGB &c = this->_style._border_color;
+        rectangleRGBA(renderer, position._x + i, position._y + i,
+                      position._x + this->_width - i, position._y + this->_height - i,
+                      c._r, c._g, c._b, c._a);
     }
 }
 

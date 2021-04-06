@@ -4,11 +4,14 @@
 
 #include <SDL2/SDL.h>
 
-#include "../application.h"
+#include <application.h>
 
-#include "../controllers/controller_base.h"
-#include "plugin_base.h"
-#include "default_plugin.h"
+#include <controllers/controller_base.h>
+#include <plugins/plugin_base.h>
+#include <plugins/default_plugin.h>
+
+#include <gui/primitives/texture.h>
+#include <gui/primitives/line.h>
 
 namespace SDL_GUI {
 
@@ -132,11 +135,29 @@ public:
                                                                       this->_interface_model);
         app->add_controller(example_controller);
 
-        Drawable *main = this->_interface_model->find_first_drawable("main");
+        Drawable *image = this->_interface_model->find_first_drawable("image");
+        image->_style._border_color = RGB("green");
+        image->_style._border_width = 3;
         Texture *t = new Texture("textures/strichmann.png", app->renderer());
-        t->set_width(500);
-        t->set_height(200);
-        main->add_child(t);
+        t->set_width(50);
+        t->set_height(60);
+        image->add_child(t);
+
+        Drawable *line = this->_interface_model->find_first_drawable("line");
+        Line *l = new Line({5,5},{95, 20});
+        line->add_child(l);
+
+        l = new Line({5,5},{95, 20});
+        l->_style._color = RGB("red");
+        l->move({0, 20});
+        line->add_child(l);
+
+        l = new Line({5,5},{95, 20});
+        l->_style._color = RGB("blue");
+        l->set_line_width(3);
+        l->move({20, 60});
+        l->set_end_relative_to_begin({-10, -30});
+        line->add_child(l);
     }
 };
 }

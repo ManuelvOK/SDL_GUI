@@ -4,11 +4,12 @@ using namespace SDL_GUI;
 
 /** prediefined color codes the object can be instantiated with. */
 static const std::map<std::string, std::array<unsigned char, 4>> predefinitions = {
-    {"red",   {255,   0,   0, 255}},
-    {"green", {  0, 255,   0, 255}},
-    {"blue",  {  0,   0, 255, 255}},
-    {"white", {255, 255, 255, 255}},
-    {"black", {  0,   0,   0, 255}},
+    {"red",    {255,   0,   0, 255}},
+    {"green",  {  0, 255,   0, 255}},
+    {"blue",   {  0,   0, 255, 255}},
+    {"yellow", {255, 255,   0, 255}},
+    {"white",  {255, 255, 255, 255}},
+    {"black",  {  0,   0,   0, 255}},
 };
 
 RGB::RGB(std::string color) {

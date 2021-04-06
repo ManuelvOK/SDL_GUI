@@ -10,5 +10,5 @@ Drawable *Circle::clone() const {
 
 void Circle::draw(SDL_Renderer *renderer, Position position) const {
     const RGB &c = this->_style._color;
-    circleRGBA(renderer, position._x, position._y, this->_radius, c._r, c._g, c._b, c._a);
+    aacircleRGBA(renderer, position._x, position._y, this->_radius, c._r, c._g, c._b, c._a);
 }
