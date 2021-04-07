@@ -9,6 +9,7 @@ protected:
     Position _begin;   /**< begin of line */
     Position _end; /**< end of line */
 
+
     unsigned _line_width = 1;
 
     void update_dimensions();
@@ -34,7 +35,7 @@ public:
      * setter for end in relation to the parent drawable
      * @param position end relative to parent drawable
      */
-    void set_end_relative_to_parent(Position position);
+    void set_end(Position position);
 
     /**
      * Setter for begin

@@ -20,7 +20,7 @@ void Rect::draw(SDL_Renderer *renderer, Position position) const {
         const RGB &c = this->_style._color;
         this->_style._color.activate(renderer);
         boxRGBA(renderer, position._x, position._y,
-                position._x + this->_width, position._y + this->_height,
+                position._x + this->_width - 1, position._y + this->_height - 1,
                 c._r, c._g, c._b, c._a);
     }
 }

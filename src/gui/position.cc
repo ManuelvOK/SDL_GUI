@@ -20,6 +20,10 @@ Position & Position::operator-=(const Position &p) {
     return *this;
 }
 
+bool Position::operator==(const Position &p) const {
+    return this->_x == p._x and this->_y == p._y;
+}
+
 std::ostream& SDL_GUI::operator<<(std::ostream& os, const Position& pos) {
     os << "(" << pos._x << "|" << pos._y << ")";
     return os;

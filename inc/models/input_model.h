@@ -138,12 +138,12 @@ public:
         this->_up.insert(input);
     }
 
-    void set_state(IState state) {
+    void set_state(IState state, bool clear_current = true) {
         if (state == this->_current_state) {
             return;
         }
         this->_current_state = state;
-        this->_state_changed = true;
+        this->_state_changed = clear_current;
     }
 
     /**

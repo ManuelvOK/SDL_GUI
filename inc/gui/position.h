@@ -47,6 +47,8 @@ public:
      */
     Position & operator-=(const Position &p);
 
+    bool operator==(const Position &p) const;
+
     friend std::ostream& operator<<(std::ostream& os, const Position& pos);
 };
 

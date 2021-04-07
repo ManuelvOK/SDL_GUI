@@ -28,11 +28,16 @@ void Line::draw(SDL_Renderer *renderer, Position position) const {
     Position begin = this->_begin + position;
     Position end = this->_end + position;
     const RGB &c = this->_style._color;
-    thickLineRGBA(renderer, begin._x, begin._y, end._x, end._y, this->_line_width,
-                  c._r, c._g, c._b, c._a);
+    if (this->_line_width == 1) {
+        aalineRGBA(renderer, begin._x, begin._y, end._x, end._y,
+                   c._r, c._g, c._b, c._a);
+    } else {
+        thickLineRGBA(renderer, begin._x, begin._y, end._x, end._y, this->_line_width,
+                      c._r, c._g, c._b, c._a);
+    }
 }
 
-void Line::set_end_relative_to_parent(Position position) {
+void Line::set_end(Position position) {
     this->_end = position;
     this->update_dimensions();
 }

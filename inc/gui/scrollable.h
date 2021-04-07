@@ -20,6 +20,13 @@ protected:
     /** flag describing whether scrolling on y axis is enabled */
     bool _scrolling_y_enabled = false;
 
+    /** flag describing whether scroll limits are checked to not be exceeded */
+    bool _enforcing_limits = false;
+
+    Position _min_limit;
+
+    Position _max_limit;
+
     /** Constructor */
     Scrollable(Position position);
 
@@ -34,6 +41,12 @@ public:
      * @return  this->_scroll_position
      */
     Position scroll_position() const;
+
+    Position min_limit() const;
+
+    Position max_limit() const;
+
+    bool enforcing_limits() const;
 
     /**
      * Setter for _scroll_position
@@ -52,6 +65,11 @@ public:
      * @param y y value of _scroll_position
      */
     void set_scroll_position_y(int y);
+
+    void set_enforcing_limits(bool enforce_limit);
+
+    void set_min_limit(Position min);
+    void set_max_limit(Position max);
 
     /**
      * decrease x coordinate of scroll position
