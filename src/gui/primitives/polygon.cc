@@ -29,17 +29,36 @@ void Polygon::draw(SDL_Renderer *renderer, Position position) const {
         return;
     }
     position -= this->_position;
-    Position begin = position + this->_points.back();
-    const RGB &c = this->_style._color;
-    for (Position end: this->_points) {
-        end += position;
-        if (this->_line_width == 1) {
-            aalineRGBA(renderer, begin._x, begin._y, end._x, end._y,
-                    c._r, c._g, c._b, c._a);
-        } else {
-            thickLineRGBA(renderer, begin._x, begin._y, end._x, end._y, this->_line_width,
-                        c._r, c._g, c._b, c._a);
+    if (this->_style._has_background) {
+        int size = this->_points.size();
+        Sint16 *xs = new Sint16[size];
+        Sint16 *ys = new Sint16[size];
+        int i = 0;
+        for (Position point: this->_points) {
+            point += position;
+            xs[i] = point._x;
+            ys[i] = point._y;
+            /* fill arrays */
+            ++i;
         }
-        begin = end;
+        const RGB &c = this->_style._color;
+        filledPolygonRGBA(renderer, xs, ys, size, c._r, c._g, c._b, c._a);
+        delete xs;
+        delete ys;
+    }
+    if (this->_style._has_border) {
+        Position begin = position + this->_points.back();
+        const RGB &c = this->_style._border_color;
+        for (Position end: this->_points) {
+            end += position;
+            if (this->_line_width == 1) {
+                aalineRGBA(renderer, begin._x, begin._y, end._x, end._y,
+                        c._r, c._g, c._b, c._a);
+            } else {
+                thickLineRGBA(renderer, begin._x, begin._y, end._x, end._y, this->_line_width,
+                            c._r, c._g, c._b, c._a);
+            }
+            begin = end;
+        }
     }
 }

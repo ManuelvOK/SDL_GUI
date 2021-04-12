@@ -12,6 +12,7 @@
 
 #include <gui/primitives/texture.h>
 #include <gui/primitives/line.h>
+#include <gui/primitives/polygon.h>
 
 namespace SDL_GUI {
 
@@ -158,6 +159,21 @@ public:
         l->move({20, 60});
         l->set_end_relative_to_begin({-10, -30});
         line->add_child(l);
+
+        Drawable *polygon = this->_interface_model->find_first_drawable("polygon");
+        Polygon *p = new Polygon();
+        p->add_point({10, 10});
+        p->add_point({15, 30});
+        p->add_point({17, 44});
+        p->add_point({38, 76});
+        p->add_point({70, 20});
+        p->add_point({55, 10});
+        p->_style._has_background = true;
+        p->_style._color = RGB("green");
+        p->_style._has_border = true;
+        p->_style._border_color = RGB("yellow");
+        p->set_line_width(3);
+        polygon->add_child(p);
     }
 };
 }
