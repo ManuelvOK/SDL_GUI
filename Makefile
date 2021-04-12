@@ -76,7 +76,7 @@ debug:
 lib: $(LIB_TARGET) $(EXPORT_LIBS)
 
 $(EXPORT_LIBS): $(BUILD)/%.a: $(LIBDIR)/%.a
-	ln -fs $(CURDIR)/$< $@
+	ln -fs "$(CURDIR)/$<" $@
 
 .PHONY: tags
 tags: $(SRCSCC)
@@ -103,7 +103,7 @@ $(SDL2_GFX_EXTDIR)/.libs/libSDL2_gfx.a:
 	$(MAKE) -C $(SDL2_GFX_EXTDIR)
 
 $(SDL2_GFX_LIB): $(SDL2_GFX_EXTDIR)/.libs/libSDL2_gfx.a
-	ln -fs $(CURDIR)/$< $@
+	ln -fs "$(CURDIR)/$<" $@
 
 
 $(RAPIDXML_INCDIR): $(RAPIDXML_HEADERS)
@@ -115,6 +115,6 @@ $(LIBRARIES): | $(LIBDIR)/
 .SECONDEXPANSION:
 
 $(LIB_HEADERS): | $(LIBINCDIR)/ $$(@D)/
-	ln -fs $(CURDIR)/$< $@
+	ln -fs "$(CURDIR)/$<" $@
 
 -include $(wildcard $(DEPS))
