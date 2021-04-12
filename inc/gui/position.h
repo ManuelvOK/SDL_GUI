@@ -33,19 +33,25 @@ public:
      */
     Position operator-(const Position &p) const;
 
+    Position operator*(const int &s) const;
+    Position operator/(const int &s) const;
+
     /**
      * Unary Addition
      * @param p position to add
      * @return this + p
      */
-    Position & operator+=(const Position &p);
+    Position &operator+=(const Position &p);
 
     /**
      * Unary Substraction
      * @param p position to substract
      * @return this - p
      */
-    Position & operator-=(const Position &p);
+    Position &operator-=(const Position &p);
+
+    Position &operator*=(const int &s);
+    Position &operator/=(const int &s);
 
     bool operator==(const Position &p) const;
 

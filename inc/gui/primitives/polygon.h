@@ -11,9 +11,13 @@ class Polygon : public Drawable {
     unsigned _line_width = 1;
 
     virtual Drawable *clone() const override;
+
+protected:
+    Polygon(std::string type, Position position = {0,0})
+        :Drawable(type, position) {}
 public:
-    Polygon()
-        :Drawable("Polygon") {}
+    Polygon(Position position = {0,0})
+        :Polygon("Polygon", position) {}
 
     void add_point(Position point);
 
@@ -24,5 +28,7 @@ public:
     void set_line_width(unsigned width);
 
     void draw(SDL_Renderer *renderer, Position position) const override;
+
+    void draw_border(SDL_Renderer *renderer, Position position) const override;
 };
 }
