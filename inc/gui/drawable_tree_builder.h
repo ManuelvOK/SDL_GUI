@@ -5,6 +5,9 @@
 #include "drawable.h"
 #include "../util/tree_builder.h"
 
+// macOS defined OVERFLOW, but it is used here as an enum case name
+#undef OVERFLOW
+
 namespace SDL_GUI {
 /** types of Drawables to build */
 enum class Type {
