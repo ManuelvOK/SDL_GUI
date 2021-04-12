@@ -1,6 +1,6 @@
 #include <gui/primitives/polygon.h>
 
-#include <SDL2/SDL2_gfxPrimitives.h>
+#include <SDL2_gfx/SDL2_gfxPrimitives.h>
 
 using namespace SDL_GUI;
 

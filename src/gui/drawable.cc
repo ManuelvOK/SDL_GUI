@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-#include <SDL2/SDL2_gfxPrimitives.h>
+#include <SDL2_gfx/SDL2_gfxPrimitives.h>
 
 #include <gui/primitives/text.h>
 #include <gui/primitives/wrap_rect.h>

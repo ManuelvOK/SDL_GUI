@@ -1,0 +1,9 @@
+[submodule "ext/rapidxml"]
+	path = ext/rapidxml
+	url = https://github.com/dwd/rapidxml
+[submodule "ext/sdl2_gfx"]
+	path = ext/sdl2_gfx
+	url = https://github.com/RobLoach/sdl2_gfx
+[submodule "ext/SDL2_gfx"]
+	path = ext/SDL2_gfx
+	url = https://github.com/RobLoach/sdl2_gfx
