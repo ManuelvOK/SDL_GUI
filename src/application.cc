@@ -96,7 +96,6 @@ void ApplicationBase::run() {
     const duration_t tick_interval = 1000000us / this->_target_tps;
 
     time_point_t now = t_sys();
-    const time_point_t start = now;
 
     time_point_t last_tick_time = now;
     time_point_t next_tick_time = now;
@@ -106,7 +105,6 @@ void ApplicationBase::run() {
 
     time_point_t one_second_ago = now - 1s;
 
-    int loop = 0;
     while (this->_is_running) {
         now = t_sys();
         if (next_tick_time - now <= 1ms) {
