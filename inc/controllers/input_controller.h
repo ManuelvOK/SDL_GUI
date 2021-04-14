@@ -76,6 +76,9 @@ protected:
     /** the applications mouse input config */
     std::map<IState, std::map<std::set<SDL_Scancode>, std::map<Uint8, IType>>> _mouse_input_config;
 
+    /** the input triggered on window quit event */
+    IType _quit_input;
+
     std::map<IState, std::set<SDL_Scancode>> _modifiers;
 
 
@@ -144,6 +147,10 @@ protected:
         if (this->_window_event_config.contains(event_id)) {
             this->_input_model->trigger(this->_window_event_config[event_id]);
         }
+    }
+
+    virtual void handle_quit() {
+        this->_input_model->trigger(this->_quit_input);
     }
 
     void register_high_level_input(IState state) {
@@ -229,11 +236,13 @@ public:
     InputController(InputModel<IType, IState> *input_model,
                     std::map<IState, std::map<std::set<SDL_Scancode>, std::map<SDL_Scancode, IType>>> keyboard_input_config,
                     std::map<SDL_WindowEventID, IType> window_event_config,
-                    std::map<IState, std::map<std::set<SDL_Scancode>, std::map<Uint8, IType>>> mouse_input_config)
+                    std::map<IState, std::map<std::set<SDL_Scancode>, std::map<Uint8, IType>>> mouse_input_config,
+                    IType quit_input)
         : _input_model(input_model),
         _keyboard_input_config(keyboard_input_config),
         _window_event_config(window_event_config),
-        _mouse_input_config(mouse_input_config) {
+        _mouse_input_config(mouse_input_config),
+        _quit_input(quit_input) {
 
         this->_low_level_input_model = new LowLevelInputModel();
 
@@ -281,6 +290,9 @@ public:
                     break;
                 case SDL_WINDOWEVENT:
                     this->handle_window_event(event.window);
+                    break;
+                case SDL_QUIT:
+                    this->handle_quit();
                     break;
                 default:
                     break;

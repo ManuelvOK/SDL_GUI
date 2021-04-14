@@ -50,7 +50,7 @@ public:
         /* Controllers */
         InputController<InputKey, InputState> *input_controller =
             new InputController<InputKey, InputState>(this->_input_model, keyboard_input_config,
-                    window_event_config, mouse_input_config);
+                    window_event_config, mouse_input_config, InputKey::QUIT);
         app->add_controller(input_controller);
 
         InterfaceController *interface_controller = new InterfaceController("templates/main.tpl",

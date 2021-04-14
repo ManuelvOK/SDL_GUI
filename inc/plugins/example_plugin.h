@@ -128,7 +128,8 @@ public:
         InputController<ExampleInputKey, ExampleInputState> *input_controller =
             new InputController<ExampleInputKey, ExampleInputState>(
                     input_model, example_keyboard_input_config, example_window_event_config,
-                    example_mouse_input_config);
+                    example_mouse_input_config,
+                    ExampleInputKey::QUIT);
         app->add_controller(input_controller);
 
         DefaultPlugin &default_plugin = std::get<DefaultPlugin>(previous);

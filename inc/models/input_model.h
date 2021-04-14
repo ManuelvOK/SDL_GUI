@@ -66,6 +66,7 @@ class InputModel : public InputModelBase {
     std::set<IType> _pressed;   /**< active (pressed) inputs */
     std::set<IType> _down;      /**< inputs that just got activated (pressed) */
     std::set<IType> _up;        /**< inputs that just got deactivated (released) */
+    std::set<IType> _triggered; /**< inputs that just got triggered */
 
     IState _current_state;
     IState _default_state;
@@ -82,6 +83,7 @@ public:
         InputModelBase::update();
         this->_down.clear();
         this->_up.clear();
+        this->_triggered.clear();
         if (this->_state_changed) {
             this->_pressed.clear();
             this->_state_changed = false;
@@ -123,7 +125,7 @@ public:
      * @param input The input to trigger
      */
     virtual void trigger(IType input) {
-        this->_down.insert(input);
+        this->_triggered.insert(input);
     }
 
     /**
@@ -152,7 +154,7 @@ public:
      * @returns True if key is pressed. False otherwise
      */
     bool is_pressed(IType key) const {
-        return this->_pressed.contains(key);
+        return this->_pressed.contains(key) or this->_triggered.contains(key);
     }
 
     /**
@@ -161,7 +163,7 @@ public:
      * @returns True if key has pressed down. False otherwise
      */
     bool is_down(IType key) const {
-        return this->_down.contains(key);
+        return this->_down.contains(key) or this->_triggered.contains(key);
     }
 
     /**
@@ -170,7 +172,7 @@ public:
      * @returns True if key has just been released. False otherwise
      */
     bool is_up(IType key) const {
-        return this->_up.contains(key);
+        return this->_up.contains(key) or this->_triggered.contains(key);
     }
 };
 }
