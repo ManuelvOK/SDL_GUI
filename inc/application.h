@@ -69,6 +69,7 @@ protected:
     unsigned _current_fps = 0;                      /**< number of frames in the last second */
     unsigned _target_tps = 60;                      /**< number of targeted ticks per second */
     unsigned _current_tps = 0;                      /**< number of ticks in the last second */
+    unsigned _current_loops = 0;                    /**< number of run loops in the last second */
 
 
     /**
@@ -169,6 +170,7 @@ public:
     unsigned current_fps() const;
     unsigned target_tps() const;
     unsigned current_tps() const;
+    unsigned current_loops() const;
 
     /**
      * Add Model to applications model list

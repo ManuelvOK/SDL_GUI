@@ -14,8 +14,8 @@
 using namespace SDL_GUI;
 
 
-inline std::chrono::high_resolution_clock::duration t_sys() {
-    return std::chrono::high_resolution_clock::now().time_since_epoch();
+inline std::chrono::high_resolution_clock::time_point t_sys() {
+    return std::chrono::high_resolution_clock::now();
 }
 
 ApplicationBase::~ApplicationBase() {
@@ -84,62 +84,92 @@ ApplicationBase::ApplicationBase(std::string application_title, unsigned window_
 }
 
 void ApplicationBase::run() {
+    using namespace std::literals;
     using duration_t = std::chrono::high_resolution_clock::duration;
-    std::list<duration_t> ticks;
-    std::list<duration_t> frames;
+    using time_point_t = std::chrono::high_resolution_clock::time_point;
+    std::list<time_point_t> ticks;
+    std::list<time_point_t> frames;
+    std::list<time_point_t> loops;
 
-    unsigned logic_count = 0;
-    unsigned render_count = 0;
 
-    const duration_t frame_interval = std::chrono::microseconds(1000000 / this->_target_fps);
-    const duration_t tick_interval = std::chrono::microseconds(1000000 / this->_target_tps);
-    const duration_t one_second = std::chrono::seconds(1);
+    const duration_t frame_interval = 1000000us / this->_target_fps;
+    const duration_t tick_interval = 1000000us / this->_target_tps;
 
-    duration_t last_tick_time = t_sys();
-    duration_t next_tick_time = t_sys();
-    duration_t last_frame_time = t_sys();
-    duration_t next_frame_time = t_sys();
+    time_point_t now = t_sys();
+    const time_point_t start = now;
 
-    duration_t one_second_ago = t_sys() - one_second;
+    time_point_t last_tick_time = now;
+    time_point_t next_tick_time = now;
+    time_point_t last_frame_time = now;
+    time_point_t next_frame_time = now;
+    time_point_t last_loop_time = now;
 
+    time_point_t one_second_ago = now - 1s;
+
+    int loop = 0;
     while (this->_is_running) {
-        if (next_tick_time <= t_sys()) {
+        now = t_sys();
+        if (next_tick_time - now <= 1ms) {
+
+            last_tick_time = now;
+            next_tick_time += tick_interval;
+
             read_sdl_events();
             this->update_controllers();
             this->update_views();
             clear_sdl_events();
 
-            logic_count++;
-            last_tick_time = t_sys();
-            next_tick_time += tick_interval;
 
             /* update tps stat */
             ticks.push_back(last_tick_time);
 
-            one_second_ago = last_tick_time - one_second;
+            one_second_ago = now - 1s;
             while (not ticks.empty() and ticks.front() < one_second_ago) {
                 ticks.pop_front();
             }
             this->_current_tps = ticks.size();
         }
 
-        if (next_frame_time <= t_sys()) {
+        now = t_sys();
+        if (next_frame_time - now <= 1ms) {
+
+            last_frame_time = now;
+            next_frame_time += frame_interval;
+
             /* render */
             this->render_views();
-
-            render_count++;
-            last_frame_time = t_sys();
-            next_frame_time += frame_interval;
 
             /* update fps stat */
             frames.push_back(last_frame_time);
 
-            one_second_ago = last_frame_time - one_second;
+            one_second_ago = now - 1s;
             while (not frames.empty() and frames.front() < one_second_ago) {
                 frames.pop_front();
             }
             this->_current_fps = frames.size();
         }
+
+        now = t_sys();
+
+        /* update loop stat */
+        last_loop_time = now;
+        loops.push_back(last_loop_time);
+
+        one_second_ago = now - 1s;
+        while (not loops.empty() and loops.front() < one_second_ago) {
+            loops.pop_front();
+        }
+
+        this->_current_loops = loops.size();
+
+        duration_t time_until_next_tick = next_tick_time - now;
+        duration_t time_until_next_frame = next_frame_time - now;
+        duration_t time_until_next = std::min(time_until_next_tick, time_until_next_frame);
+        int delay_ms = time_until_next / 1ms;
+        if (delay_ms >= 0) {
+            SDL_Delay(std::max(1, delay_ms));
+        }
+
     }
     this->deinit();
 }
@@ -192,6 +222,10 @@ unsigned ApplicationBase::target_tps() const {
 
 unsigned ApplicationBase::current_tps() const {
     return this->_current_tps;
+}
+
+unsigned ApplicationBase::current_loops() const {
+    return this->_current_loops;
 }
 
 void ApplicationBase::add_model(ModelBase *model) {

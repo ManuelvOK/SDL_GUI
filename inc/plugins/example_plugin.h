@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <sstream>
 
 #include <SDL2/SDL.h>
 
@@ -10,6 +11,7 @@
 #include <plugins/plugin_base.h>
 #include <plugins/default_plugin.h>
 
+#include <gui/primitives/text.h>
 #include <gui/primitives/texture.h>
 #include <gui/primitives/line.h>
 #include <gui/primitives/polygon.h>
@@ -135,6 +137,34 @@ public:
         ExampleController *example_controller = new ExampleController(app, input_model,
                                                                       this->_interface_model);
         app->add_controller(example_controller);
+
+        /* Add content */
+
+        Drawable *stats = this->_interface_model->find_first_drawable("stats");
+        stats->add_recalculation_callback(
+            [this, app](Drawable *d) {
+                d->remove_all_children();
+
+                std::stringstream ss;
+                ss << "fps:   " << app->current_fps();
+                Text *t = new Text(this->_interface_model->font(), ss.str());
+                t->set_x(5);
+                d->add_child(t);
+
+                ss.str("");
+                ss << "tps:   " << app->current_tps();
+                t = new Text(this->_interface_model->font(), ss.str());
+                t->set_x(5);
+                t->set_y(13);
+                d->add_child(t);
+
+                ss.str("");
+                ss << "loops: " << app->current_loops();
+                t = new Text(this->_interface_model->font(), ss.str());
+                t->set_x(5);
+                t->set_y(25);
+                d->add_child(t);
+            });
 
         Drawable *image = this->_interface_model->find_first_drawable("image");
         image->_style._border_color = RGB("green");
