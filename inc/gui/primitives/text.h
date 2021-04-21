@@ -42,5 +42,7 @@ public:
      * @param text text to display
      */
     void set_text(const std::string text = "");
+
+    void set_color(RGB color);
 };
 }

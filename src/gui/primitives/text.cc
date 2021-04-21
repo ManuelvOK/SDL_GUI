@@ -74,6 +74,11 @@ void Text::set_text(const std::string text) {
     this->create_surfaces();
 }
 
+void Text::set_color(RGB color) {
+    this->_style._color = color;
+    this->create_surfaces();
+}
+
 unsigned Text::height() const {
     return this->_surfaces.size() * TTF_FontLineSkip(this->_font);
 }
