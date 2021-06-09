@@ -71,6 +71,8 @@ protected:
     unsigned _current_tps = 0;                      /**< number of ticks in the last second */
     unsigned _current_loops = 0;                    /**< number of run loops in the last second */
 
+    bool _is_headless = false;
+
 
     /**
      * initialise everything concerning SDL
@@ -125,8 +127,8 @@ protected:
      * @param window_width initial width of window
      * @param window_height initial height of window
      */
-    ApplicationBase(std::string application_title, unsigned window_width = 1920,
-                    unsigned window_height = 1080);
+    ApplicationBase(std::string application_title, int argc, char *argv[],
+                    unsigned window_width = 1920, unsigned window_height = 1080);
 
     /** Destructor */
     ~ApplicationBase();
@@ -172,6 +174,8 @@ public:
     unsigned current_tps() const;
     unsigned current_loops() const;
 
+    bool is_headless() const;
+
     /**
      * Add Model to applications model list
      * @param model model to add
@@ -210,7 +214,7 @@ public:
      */
     Application(std::string application_title, int argc, char *argv[], unsigned window_width = 1920,
                 unsigned window_height = 1080)
-        : ApplicationBase(application_title, window_width, window_height) {
+        : ApplicationBase(application_title, argc, argv, window_width, window_height) {
             this->_plugins = create_plugins<Ts...>(this, argc, argv);
         }
 };

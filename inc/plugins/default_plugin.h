@@ -38,6 +38,10 @@ public:
         (void)argv;
         this->_application = app;
 
+        if (app->is_headless()) {
+            return;
+        }
+
         /* Models */
         this->_interface_model = new SDL_GUI::InterfaceModel(app->renderer(), app->window_width(),
                                                              app->window_height());
@@ -53,9 +57,8 @@ public:
                     window_event_config, mouse_input_config, InputKey::QUIT);
         app->add_controller(input_controller);
 
-        InterfaceController *interface_controller = new InterfaceController("templates/main.tpl",
-                                                                            this->_interface_model,
-                                                                            this->_input_model);
+        InterfaceController *interface_controller =
+            new InterfaceController("templates/main.tpl", this->_interface_model, this->_input_model);
         interface_controller->_weight = 200;
         app->add_controller(interface_controller);
 

@@ -9,6 +9,7 @@
 #include <SDL2/SDL_ttf.h>
 
 #include <controllers/input_controller.h>
+#include <util/command_line.h>
 
 
 using namespace SDL_GUI;
@@ -74,10 +75,19 @@ SDL_Renderer *ApplicationBase::init_renderer(SDL_Window *window) {
     return renderer;
 }
 
-ApplicationBase::ApplicationBase(std::string application_title, unsigned window_width,
-                                 unsigned window_height)
+ApplicationBase::ApplicationBase(std::string application_title, int argc, char *argv[],
+                                 unsigned window_width, unsigned window_height)
     : _application_title(application_title), _window_width(window_width),
       _window_height(window_height) {
+    CommandLine cmd;
+    cmd.register_flag("headless", "", "headless");
+    cmd.parse(argc, argv);
+
+    if (cmd.get_flag("headless")) {
+        this->_is_headless = true;
+        return;
+    }
+
     ApplicationBase::init_SDL();
     this->_window = ApplicationBase::init_window(application_title, window_width, window_height);
     this->_renderer = ApplicationBase::init_renderer(this->_window);
@@ -134,8 +144,10 @@ void ApplicationBase::run() {
             last_frame_time = now;
             next_frame_time += frame_interval;
 
-            /* render */
-            this->render_views();
+            if (not this->_is_headless) {
+                /* render */
+                this->render_views();
+            }
 
             /* update fps stat */
             frames.push_back(last_frame_time);
@@ -224,6 +236,10 @@ unsigned ApplicationBase::current_tps() const {
 
 unsigned ApplicationBase::current_loops() const {
     return this->_current_loops;
+}
+
+bool ApplicationBase::is_headless() const {
+    return this->_is_headless;
 }
 
 void ApplicationBase::add_model(ModelBase *model) {

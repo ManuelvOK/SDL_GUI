@@ -119,6 +119,11 @@ public:
         (void)app;
         (void)argc;
         (void)argv;
+
+        if (app->is_headless()) {
+            return;
+        }
+
         /* Models */
         InputModel<ExampleInputKey, ExampleInputState> *input_model =
             new InputModel<ExampleInputKey, ExampleInputState>(ExampleInputState::ALL);
