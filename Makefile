@@ -44,8 +44,8 @@ EXPORT_LIBS := $(LIBRARIES:$(LIBDIR)%=$(BUILD)%)
 $(foreach dirname,$(dir $(OBJS)) $(dir $(DEPS)),$(shell $(MKDIR) $(dirname)))
 
 .PHONY: all
-#all: CXXFLAGS += -fsanitize=address
-#all: LIBS += -fsanitize=address
+# all: CXXFLAGS += -fsanitize=address
+# all: DYN_LIBS += -fsanitize=address
 all: $(TARGET)
 
 .PHONY: libheaders
@@ -71,8 +71,8 @@ debug:
 	@echo $(OBJS)
 
 .PHONY: lib
-#lib: CXXFLAGS += -fsanitize=address
-#lib: LIBS += -fsanitize=address
+# lib: CXXFLAGS += -fsanitize=address
+# lib: DYN_LIBS += -fsanitize=address
 lib: $(LIB_TARGET) $(EXPORT_LIBS)
 
 $(EXPORT_LIBS): $(BUILD)/%.a: $(LIBDIR)/%.a

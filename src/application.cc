@@ -79,12 +79,13 @@ ApplicationBase::ApplicationBase(std::string application_title, int argc, char *
                                  unsigned window_width, unsigned window_height)
     : _application_title(application_title), _window_width(window_width),
       _window_height(window_height) {
-    CommandLine cmd;
-    cmd.register_flag("headless", "", "headless");
-    cmd.parse(argc, argv);
+    this->_command_line.register_flag("headless", "", "headless");
+    this->_command_line.parse(argc, argv);
 
-    if (cmd.get_flag("headless")) {
+    if (this->_command_line.get_flag("headless")) {
         this->_is_headless = true;
+        std::cerr << std::endl << "== Running in headless mode. Press Ctrl-C to quit. =="
+                  << std::endl;
         return;
     }
 
@@ -240,6 +241,10 @@ unsigned ApplicationBase::current_loops() const {
 
 bool ApplicationBase::is_headless() const {
     return this->_is_headless;
+}
+
+CommandLine *ApplicationBase::command_line() {
+    return &this->_command_line;
 }
 
 void ApplicationBase::add_model(ModelBase *model) {

@@ -21,21 +21,19 @@ private:
     InputModel<InputKey, InputState> *_input_model; /**< The applications input model */
 public:
     /** Constructor */
-    DefaultPlugin() : PluginBase("DefaultPlugin") {}
+    DefaultPlugin(CommandLine *command_line) : PluginBase("DefaultPlugin", command_line) {}
 
     /**
      * Create all the needed Models, Controllers and Views
      * @tparam Ts List of already instantiated plugin types
      * @param app The application
-     * @param previous tuple of already instantiated plugins
+     * @param plugins tuple of other plugins
      * @param argc programs argc
      * @param argv[] programs argv
      */
     template <typename ... Ts>
-    void init(ApplicationBase *app, std::tuple<Ts...> previous, int argc, char* argv[]) {
-        (void)previous;
-        (void)argc;
-        (void)argv;
+    void init(ApplicationBase *app, std::tuple<Ts...> *plugins) {
+        (void)plugins;
         this->_application = app;
 
         if (app->is_headless()) {

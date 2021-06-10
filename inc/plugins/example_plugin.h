@@ -104,21 +104,17 @@ class ExamplePlugin: public PluginBase {
     InterfaceModel *_interface_model;
 public:
     /** Constructor */
-    ExamplePlugin(): PluginBase("Example Plugin") {}
+    ExamplePlugin(CommandLine *command_line): PluginBase("Example Plugin", command_line) {}
 
     /**
      * Create all the needed Models, Controllers and Views
      * @tparam Ts List of already instantiated plugin types
      * @param app The application
-     * @param previous tuple of already instantiated plugins
-     * @param argc programs argc
-     * @param argv[] programs argv
+     * @param plugins tuple of other plugins
      */
     template <typename ... Ts>
-    void init(ApplicationBase *app, std::tuple<Ts...> previous, int argc, char *argv[]) {
+    void init(ApplicationBase *app, std::tuple<Ts...> *plugins) {
         (void)app;
-        (void)argc;
-        (void)argv;
 
         if (app->is_headless()) {
             return;
@@ -137,7 +133,7 @@ public:
                     ExampleInputKey::QUIT);
         app->add_controller(input_controller);
 
-        DefaultPlugin &default_plugin = std::get<DefaultPlugin>(previous);
+        DefaultPlugin &default_plugin = std::get<DefaultPlugin>(*plugins);
         this->_interface_model = default_plugin.interface_model();
 
         ExampleController *example_controller = new ExampleController(app, input_model,

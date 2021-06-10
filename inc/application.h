@@ -10,49 +10,12 @@
 #include "controllers/controller_base.h"
 #include "models/model_base.h"
 #include "plugins/plugin_base.h"
+#include "util/command_line.h"
 #include "views/view_base.h"
 
 #include "gui/primitives/texture.h"
 
 namespace SDL_GUI {
-
-class ApplicationBase;
-
-/**
- * This function is used to recursively instantiate all the Plugins. This special case has an empty
- * template list and results in an empty tuple. This is the last recursion.
- * @tparam Ts Plugins to instantiate
- * @param application The application
- * @param argc The programs argc
- * @param argv[] The programs argv
- * @return tuple with all instantiated plugins
- */
-template <typename ... Ts>
-typename std::enable_if<(sizeof...(Ts) == 0), std::tuple<Ts...>>::type
-create_plugins(ApplicationBase *application, int argc, char *argv[]) {
-    (void)application;
-    (void)argc;
-    (void)argv;
-    return std::make_tuple();
-}
-
-/**
- * This function is used to recursively instantiate all the Plugins. The first given template
- * parameter gets instantiated with access to all the template parameters after it.
- * @tparam T type of first Plugin in plugin List
- * @tparam Ts remaining plugins to instantiate
- * @param application The application
- * @param argc The programs argc
- * @param argv[] The programs argv
- * @return tuple with all instantiated plugins
- */
-template <typename T, typename ... Ts>
-std::tuple<T, Ts...> create_plugins(ApplicationBase *application, int argc, char *argv[]) {
-    std::tuple<Ts...> previous = create_plugins<Ts...>(application, argc, argv);
-    T current = T();
-    current.init(application, previous, argc, argv);
-    return std::tuple_cat(std::make_tuple(current), previous);
-}
 
 /** Abstract class for Application Objects */
 class ApplicationBase {
@@ -72,6 +35,8 @@ protected:
     unsigned _current_loops = 0;                    /**< number of run loops in the last second */
 
     bool _is_headless = false;
+
+    CommandLine _command_line;
 
 
     /**
@@ -176,6 +141,8 @@ public:
 
     bool is_headless() const;
 
+    CommandLine *command_line();
+
     /**
      * Add Model to applications model list
      * @param model model to add
@@ -196,6 +163,49 @@ public:
 };
 
 /**
+ * This function is used to recursively instantiate all the Plugins. This special case has an empty
+ * template list and results in an empty tuple. This is the last recursion.
+ * @tparam Ts Plugins to instantiate
+ * @param application The application
+ * @param argc The programs argc
+ * @param argv[] The programs argv
+ * @return tuple with all instantiated plugins
+ */
+template <typename ... Ts>
+typename std::enable_if<(sizeof...(Ts) == 0), std::tuple<Ts...>>::type
+create_plugins(ApplicationBase *application) {
+    (void)application;
+    return std::make_tuple<Ts ...>();
+}
+
+/**
+ * This function is used to recursively instantiate all the Plugins. The first given template
+ * parameter gets instantiated with access to all the template parameters after it.
+ * @tparam T type of first Plugin in plugin List
+ * @tparam Ts remaining plugins to instantiate
+ * @param application The application
+ * @param argc The programs argc
+ * @param argv[] The programs argv
+ * @return tuple with all instantiated plugins
+ */
+template <typename T, typename ... Ts>
+std::tuple<T, Ts...> create_plugins(ApplicationBase *application) {
+    return std::tuple_cat(std::make_tuple(T(application->command_line())), create_plugins<Ts...>(application));
+}
+
+template <typename T>
+void init_plugins(ApplicationBase *application, T *all_plugins) {
+    (void) application;
+    (void) all_plugins;
+}
+
+template <typename T, typename P, typename ... Ps>
+void init_plugins(ApplicationBase *application, T *all_plugins) {
+    std::get<P>(*all_plugins).init(application, all_plugins);
+    init_plugins<T, Ps...>(application, all_plugins);
+}
+
+/**
  * Actual Application class
  * @tparam Ts list of Plugins the application uses
  */
@@ -214,8 +224,10 @@ public:
      */
     Application(std::string application_title, int argc, char *argv[], unsigned window_width = 1920,
                 unsigned window_height = 1080)
-        : ApplicationBase(application_title, argc, argv, window_width, window_height) {
-            this->_plugins = create_plugins<Ts...>(this, argc, argv);
-        }
+        : ApplicationBase(application_title, argc, argv, window_width, window_height),
+          _plugins(create_plugins<Ts...>(this)) {
+        this->_command_line.parse(argc, argv);
+        init_plugins<std::tuple<Ts...>, Ts...>(this, &this->_plugins);
+    }
 };
 }
