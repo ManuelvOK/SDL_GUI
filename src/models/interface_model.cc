@@ -27,7 +27,6 @@ InterfaceModel::InterfaceModel(SDL_Renderer *renderer, unsigned window_width,
             font_file = (char *)file;
         }
     }
-    FcPatternDestroy(pat);
     std::cout << "Font: " << font_file << std::endl;
     this->_font = TTF_OpenFont(font_file, 12);
     if (!this->_font) {
@@ -36,10 +35,15 @@ InterfaceModel::InterfaceModel(SDL_Renderer *renderer, unsigned window_width,
     }
     /* init null_drawable */
     this->_null_drawable = new NullDrawable();
+
+    FcPatternDestroy(font);
+    FcPatternDestroy(pat);
+    FcConfigDestroy(config);
 }
 
 InterfaceModel::~InterfaceModel() {
     delete this->_null_drawable;
+    delete this->_drawable_root;
 }
 
 TTF_Font *InterfaceModel::font() {

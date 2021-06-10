@@ -15,6 +15,9 @@ Text::~Text() {
     for (SDL_Surface *s: this->_surfaces) {
         SDL_FreeSurface(s);
     }
+    if (this->_surface != nullptr) {
+        SDL_FreeSurface(this->_surface);
+    }
 }
 
 Drawable *Text::clone() const {

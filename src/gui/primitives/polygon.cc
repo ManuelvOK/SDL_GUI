@@ -43,8 +43,8 @@ void Polygon::draw(SDL_Renderer *renderer, Position position) const {
     }
     const RGB &c = this->_style._color;
     filledPolygonRGBA(renderer, xs, ys, size, c._r, c._g, c._b, c._a);
-    delete xs;
-    delete ys;
+    delete[] xs;
+    delete[] ys;
 }
 
 void Polygon::draw_border(SDL_Renderer *renderer, Position position) const {

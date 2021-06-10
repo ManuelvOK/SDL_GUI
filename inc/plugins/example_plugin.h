@@ -151,6 +151,7 @@ public:
                 ss << "fps:   " << app->current_fps();
                 Text *t = new Text(this->_interface_model->font(), ss.str());
                 t->set_x(5);
+                t->add_attribute("fps");
                 d->add_child(t);
 
                 ss.str("");
@@ -158,6 +159,7 @@ public:
                 t = new Text(this->_interface_model->font(), ss.str());
                 t->set_x(5);
                 t->set_y(13);
+                t->add_attribute("tps");
                 d->add_child(t);
 
                 ss.str("");
@@ -165,6 +167,7 @@ public:
                 t = new Text(this->_interface_model->font(), ss.str());
                 t->set_x(5);
                 t->set_y(25);
+                t->add_attribute("loops");
                 d->add_child(t);
             });
 
