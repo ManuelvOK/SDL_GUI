@@ -9,7 +9,7 @@
 
 #include <controllers/controller_base.h>
 #include <plugins/plugin_base.h>
-#include <plugins/default_plugin.h>
+#include <plugins/core.h>
 
 #include <gui/primitives/text.h>
 #include <gui/primitives/texture.h>
@@ -22,7 +22,7 @@ namespace SDL_GUI {
  * Abstraction for all possible inputs this plugin handles
  * For this Example its only important to close the application
  */
-enum class ExampleInputKey {
+enum class ExampleInputValue {
     QUIT,
     DEBUG,
 };
@@ -37,20 +37,20 @@ enum class ExampleInputState {
  */
 static const std::map<ExampleInputState,
                       std::map<std::set<SDL_Scancode>,
-                               std::map<SDL_Scancode, ExampleInputKey>>>
+                               std::map<SDL_Scancode, ExampleInputValue>>>
 example_keyboard_input_config = {
     {ExampleInputState::ALL, {
         {{}, {
-            {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
-            {SDL_SCANCODE_ESCAPE, ExampleInputKey::QUIT},
+            {SDL_SCANCODE_Q, ExampleInputValue::QUIT},
+            {SDL_SCANCODE_ESCAPE, ExampleInputValue::QUIT},
         }},
         {{SDL_SCANCODE_LSHIFT}, {
-            {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
-            {SDL_SCANCODE_D, ExampleInputKey::DEBUG},
+            {SDL_SCANCODE_Q, ExampleInputValue::QUIT},
+            {SDL_SCANCODE_D, ExampleInputValue::DEBUG},
         }},
         {{SDL_SCANCODE_RSHIFT}, {
-            {SDL_SCANCODE_Q, ExampleInputKey::QUIT},
-            {SDL_SCANCODE_D, ExampleInputKey::DEBUG},
+            {SDL_SCANCODE_Q, ExampleInputValue::QUIT},
+            {SDL_SCANCODE_D, ExampleInputValue::DEBUG},
         }},
     }},
 };
@@ -59,7 +59,7 @@ example_keyboard_input_config = {
  * Window event config.
  * This could be used to react to changes in the window size.
  */
-static const std::map<SDL_WindowEventID, ExampleInputKey> example_window_event_config;
+static const std::map<SDL_WindowEventID, ExampleInputValue> example_window_event_config;
 
 /**
  * Mouse input config
@@ -67,12 +67,12 @@ static const std::map<SDL_WindowEventID, ExampleInputKey> example_window_event_c
  */
 static const std::map<ExampleInputState,
                       std::map<std::set<SDL_Scancode>,
-                               std::map<Uint8, ExampleInputKey>>> example_mouse_input_config;
+                               std::map<Uint8, ExampleInputValue>>> example_mouse_input_config;
 
 /** Plugins controller */
 class ExampleController : public ControllerBase {
     ApplicationBase *_application;              /**< The application */
-    InputModel<ExampleInputKey, ExampleInputState> *_input_model;  /**< The applications input model */
+    InputModel<ExampleInputValue, ExampleInputState> *_input_model;  /**< The applications input model */
     InterfaceModel *_interface_model;
 public:
     /**
@@ -81,7 +81,7 @@ public:
      * @param input_model The applications input model
      */
     ExampleController(ApplicationBase *application,
-                      InputModel<ExampleInputKey, ExampleInputState> *input_model,
+                      InputModel<ExampleInputValue, ExampleInputState> *input_model,
                       InterfaceModel *interface_model)
         : _application(application), _input_model(input_model),
           _interface_model(interface_model) {}
@@ -90,10 +90,10 @@ public:
      * Check if application should quit
      */
     virtual void update() {
-        if (this->_input_model->is_pressed(ExampleInputKey::QUIT)) {
+        if (this->_input_model->is_pressed(ExampleInputValue::QUIT)) {
             this->_application->_is_running = false;
         }
-        if (this->_input_model->is_down(ExampleInputKey::DEBUG)) {
+        if (this->_input_model->is_down(ExampleInputValue::DEBUG)) {
             this->_interface_model->toggle_debug_information_drawn();
         }
     }
@@ -121,20 +121,20 @@ public:
         }
 
         /* Models */
-        InputModel<ExampleInputKey, ExampleInputState> *input_model =
-            new InputModel<ExampleInputKey, ExampleInputState>(ExampleInputState::ALL);
+        InputModel<ExampleInputValue, ExampleInputState> *input_model =
+            new InputModel<ExampleInputValue, ExampleInputState>(ExampleInputState::ALL);
         app->add_model(input_model);
 
         /* Controllers */
-        InputController<ExampleInputKey, ExampleInputState> *input_controller =
-            new InputController<ExampleInputKey, ExampleInputState>(
+        InputController<ExampleInputValue, ExampleInputState> *input_controller =
+            new InputController<ExampleInputValue, ExampleInputState>(
                     input_model, example_keyboard_input_config, example_window_event_config,
                     example_mouse_input_config,
-                    ExampleInputKey::QUIT);
+                    ExampleInputValue::QUIT);
         app->add_controller(input_controller);
 
-        DefaultPlugin &default_plugin = std::get<DefaultPlugin>(*plugins);
-        this->_interface_model = default_plugin.interface_model();
+        Core &core = std::get<Core>(*plugins);
+        this->_interface_model = core.interface_model();
 
         ExampleController *example_controller = new ExampleController(app, input_model,
                                                                       this->_interface_model);
@@ -174,6 +174,7 @@ public:
         Drawable *image = this->_interface_model->find_first_drawable("image");
         image->_style._border_color = RGB("green");
         image->_style._border_width = 3;
+
         Texture *t = new Texture("textures/strichmann.png", app->renderer());
         t->set_width(50);
         t->set_height(60);

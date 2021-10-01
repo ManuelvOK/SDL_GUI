@@ -14,14 +14,14 @@
 namespace SDL_GUI {
 
 /** Plugin that hold the default default GUI rendering */
-class DefaultPlugin: public PluginBase {
+class Core: public PluginBase {
 private:
     ApplicationBase *_application;      /**< The application */
     InterfaceModel *_interface_model;   /**< The applications interface model */
-    InputModel<InputKey, InputState> *_input_model; /**< The applications input model */
+    InputModel<InputValue, InputState> *_input_model; /**< The applications input model */
 public:
     /** Constructor */
-    DefaultPlugin(CommandLine *command_line) : PluginBase("DefaultPlugin", command_line) {}
+    Core(CommandLine *command_line) : PluginBase("Core", command_line) {}
 
     /**
      * Create all the needed Models, Controllers and Views
@@ -46,13 +46,14 @@ public:
         app->add_model(this->_interface_model);
         Drawable::set_interface_model(this->_interface_model);
 
-        this->_input_model = new InputModel<InputKey, InputState>(InputState::ALL);
+        this->_input_model = new InputModel<InputValue, InputState>(InputState::ALL);
         app->add_model(this->_input_model);
 
         /* Controllers */
-        InputController<InputKey, InputState> *input_controller =
-            new InputController<InputKey, InputState>(this->_input_model, keyboard_input_config,
-                    window_event_config, mouse_input_config, InputKey::QUIT);
+        InputController<InputValue, InputState> *input_controller =
+            new InputController<InputValue, InputState>(this->_input_model, keyboard_input_config,
+                    window_event_config, mouse_input_config, InputValue::QUIT);
+
         app->add_controller(input_controller);
 
         InterfaceController *interface_controller =
@@ -75,6 +76,6 @@ public:
      * Getter for _input_model
      * @return this->_input_model
      */
-    InputModel<InputKey, InputState> *input_model();
+    InputModel<InputValue, InputState> *input_model();
 };
 }
